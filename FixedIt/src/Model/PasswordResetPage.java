@@ -7,20 +7,22 @@ public class PasswordResetPage extends EmailSender {
 	private Calendar expirationDate;
 	private Authenticator a;
 	private String url;
+	private FakeDatabase db;
 	
-	public PasswordResetPage(Authenticator a, String emailAddress, Calendar expirationDate){
+	public PasswordResetPage(Authenticator a, String emailAddress, Calendar expirationDate, FakeDatabase db){
 		this.emailAddress=emailAddress;
 		this.expirationDate=expirationDate;
 		this.a=a;
+		this.db=db;
 		generateAndSetURL();
 	}
-	//not implemented yet
-	public boolean resetPassword(String password){
-		return false;
+	
+	public void resetPassword(String password){
+		db.setPassword(password);
 	}
 	
 	public void renew(){
-		
+		a.requestPasswordReset(emailAddress);
 	}
 	
 	public String buildEmail(String firstHalf, String secondHalf){

@@ -2,14 +2,10 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import Model.Authenticator;
-import Model.PasswordResetPage;
 
 public class EmailSenderTest {
 	Authenticator a;

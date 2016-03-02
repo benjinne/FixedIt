@@ -14,20 +14,22 @@ public class User {
 	private TreeMap<String, Schedule> schedules;
 	private int studentStatus, numSchedules;
 	private Query currentQuery;
+	private FakeDatabase db;
 	
-	public User(String emailAddress){
+	public User(String emailAddress, FakeDatabase db){
 		this.emailAddress=emailAddress;
 		this.schedules=lookupSchedules();
 		this.studentStatus=lookupStudentStatus();
 		this.numSchedules=schedules.size();
+		this.db=db;
 	}
-	//implement with database
+	
 	private TreeMap<String, Schedule> lookupSchedules(){
-		return null;
+		return db.getUserSchedules(this);
 	}
-	//implement with database
+	
 	private int lookupStudentStatus(){
-		return -1;
+		return db.getStudentStatus(this);
 	}
 	
 	public void dispose(){
@@ -41,9 +43,9 @@ public class User {
 			numSchedules++;
 		}
 	}
-	//implement with database
+	
 	public void deleteAccount(){
-		
+		db.deleteUser(this);
 	}
 	
 	public Query newQuery(int term, String level, String dept){
