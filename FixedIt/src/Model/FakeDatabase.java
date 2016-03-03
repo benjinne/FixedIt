@@ -16,10 +16,12 @@ public class FakeDatabase {
 	
 	public TreeMap<String, Schedule> getUserSchedules(User usr){
 		System.out.println(this.getClass() + ": A method is not implemented yet");
+		return null;
 	}
 	
 	public int getStudentStatus(User usr){
 		System.out.println(this.getClass() + ": A method is not implemented yet");
+		return 0;
 	}
 	
 	public void deleteUser(User usr){

@@ -36,7 +36,7 @@ public class Authenticator extends EmailSender {
 	}
 	
 	public void saveExistingUserNewDataToDB(User usr){
-		System.out.println("Authenticator:Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
+		System.out.println("Authenticator::Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
 	}
 	
 	/**
@@ -196,7 +196,7 @@ public class Authenticator extends EmailSender {
 		return false;
 	}
 	private Session createSession(User user){
-		return new Session(user);
+		return new Session(user, this);
 	}
 	
 	public static final String MESSAGE_FIRST_HALF=
