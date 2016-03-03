@@ -17,12 +17,14 @@ public class PasswordResetPage extends EmailSender {
 		generateAndSetURL();
 	}
 	
-	public void resetPassword(String password){
-		if(!expirationDate.after(Calendar.getInstance())){
+	public boolean resetPassword(String password){
+		if(expirationDate.after(Calendar.getInstance())){
 			db.setPassword(password);
+			return true;
 		}
 		else{
-			throw new RuntimeException("This passwordResetPage is expired!");
+			System.out.println("This PasswordResetPage has expired!");
+			return false;
 		}
 	}
 	

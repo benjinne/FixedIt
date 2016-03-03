@@ -24,10 +24,10 @@ public class AuthenticatorTest {
 		a=new Authenticator(db);
 	}
 	
-//	@Test
-//	public void testRequestPasswordReset(){
-//		a.requestPasswordReset("mjones44@ycp.edu");
-//	}
+	@Test
+	public void testRequestPasswordReset(){
+		a.requestPasswordReset("cs320fixedit@mailinator.com");
+	}
 
 	@Test
 	public void testValidateNewUser() {
