@@ -14,21 +14,20 @@ public class User {
 	private TreeMap<String, Schedule> schedules;
 	private int studentStatus, numSchedules;
 	private Query currentQuery;
-	private FakeDatabase db;
+	private Authenticator auth;
 	
-	public User(String emailAddress){
+	public User(String emailAddress, Authenticator auth){
 		this.emailAddress=emailAddress;
-		this.schedules=lookupSchedules();
-		this.studentStatus=lookupStudentStatus();
-		this.numSchedules=schedules.size();
+		this.auth=auth;
 	}
 	
-	private TreeMap<String, Schedule> lookupSchedules(){
-		return db.getUserSchedules(this);
-	}
-	
-	private int lookupStudentStatus(){
-		return db.getStudentStatus(this);
+	public void reInitializeUser(){
+		User tmp=auth.getUser(emailAddress);
+		emailAddress=tmp.getEmailAddress();
+		schedules=tmp.getSchedules();
+		studentStatus=tmp.getStudentStatus();
+		numSchedules=tmp.getNumSchedules();
+		tmp.dispose();
 	}
 	
 	public void dispose(){
@@ -44,7 +43,7 @@ public class User {
 	}
 	
 	public void deleteAccount(){
-		db.deleteUser(this);
+		auth.deleteUser(emailAddress);
 	}
 	
 	public Query newQuery(int term, String level, String dept){

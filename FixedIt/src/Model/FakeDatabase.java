@@ -1,35 +1,29 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class FakeDatabase {
-	private ArrayList<User> users;
+	private TreeMap<String, String> usernamePasswordPairings;
+	private TreeMap<String, User> users;
 	
 	public FakeDatabase(){
-		users=new ArrayList<User>();
+		users=new TreeMap<String, User>();
+		usernamePasswordPairings=new TreeMap<String, String>();
 	}
 	
-	public FakeDatabase(ArrayList<User> initializeWithUsers){
-		
+	public FakeDatabase(TreeMap<String, User> users){
+		this.users=users;
 	}
 	
-	public TreeMap<String, Schedule> getUserSchedules(User usr){
-		System.out.println(this.getClass() + ": A method is not implemented yet");
-		return null;
+	public User getUserByEmailAddress(String emailAddress){
+		return users.get(emailAddress);
 	}
 	
-	public int getStudentStatus(User usr){
-		System.out.println(this.getClass() + ": A method is not implemented yet");
-		return 0;
+	public void setPasswordForUser(String emailAddress, String password){
+		usernamePasswordPairings.put(emailAddress, password);
 	}
 	
-	public void deleteUser(User usr){
-		System.out.println(this.getClass() + ": A method is not implemented yet");
+	public void deleteUser(String emailAddress){
+		users.remove(emailAddress);
 	}
-	
-	public void setPassword(String pw){
-		System.out.println(this.getClass() + ": A method is not implemented yet");
-	}
-
 }

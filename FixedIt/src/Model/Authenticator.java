@@ -35,8 +35,20 @@ public class Authenticator extends EmailSender {
 		return false;
 	}
 	
+	public User getUser(String emailAddress){
+		return db.getUserByEmailAddress(emailAddress);
+	}
+	
 	public void saveExistingUserNewDataToDB(User usr){
 		System.out.println("Authenticator::Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
+	}
+	
+	public void setPasswordForUser(String emailAddress, String password){
+		db.setPasswordForUser(emailAddress, saltHashPassword(password));
+	}
+	
+	public void deleteUser(String emailAddress){
+		db.deleteUser(emailAddress);
 	}
 	
 	/**
@@ -46,6 +58,9 @@ public class Authenticator extends EmailSender {
 	 * @return true if password meets requirements, false otherwise
 	 */
 	public boolean isValidPassword(String password){
+		if(password.equals("password")){ //LOL
+			return false;
+		}
 		if(password.length()>=8){
 			for(int i=0; i<password.length(); i++){
 				if(!ALLOWED_CHARS.contains(Character.toString(password.charAt(i)))){
@@ -75,7 +90,7 @@ public class Authenticator extends EmailSender {
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.DATE, 7);
-		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, db);
+		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal);
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
 		sendMail(email, message);
 	}
@@ -184,7 +199,7 @@ public class Authenticator extends EmailSender {
 	
 	public Session authorizeUser(String email, String password){
 		if(credentialsMatch(email, password)){
-			return createSession(new User(email));
+			return createSession(new User(email, this));
 		}
 		else{
 			return null;

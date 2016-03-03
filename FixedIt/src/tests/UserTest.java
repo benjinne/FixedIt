@@ -9,16 +9,22 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import Model.Authenticator;
 import Model.Course;
+import Model.FakeDatabase;
 import Model.Query;
 import Model.User;
 
 public class UserTest {
 	User user;
+	FakeDatabase db;
+	Authenticator auth;
 	
 	@Before
 	public void setUp() throws Exception {
-		user=new User("dwayne@theRockJohnson.com");
+		db=new FakeDatabase();
+		auth=new Authenticator(db);
+		user=new User("dwayne@theRockJohnson.com", auth);
 		ArrayList<Course> cs=user.newQuery(Query.SPRING_2016, Query.LEVEL_UNDERGRAD, Query.CS_12).createRegistrar().fetch();
 		user.createSchedule("Dwayne \"The Rock\" Johnson's Schedule");
 		user.getSchedule("Dwayne \"The Rock\" Johnson's Schedule").addCourses(cs.get(0), cs.get(1), cs.get(2), cs.get(4));

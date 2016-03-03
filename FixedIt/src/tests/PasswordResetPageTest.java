@@ -22,7 +22,7 @@ public class PasswordResetPageTest {
 		auth=new Authenticator(db);
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, -4);
-		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal, db);
+		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class PasswordResetPageTest {
 		assertFalse(pwReset.resetPassword("password"));
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, 4);
-		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal, db);
+		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);
 		assertTrue(pwReset.resetPassword("password"));
 	}
 
