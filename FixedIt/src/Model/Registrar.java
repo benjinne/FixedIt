@@ -86,6 +86,7 @@ public class Registrar {
 	 * called directly. This method uses a library called JSoup,
 	 * licensed under the MIT License, which can be found at the top of
 	 * this file.
+	 * NOTE: If the course is "TO BE ARRANGED", Course.days will be null
 	 * @param lines a String array containing Strings in CSV format
 	 * @return courses an ArrayList<Course> parsed from lines of CSV
 	 */
@@ -101,7 +102,7 @@ public class Registrar {
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
 					course.setType(data[4]);
-					course.setTime(data[5].replace(" ", ""));
+					course.setTime("TO BE ARRANGED");
 					course.addLocation(data[6]);
 					course.addInstructor(data[7]);
 					course.setCapacity(Integer.parseInt(data[8].substring(1)));
@@ -156,7 +157,7 @@ public class Registrar {
 		 for (Element row : rows) {
 			 Elements cells = row.getElementsByTag("td");
 			 for (Element cell : cells) {
-				 csv=csv+cell.text().concat(", ");
+				 csv=csv+cell.text().replace(",", "").concat(", ");
 			 }
 			 csv=csv+"\n";
 		 }
