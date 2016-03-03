@@ -16,12 +16,11 @@ public class User {
 	private Query currentQuery;
 	private FakeDatabase db;
 	
-	public User(String emailAddress, FakeDatabase db){
+	public User(String emailAddress){
 		this.emailAddress=emailAddress;
 		this.schedules=lookupSchedules();
 		this.studentStatus=lookupStudentStatus();
 		this.numSchedules=schedules.size();
-		this.db=db;
 	}
 	
 	private TreeMap<String, Schedule> lookupSchedules(){

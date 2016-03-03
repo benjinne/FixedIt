@@ -5,14 +5,14 @@ import java.util.Calendar;
 public class PasswordResetPage extends EmailSender {
 	private String emailAddress;
 	private Calendar expirationDate;
-	private Authenticator a;
+	private Authenticator auth;
 	private String url;
 	private FakeDatabase db;
 	
-	public PasswordResetPage(Authenticator a, String emailAddress, Calendar expirationDate, FakeDatabase db){
+	public PasswordResetPage(Authenticator auth, String emailAddress, Calendar expirationDate, FakeDatabase db){
 		this.emailAddress=emailAddress;
 		this.expirationDate=expirationDate;
-		this.a=a;
+		this.auth=auth;
 		this.db=db;
 		generateAndSetURL();
 	}
@@ -22,7 +22,7 @@ public class PasswordResetPage extends EmailSender {
 	}
 	
 	public void renew(){
-		a.requestPasswordReset(emailAddress);
+		auth.requestPasswordReset(emailAddress);
 	}
 	
 	public String buildEmail(String firstHalf, String secondHalf){

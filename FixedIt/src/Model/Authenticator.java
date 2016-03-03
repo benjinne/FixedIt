@@ -14,9 +14,14 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Authenticator extends EmailSender {
 	public static final String ALLOWED_CHARS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.-_";
-	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 												+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	private FakeDatabase db;
 
+	public Authenticator(FakeDatabase db){
+		this.db=db;
+	}
+	
 	//implement with database
 	public boolean validateNewUser(User newUser){
 		return false;
@@ -28,6 +33,10 @@ public class Authenticator extends EmailSender {
 	//implement with database
 	public boolean userExists(String emailAddress){
 		return false;
+	}
+	
+	public void saveExistingUserNewDataToDB(User usr){
+		System.out.println("Authenticator:Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
 	}
 	
 	/**
@@ -66,7 +75,7 @@ public class Authenticator extends EmailSender {
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
 		cal.add(Calendar.DATE, 7);
-		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal);
+		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, db);
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
 		sendMail(email, message);
 	}
