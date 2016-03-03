@@ -13,7 +13,7 @@ public class RegistrarTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520&stype=A&dmode=D&dept=CS_12");
+		r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520&stype=A&dmode=D&dept=ECH_04");
 	}
 
 	@Test

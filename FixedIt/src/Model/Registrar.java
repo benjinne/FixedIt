@@ -95,7 +95,7 @@ public class Registrar {
 			String[] data=lines[i].split(",");
 			Course course=new Course();
 			if(data[0].matches("[A-Za-z0-9]+")){
-				if(data[4].contains("TUT") || data[4].contains("IND")){
+				if(data[5].toLowerCase().contains("arranged")){
 					course.setCRN(Integer.parseInt(data[0]));
 					course.setCourseAndSection(data[1]);
 					course.setTitle(data[2]);
@@ -150,6 +150,7 @@ public class Registrar {
 		sourceHTML=sourceHTML.substring(sourceHTML.lastIndexOf("<table  class="));
 		sourceHTML=sourceHTML.substring(0, sourceHTML.lastIndexOf("</table>")+8);
 		 Document doc = Jsoup.parseBodyFragment(sourceHTML);
+		 //System.out.println(doc);
 		 Elements rows = doc.getElementsByTag("tr");
 		 String csv="";
 		 for (Element row : rows) {
