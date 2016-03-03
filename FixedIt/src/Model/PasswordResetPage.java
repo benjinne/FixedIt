@@ -18,7 +18,12 @@ public class PasswordResetPage extends EmailSender {
 	}
 	
 	public void resetPassword(String password){
-		db.setPassword(password);
+		if(!expirationDate.after(Calendar.getInstance())){
+			db.setPassword(password);
+		}
+		else{
+			throw new RuntimeException("This passwordResetPage is expired!");
+		}
 	}
 	
 	public void renew(){
