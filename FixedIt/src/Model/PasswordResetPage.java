@@ -2,7 +2,7 @@ package Model;
 
 import java.util.Calendar;
 
-public class PasswordResetPage extends EmailSender {
+public class PasswordResetPage implements EmailSender {
 	private String emailAddress;
 	private Calendar expirationDate;
 	private Authenticator auth;

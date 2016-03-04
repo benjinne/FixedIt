@@ -16,14 +16,14 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class EmailSender extends javax.mail.Authenticator{
+public interface EmailSender {
 	/**
 	 * Sends an email in HTML format to the given address.
 	 * @param email the email address to send to
 	 * @param text the text/HTML to set as the body of the message
 	 * @return true if message is sent successfully, false if message fails to send
 	 */
-	public boolean sendMail(String email, String text) {
+	public default boolean sendMail(String email, String text) {
 		Properties properties = new Properties();
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.port", "587");
