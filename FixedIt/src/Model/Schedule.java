@@ -6,10 +6,16 @@ public class Schedule {
 	
 	public ArrayList<Course> courses;
 	public String name;
+	//Set to one of the Query.Session constants
+	public String term;
+	//Set to one of the Query.Level constants
+	public String level;
 	
-	public Schedule(String name, ArrayList<Course> courses){
+	public Schedule(String name, ArrayList<Course> courses, String term, String level){
 		this.name=name;
 		this.courses=courses;
+		this.term=term;
+		this.level=level;
 	}
 	
 	public Schedule(String name){
@@ -87,6 +93,27 @@ public class Schedule {
 			}
 		}
 		return false;
+	}
+	
+	public String getTerm(){
+		return term;
+	}
+	/**
+	 * Use one the Query constants
+	 * @param term one of the Query term constants
+	 */
+	public void setTerm(String term){
+		this.term=term;
+	}
+	public String getLevel(){
+		return level;
+	}
+	/**
+	 * Use one of the Query constants here
+	 * @param level one of the Query level constants
+	 */
+	public void setLevel(String level){
+		this.level=level;
 	}
 	
 	public ArrayList<Course> getCourses() {
