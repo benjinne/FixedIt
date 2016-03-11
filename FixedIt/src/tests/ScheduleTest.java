@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Course;
-import Model.Registrar;
-import Model.Schedule;
+import fixedIt.modelComponents.Course;
+import fixedIt.modelComponents.Registrar;
+import fixedIt.modelComponents.Schedule;
 
 public class ScheduleTest {
 	private Schedule s;

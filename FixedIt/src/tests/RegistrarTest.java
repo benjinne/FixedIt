@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Course;
-import Model.Registrar;
+import fixedIt.modelComponents.Course;
+import fixedIt.modelComponents.Registrar;
 
 public class RegistrarTest {
 	Registrar r;

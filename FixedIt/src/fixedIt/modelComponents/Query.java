@@ -1,4 +1,4 @@
-package Model;
+package fixedIt.modelComponents;
 
 
 public class Query {

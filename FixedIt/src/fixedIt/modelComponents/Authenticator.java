@@ -1,4 +1,4 @@
-package Model;
+package fixedIt.modelComponents;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -207,7 +207,7 @@ public class Authenticator implements EmailSender {
 	}
 	
 	//implement with database
-	private boolean credentialsMatch(String email, String password){
+	public boolean credentialsMatch(String email, String password){
 		return false;
 	}
 	private Session createSession(User user){

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Authenticator;
-import Model.Course;
-import Model.FakeDatabase;
-import Model.Query;
-import Model.User;
+import fixedIt.modelComponents.Authenticator;
+import fixedIt.modelComponents.Course;
+import fixedIt.modelComponents.FakeDatabase;
+import fixedIt.modelComponents.Query;
+import fixedIt.modelComponents.User;
 
 public class UserTest {
 	User user;

@@ -7,9 +7,9 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import Model.Authenticator;
-import Model.FakeDatabase;
-import Model.PasswordResetPage;
+import fixedIt.modelComponents.Authenticator;
+import fixedIt.modelComponents.FakeDatabase;
+import fixedIt.modelComponents.PasswordResetPage;
 
 public class PasswordResetPageTest {
 	private PasswordResetPage pwReset;

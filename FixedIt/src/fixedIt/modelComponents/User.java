@@ -1,4 +1,4 @@
-package Model;
+package fixedIt.modelComponents;
 
 import java.io.BufferedWriter;
 import java.io.File;
