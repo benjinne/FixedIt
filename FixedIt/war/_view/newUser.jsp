@@ -4,7 +4,7 @@
 
 <html>
 	<head>
-		<title>FixedIt Scheduler Login</title>
+		<title>FixedIt Scheduler Registration</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -21,7 +21,7 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 	
-		<form action="${pageContext.servletContext.contextPath}/login" method="post">
+		<form action="${pageContext.servletContext.contextPath}/register" method="post">
 			<table>
 				<tr>
 					<td class="label">Email Address: </td>
@@ -31,12 +31,16 @@
 					<td class="label">Password: </td>
 					<td><input type="password" name="password" size="12" value="${password}" /></td>
 				</tr>
+				<tr>
+					<td class="label">Confirm Password: </td>
+					<td><input type="password" name="passwordConfirm" size="12" value="${passwordConfirm}" /></td>
+				</tr>
 			</table>
-			<input type="Submit" name="submit" value="Login">
+			<input type="Submit" name="submit" value="Create Account">
 			<br>
-			<c:set var="credentialsMatch"/>
-			<c:if test="${credentialsMatch}">
-				<p><a href="_view/userInfo.jsp">Go to User Home</a></p>
+			<c:set var="accountCreated" value="${accountCreated}"/>
+			<c:if test="${accountCreated}">
+				<a href="_view/login.jsp">Login to your new account!</a>
 			</c:if>
 		</form>
 	</body>

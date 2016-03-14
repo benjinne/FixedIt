@@ -26,4 +26,8 @@ public class FakeDatabase {
 	public void deleteUser(String emailAddress){
 		users.remove(emailAddress);
 	}
+	public void addNewUser(User user, String password){
+		users.put(user.getEmailAddress(), user);
+		usernamePasswordPairings.put(user.getEmailAddress(), password);
+	}
 }
