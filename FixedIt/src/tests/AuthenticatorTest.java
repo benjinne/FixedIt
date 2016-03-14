@@ -10,7 +10,6 @@ import fixedIt.modelComponents.FakeDatabase;
 
 public class AuthenticatorTest {
 	private Authenticator a;
-	private FakeDatabase db;
 	private String validPass;
 	private String validPass2;
 	private String invalidPass;
@@ -20,8 +19,7 @@ public class AuthenticatorTest {
 		validPass="ThisIsAPassword!-._";
 		invalidPass="ThisIsAnInvalidPass/?@#";
 		validPass2="ThisIsAlsoAPassword!!!---...___";
-		db=new FakeDatabase();
-		a=new Authenticator(db);
+		a=new Authenticator();
 	}
 	
 	@Test
