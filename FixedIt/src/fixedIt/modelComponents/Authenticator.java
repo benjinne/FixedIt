@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -12,14 +15,24 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import fixedIt.sql.database.*;
+
 public class Authenticator implements EmailSender {
 	public static final String ALLOWED_CHARS="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.-_";
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 												+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	private FakeDatabase db;
 
-	public Authenticator(FakeDatabase db){
-		this.db=db;
+	public Authenticator(){
+		Connection conn = null;
+		try {
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+			conn.setAutoCommit(true);
+		} catch (SQLException | ClassNotFoundException e) {
+			System.out.println("Error: " + e.getMessage());
+		} finally {
+			DBUtil.closeQuietly(conn);
+		}
 	}
 	
 	//implement with database
@@ -28,15 +41,15 @@ public class Authenticator implements EmailSender {
 	}
 	//implement with database
 	public void addNewUserToDB(String email, String password){
-		db.addNewUser(new User(email, this), password);
+		
 	}
 	//implement with database
 	public boolean userExists(String emailAddress){
 		return false;
 	}
-	
+	//implement with database
 	public User getUser(String emailAddress){
-		return db.getUserByEmailAddress(emailAddress);
+		return null;
 	}
 	
 	public void saveExistingUserNewDataToDB(User usr){
@@ -44,11 +57,11 @@ public class Authenticator implements EmailSender {
 	}
 	
 	public void setPasswordForUser(String emailAddress, String password){
-		db.setPasswordForUser(emailAddress, saltHashPassword(password));
+		
 	}
-	
+	//implement with database
 	public void deleteUser(String emailAddress){
-		db.deleteUser(emailAddress);
+		
 	}
 	
 	/**

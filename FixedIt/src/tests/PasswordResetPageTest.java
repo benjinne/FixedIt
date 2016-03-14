@@ -14,12 +14,10 @@ import fixedIt.modelComponents.PasswordResetPage;
 public class PasswordResetPageTest {
 	private PasswordResetPage pwReset;
 	private Authenticator auth;
-	private FakeDatabase db;
 
 	@Before
 	public void setUp() throws Exception {
-		db=new FakeDatabase();
-		auth=new Authenticator(db);
+		auth=new Authenticator();
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, -4);
 		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);

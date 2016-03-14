@@ -6,15 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class User {
+public class User{
+	/**
+	 * 
+	 */
 	public static final int STATUS_FULL_TIME=0;
 	public static final int STATUS_PART_TIME=1;
 	
 	private String emailAddress;
 	private TreeMap<String, Schedule> schedules;
 	private int studentStatus, numSchedules;
-	private Query currentQuery;
-	private Authenticator auth;
+	private transient Query currentQuery;
+	private transient Authenticator auth;
 	
 	public User(String emailAddress, Authenticator auth){
 		this.emailAddress=emailAddress;
