@@ -11,19 +11,16 @@ import org.junit.Test;
 
 import fixedIt.modelComponents.Authenticator;
 import fixedIt.modelComponents.Course;
-import fixedIt.modelComponents.FakeDatabase;
 import fixedIt.modelComponents.Query;
 import fixedIt.modelComponents.User;
 
 public class UserTest {
 	User user;
-	FakeDatabase db;
 	Authenticator auth;
 	
 	@Before
 	public void setUp() throws Exception {
-		db=new FakeDatabase();
-		auth=new Authenticator(db);
+		auth=new Authenticator();
 		user=new User("dwayne@theRockJohnson.com", auth);
 		ArrayList<Course> cs=user.newQuery(Query.SPRING_2016, Query.LEVEL_UNDERGRAD, Query.CS_12).createRegistrar().fetch();
 		user.createSchedule("Dwayne \"The Rock\" Johnson's Schedule");
