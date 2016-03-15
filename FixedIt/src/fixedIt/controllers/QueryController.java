@@ -13,7 +13,7 @@ public class QueryController {
 		this.query=query;
 	}
 	
-	public void setAuth(Query query){
+	public void setQuery(Query query){
 		this.query=query;
 	}
 	
