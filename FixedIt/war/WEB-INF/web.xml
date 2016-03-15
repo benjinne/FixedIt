@@ -26,6 +26,11 @@
     <servlet-class>fixedIt.servlets.SearchServlet</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>DisplayScheduleServlet</servlet-name>
+    <servlet-class>fixedIt.servlets.DisplayScheduleServlet</servlet-class>
+  </servlet>
+  
   <!-- Servlet mappings -->
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -37,14 +42,19 @@
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
   
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>UserInfoServlet</servlet-name>
     <url-pattern>/userInfo</url-pattern>
   </servlet-mapping>
   
-    <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>SearchServlet</servlet-name>
     <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>DisplayScheduleServlet</servlet-name>
+    <url-pattern>/schedule</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>

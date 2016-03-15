@@ -6,17 +6,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fixedIt.modelComponents.Query;
+import fixedIt.modelComponents.Schedule;
 
 
-public class SearchServlet extends HttpServlet {			
+public class DisplayScheduleServlet extends HttpServlet {			
 	
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class SearchServlet extends HttpServlet {
 	
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
 
 	/*private String getStringFromParameter(String s) {
@@ -44,4 +44,3 @@ public class SearchServlet extends HttpServlet {
 		}
 	}*/
 }
-
