@@ -91,7 +91,7 @@ public class Main {
 				}
 				sql=sql +"'" + c.getCapacity() + "', \n'" + c.getSeatsRemain() + "', \n'" + c.getSeatsFilled()
 					+ "', \n'" + c.getBeginEnd() + "'" + ")";
-				System.out.println(sql);
+				//System.out.println(sql);
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}
