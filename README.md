@@ -3,10 +3,11 @@ CS320 Software Engineering Project: York College Scheduling App
 
 
 To Do:
--[ ] implement database methods in Authenticator class
 
--[ ] finish jsp and servlet files
+- [ ] implement database methods in Authenticator class
 
--[ ] write tests for database methods
+- [ ] finish jsp and servlet files
 
--[ ] design Web interface
+- [ ] write tests for database methods
+
+- [ ] design Web interface
