@@ -18,6 +18,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SQLWriter {
+	/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 *
+	 * FORMAT FOR TABLE courses
+	 *  CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd
+	 * 
+	 *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 */
 	static class RowList extends ArrayList<List<String>> {
 		private static final long serialVersionUID = 1L;
 	}
@@ -33,6 +40,10 @@ public class SQLWriter {
 			+ "----------------------------------------------------"
 			+ "----------------------------------------------------";
 
+	public static void executeDBCommand(Connection conn, String sql) throws SQLException{
+		executeSQL(conn, sql);
+	}
+	
 	private static void executeSQL(Connection conn, String sql) throws SQLException {
 		Statement stmt = null;
 		ResultSet resultSet = null;

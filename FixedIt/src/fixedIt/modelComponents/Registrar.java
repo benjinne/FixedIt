@@ -72,8 +72,9 @@ public class Registrar {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         String inputLine;
         StringBuilder a = new StringBuilder();
-        while ((inputLine = in.readLine()) != null)
-            a.append(inputLine);
+        while ((inputLine = in.readLine()) != null){
+        	a.append(inputLine);
+        }
         in.close();
 
         return a.toString();
@@ -164,6 +165,7 @@ public class Registrar {
 		 csv=csv.substring(csv.indexOf('\n'));
 		 csv=csv.replace(" view book info", "");
 		 csv=csv.substring(1);
+		 csv=csv.replaceAll("\u00a0", "");
 		 String[] lines=csv.split("\\n");
 		 return lines;
 	}
