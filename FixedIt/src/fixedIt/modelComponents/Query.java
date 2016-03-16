@@ -8,6 +8,7 @@ public class Query {
 	public static final int SUMMER_I_2016			=201540;
 	public static final int MINIMESTER_2016			=201530;
 	public static final int SPRING_2016				=201520;
+	public static final int FALL_2016				=201610;
 	
 	//level constants
 	public static final String LEVEL_UNDERGRAD							="A";

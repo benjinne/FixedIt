@@ -24,6 +24,9 @@ public class SQLWriter {
 	 *  CRN, courseAndSection, title, credits, type, days, time, location_one, 
 	 *  	location_two, instructor_one, instructor_two, capacity, seatsRemain, 
 	 *  	seatsFilled, beginEnd
+	 *  
+	 *  FORMAT FOR TABLE users
+	 *  	emailaddress, passwordhash, studentstatus, numschedules
 	 * 
 	 *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 */
