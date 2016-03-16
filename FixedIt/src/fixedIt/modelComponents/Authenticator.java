@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,34 +36,78 @@ public class Authenticator implements EmailSender {
 			DBUtil.closeQuietly(conn);
 		}
 	}
-	//implement tests
-	public void addNewUserToDB(String email, String passwordHash){
-		String sql="insert into users values ( '" + email + "', '" + passwordHash + "', 0, 0 ) ;";
+	/**
+	 * adds a new user to the database.
+	 * @param user the user to add to the database.
+	 * @return true if user is added successfully, false otherwise.
+	 */
+	public boolean addNewUserToDB(User user){
+		String sql="insert into users values ( '" + user.getEmailAddress() + "', '" + user.getPasswordHash() + "', 0, 0 ) ;";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
-	//implement with database
-	public boolean userExists(String emailAddress){
-		return false;
+	/**
+	 * Checks if a user already exists in the database
+	 * associated with the given email address.
+	 * @param emailAddress email address to check
+	 * @return true if a user is found, false otherwise.
+	 * @throws SQLException
+	 */
+	public boolean userExists(String emailAddress) throws SQLException{
+		String sql="select * from users where emailaddress='" + emailAddress + "'";
+		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+		if(rs.getString("emailaddress").contains(emailAddress)){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
-	//implement with database
-	public User getUser(String emailAddress){
-		return null;
+	/**
+	 * Populates a user object with data from database, if
+	 * a user with the given email address exists.
+	 * NOT FINISHED; HAVE TO POPULATE SCHEDULE TREEMAP
+	 * 
+	 * @param emailAddress user's email address to lookup user by
+	 * @return user the user object associated with the given email address, if one exists.
+	 * @throws SQLException
+	 */
+	public User getUser(String emailAddress) throws SQLException{
+		User user=new User();
+		if(this.userExists(emailAddress)){
+			String sql="select * from users where emailaddress='" + emailAddress + "'";
+			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+			user.setEmailAddress(emailAddress);
+			user.setPasswordHash(rs.getString("passwordhash"));
+			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
+			
+			return user;
+		}
+		else return null;
 	}
 	
 	public void saveExistingUserNewDataToDB(User usr){
 		System.out.println("Authenticator::Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
 	}
 	
-	public void setPasswordForUser(String emailAddress, String password){
-		
+	public boolean setPasswordForUser(String emailAddress, String password){
+		return false;
 	}
-	//implement with database
-	public void deleteUser(String emailAddress){
-		
+	
+	public boolean deleteUser(User user){
+		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "';";
+		try {
+			SQLWriter.executeDBCommand(conn, sql);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	/**

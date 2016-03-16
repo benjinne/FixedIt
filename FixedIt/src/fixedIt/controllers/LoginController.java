@@ -6,6 +6,7 @@ public class LoginController {
 	private Authenticator auth;
 	
 	public LoginController(){
+		auth=new Authenticator();
 	}
 	
 	public LoginController(Authenticator auth){

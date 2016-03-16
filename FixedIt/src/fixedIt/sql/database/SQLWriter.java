@@ -21,7 +21,9 @@ public class SQLWriter {
 	/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 *
 	 * FORMAT FOR TABLE courses
-	 *  CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd
+	 *  CRN, courseAndSection, title, credits, type, days, time, location_one, 
+	 *  	location_two, instructor_one, instructor_two, capacity, seatsRemain, 
+	 *  	seatsFilled, beginEnd
 	 * 
 	 *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 */
@@ -40,11 +42,11 @@ public class SQLWriter {
 			+ "----------------------------------------------------"
 			+ "----------------------------------------------------";
 
-	public static void executeDBCommand(Connection conn, String sql) throws SQLException{
-		executeSQL(conn, sql);
+	public static ResultSet executeDBCommand(Connection conn, String sql) throws SQLException{
+		return executeSQL(conn, sql);
 	}
 	
-	private static void executeSQL(Connection conn, String sql) throws SQLException {
+	private static ResultSet executeSQL(Connection conn, String sql) throws SQLException {
 		Statement stmt = null;
 		ResultSet resultSet = null;
 
@@ -77,6 +79,7 @@ public class SQLWriter {
 			DBUtil.closeQuietly(resultSet);
 			DBUtil.closeQuietly(stmt);
 		}
+		return resultSet;
 	}
 
 	private static void printRow(List<String> row, List<Integer> colWidths) {

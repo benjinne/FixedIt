@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.TreeMap;
 
 public class User{
@@ -16,6 +17,14 @@ public class User{
 	private Query currentQuery;
 	private Authenticator auth;
 	
+	public User(){
+		emailAddress=null;
+		passwordHash=null;
+		studentStatus=0;
+		numSchedules=0;
+		auth=null;
+	}
+	
 	public User(String emailAddress, String passwordHash, int studentStatus, int numSchedules, Authenticator auth){
 		this.emailAddress=emailAddress;
 		this.passwordHash=passwordHash;
@@ -24,7 +33,7 @@ public class User{
 		this.auth=auth;
 	}
 	
-	public void reInitializeUser(){
+	public void reInitializeUser() throws SQLException{
 		User tmp=auth.getUser(emailAddress);
 		emailAddress=tmp.getEmailAddress();
 		schedules=tmp.getSchedules();
@@ -47,7 +56,7 @@ public class User{
 	}
 	
 	public void deleteAccount(){
-		auth.deleteUser(emailAddress);
+		auth.deleteUser(this);
 	}
 	
 	public Query newQuery(int term, String level, String dept){
@@ -82,7 +91,9 @@ public class User{
 	public Schedule getSchedule(String key){
 		return schedules.get(key);
 	}
-	
+	public void setAuth(Authenticator auth){
+		this.auth=auth;
+	}
 	public int getNumSchedules(){
 		return numSchedules;
 	}

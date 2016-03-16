@@ -39,11 +39,16 @@ public class LoginServlet extends HttpServlet {
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
-			if(controller.getAuth().userExists(emailAddress)){
-				credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
-			}
-			else{
-				errorMessage="No account exists for this email address.";
+			try {
+				if(controller.getAuth().userExists(emailAddress)){
+					credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
+				}
+				else{
+					errorMessage="No account exists for this email address.";
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

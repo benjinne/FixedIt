@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import fixedIt.modelComponents.Authenticator;
 import fixedIt.modelComponents.FakeDatabase;
+import fixedIt.modelComponents.User;
 
 public class AuthenticatorTest {
 	private Authenticator a;
@@ -25,16 +26,6 @@ public class AuthenticatorTest {
 	@Test
 	public void testRequestPasswordReset(){
 		a.requestPasswordReset("cs320fixedit@mailinator.com");
-	}
-
-	@Test
-	public void testValidateNewUser() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddNewUserToDB() {
-		fail("Not yet implemented");
 	}
 
 	@Test

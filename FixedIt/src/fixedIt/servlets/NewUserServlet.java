@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Authenticator;
+import fixedIt.modelComponents.User;
 
 
 public class NewUserServlet extends HttpServlet {
@@ -45,7 +46,8 @@ public class NewUserServlet extends HttpServlet {
 			errorMessage="Email address is not recognized as email address format: address@example.com";
 		}
 		else {
-			controller.getAuth().addNewUserToDB(emailAddress, password);
+			User user=new User(emailAddress, controller.getAuth().saltHashPassword(password), 0, 0, controller.getAuth());
+			controller.getAuth().addNewUserToDB(user);
 			accountCreated=true;
 		}
 		
