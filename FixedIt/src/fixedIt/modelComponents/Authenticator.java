@@ -317,7 +317,7 @@ public class Authenticator implements EmailSender {
 		return bytes;
 	}
 	
-	public Session authorizeUser(String email, String password){
+	public Session authorizeUser(String email, String password) throws SQLException{
 		if(credentialsMatch(email, password)){
 			return null; //implement!!
 		}
@@ -327,7 +327,13 @@ public class Authenticator implements EmailSender {
 	}
 	
 	//implement with database
-	public boolean credentialsMatch(String email, String password){
+	public boolean credentialsMatch(String email, String password) throws SQLException{
+		String hash=saltHashPassword(password);
+		String sql="select passwordhash from users where emailaddress='" + email + "'";
+		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+		if(hash.equals(rs.getString("passwordhash"))){
+			return true;
+		}
 		return false;
 	}
 	private Session createSession(User user){
