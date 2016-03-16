@@ -7,20 +7,20 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 public class User{
-	/**
-	 * 
-	 */
 	public static final int STATUS_FULL_TIME=0;
 	public static final int STATUS_PART_TIME=1;
 	
-	private String emailAddress;
+	private String emailAddress, passwordHash;
 	private TreeMap<String, Schedule> schedules;
 	private int studentStatus, numSchedules;
-	private transient Query currentQuery;
-	private transient Authenticator auth;
+	private Query currentQuery;
+	private Authenticator auth;
 	
-	public User(String emailAddress, Authenticator auth){
+	public User(String emailAddress, String passwordHash, int studentStatus, int numSchedules, Authenticator auth){
 		this.emailAddress=emailAddress;
+		this.passwordHash=passwordHash;
+		this.studentStatus=studentStatus;
+		this.numSchedules=numSchedules;
 		this.auth=auth;
 	}
 	
@@ -35,6 +35,7 @@ public class User{
 	
 	public void dispose(){
 		emailAddress=null;
+		passwordHash=null;
 		schedules=null;
 		currentQuery=null;
 	}
@@ -108,5 +109,11 @@ public class User{
 	}
 	public void setCurrentQuery(Query currentQuery) {
 		this.currentQuery = currentQuery;
+	}
+	public String getPasswordHash(){
+		return passwordHash;
+	}
+	public void setPasswordHash(String newHash){
+		passwordHash=newHash;
 	}
 }

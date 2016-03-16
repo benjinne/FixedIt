@@ -21,9 +21,10 @@ public class Authenticator implements EmailSender {
 	public static final String ALLOWED_CHARS="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.-_";
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 												+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	private Connection conn;
 
 	public Authenticator(){
-		Connection conn = null;
+		conn = null;
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
@@ -34,14 +35,14 @@ public class Authenticator implements EmailSender {
 			DBUtil.closeQuietly(conn);
 		}
 	}
-	
-	//implement with database
-	public boolean validateNewUser(User newUser){
-		return false;
-	}
-	//implement with database
-	public void addNewUserToDB(String email, String password){
-		
+	//implement tests
+	public void addNewUserToDB(String email, String passwordHash){
+		String sql="insert into users values ( '" + email + "', '" + passwordHash + "', 0, 0 ) ;";
+		try {
+			SQLWriter.executeDBCommand(conn, sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	//implement with database
 	public boolean userExists(String emailAddress){
@@ -212,7 +213,7 @@ public class Authenticator implements EmailSender {
 	
 	public Session authorizeUser(String email, String password){
 		if(credentialsMatch(email, password)){
-			return createSession(new User(email, this));
+			return null; //implement!!
 		}
 		else{
 			return null;
