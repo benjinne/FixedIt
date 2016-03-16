@@ -9,3 +9,4 @@ TODO:
 - [ ] !! TEST ALL DATABASE METHODS !!
 - [ ] finish jsp and servlet files
 - [ ] design Web interface
+- [ ] implement method in search controller to translate user's search terms into database queries
