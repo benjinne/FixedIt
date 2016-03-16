@@ -1,5 +1,6 @@
 package fixedIt.modelComponents;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 
 public class PasswordResetPage implements EmailSender {
@@ -15,7 +16,7 @@ public class PasswordResetPage implements EmailSender {
 		generateAndSetURL();
 	}
 	
-	public boolean resetPassword(String password){
+	public boolean resetPassword(String password) throws SQLException{
 		if(expirationDate.after(Calendar.getInstance())){
 			auth.setPasswordForUser(emailAddress, password);
 			return true;

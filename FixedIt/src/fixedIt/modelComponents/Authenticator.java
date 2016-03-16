@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +43,7 @@ public class Authenticator implements EmailSender {
 	 * @return true if user is added successfully, false otherwise.
 	 */
 	public boolean addNewUserToDB(User user){
-		String sql="insert into users values ( '" + user.getEmailAddress() + "', '" + user.getPasswordHash() + "', 0, 0 ) ;";
+		String sql="insert into users values ( '" + user.getEmailAddress() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
 			return true;
@@ -71,7 +72,7 @@ public class Authenticator implements EmailSender {
 	/**
 	 * Populates a user object with data from database, if
 	 * a user with the given email address exists.
-	 * NOT FINISHED; HAVE TO POPULATE SCHEDULE TREEMAP
+	 * !!!POPULATING TREEMAP OF SCHEDULES IN UNTESTED!!!
 	 * 
 	 * @param emailAddress user's email address to lookup user by
 	 * @return user the user object associated with the given email address, if one exists.
@@ -85,22 +86,82 @@ public class Authenticator implements EmailSender {
 			user.setEmailAddress(emailAddress);
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
-			
-			return user;
+			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
+			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
+			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
+			while(rs.next()){	//loop through all schedules
+				String scheduleName=rs.getString("tablename").substring(9, rs.getString("tablename").indexOf(emailAddress));
+				Schedule s=new Schedule(scheduleName);
+				sql="select * from " + rs.getString("tablename");
+				ResultSet courses=SQLWriter.executeDBCommand(conn, sql);  //get all courses in current schedule 
+				while(courses.next()){	//loop through all courses in current schedule 
+					Course c=new Course();
+					c.setCRN(Integer.parseInt(courses.getString("crn")));					//
+					c.setCourseAndSection(courses.getString("courseandsection"));			//
+					c.setTitle(courses.getString("title"));									//
+					c.setCredits(Double.parseDouble(courses.getString("credits")));			//
+					c.setType(courses.getString("type"));									//
+					c.setDays(courses.getString("days"));									//	add all course info
+					c.setTime(courses.getString("time"));									//	to a course object
+					c.addLocation(courses.getString("location_one"));						//
+					c.addLocation(courses.getString("location_two"));						//
+					c.addInstructor(courses.getString("instructor_one"));					//
+					c.addInstructor(courses.getString("instructor_two"));					//
+					c.setCapacity(Integer.parseInt(courses.getString("capacity")));			//
+					c.setSeatsRemain(Integer.parseInt(courses.getString("seatsremain")));	//
+					c.setSeatsFilled(Integer.parseInt(courses.getString("seatsfilled")));	//
+					c.setBeginEnd(courses.getString("beginend"));							//
+					s.addCourse(c);		//add course to a schedule
+				}
+				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
+			}
+			return user;		//return the generated user
 		}
-		else return null;
+		else return null;	//if the user does not exist, or if a database error occurs, return null
 	}
-	
-	public void saveExistingUserNewDataToDB(User usr){
-		System.out.println("Authenticator::Method: saveExistingUserNewDataToDB(User usr) not implemented yet!");
+	/**
+	 * Erases all user data and writes new/current user data to database.
+	 * @param usr the user for which to write the data
+	 * @throws SQLException
+	 */
+	public void saveExistingUserNewDataToDB(User usr) throws SQLException{
+		String sql="delete from users where emailaddress='" + usr.getEmailAddress() + "'";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', '" +
+				usr.getStudentStatus() + "', '" + usr.getNumSchedules() + "' ) ";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="select * from sys.systables where tablename like 'schedule%" + usr.getEmailAddress() + "%' ";
+		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+		while(rs.next()){
+			sql="delete * from sys.systables where tablename='" + rs.getString("tablename");
+		}
+		for(Schedule s : usr.getSchedules().values()){
+			sql="create table schedule" + usr.getEmailAddress() + s.getName() + "( crn varchar(20) )";
+			SQLWriter.executeDBCommand(conn, sql);
+			for(Course c : s.getCourses()){
+				sql="insert into schedule" + usr.getEmailAddress() + s.getName() + " ( " + c.getCRN() + " ) ";
+				SQLWriter.executeDBCommand(conn, sql);
+			}
+		}
 	}
-	
-	public boolean setPasswordForUser(String emailAddress, String password){
+	/**
+	 * updates the user's password, if the password is valid
+	 * @param emailAddress the email address of the user for which to update the password
+	 * @param password the salt+hash of the desired password
+	 * @return true if password is updated successfully, false otherwise.
+	 * @throws SQLException
+	 */
+	public boolean setPasswordForUser(String emailAddress, String password) throws SQLException{
+		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress + "' ";
+		if(isValidPassword(password)){
+			SQLWriter.executeDBCommand(conn, sql);
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean deleteUser(User user){
-		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "';";
+		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "'";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
 			return true;

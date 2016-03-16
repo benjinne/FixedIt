@@ -1,5 +1,6 @@
 package fixedIt.modelComponents;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Session {
@@ -21,7 +22,7 @@ public class Session {
 		return sessionSearchHistory;
 	}
 	
-	public void endSessionAndLogout(){
+	public void endSessionAndLogout() throws SQLException{
 		auth.saveExistingUserNewDataToDB(user);
 		user.dispose();
 		sessionSearchHistory=null;

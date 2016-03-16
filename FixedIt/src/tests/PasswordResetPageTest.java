@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import org.junit.Before;
@@ -25,11 +26,21 @@ public class PasswordResetPageTest {
 
 	@Test
 	public void testResetPassword() {
-		assertFalse(pwReset.resetPassword("password"));
+		try {
+			assertFalse(pwReset.resetPassword("password"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, 4);
 		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);
-		assertTrue(pwReset.resetPassword("password"));
+		try {
+			assertTrue(pwReset.resetPassword("password"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
