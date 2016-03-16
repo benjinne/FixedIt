@@ -38,7 +38,7 @@ public class Authenticator implements EmailSender {
 		}
 	}
 	/**
-	 * adds a new user to the database.
+	 * adds a new basic user to the database.
 	 * @param user the user to add to the database.
 	 * @return true if user is added successfully, false otherwise.
 	 */
