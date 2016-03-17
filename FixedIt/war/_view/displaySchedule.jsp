@@ -4,10 +4,30 @@
 
 <html>
 	<head>
-		<title>Class Schedule: </title>
+		<title>FixedIt Scheduler displaySchedule</title>
+		<style type="text/css">
+		.error {
+			color: red;
+		}
+		
+		td.label {
+			text-align: left;
+		}
+		</style>
 	</head>
 
 	<body>
-		PULL SCHEDULE DATA FOR USER
+		<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
+	
+		<form action="${pageContext.servletContext.contextPath}/displaySchedule" method="post">
+			<table>
+				<tr>
+					<td class="label">Schedule(button): </td>
+				</tr>
+			</table>
+			<br>
+		</form>
 	</body>
 </html>

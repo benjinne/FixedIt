@@ -4,10 +4,39 @@
 
 <html>
 	<head>
-		<title>Search for Classes:</title>
+		<title>FixedIt Scheduler Search</title>
+		<style type="text/css">
+		.error {
+			color: red;
+		}
+		
+		td.label {
+			text-align: left;
+		}
+		</style>
 	</head>
 
 	<body>
-		DO STUFF FOR SEARCH
+		<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
+	
+		<form action="${pageContext.servletContext.contextPath}/search" method="post">
+			<table>
+				<tr>
+					<td class="label">Search By Subject: </td>
+					<td><input type="search" name="searchBySubject" size="12" value="${searchBySubject}" /></td>
+				</tr>
+				<tr>
+					<td class="label">Search by Section: </td>
+					<td><input type="search" name="searchBySection" size="12" value="${searchBySection}" /></td>
+				</tr>
+				<tr>
+					<td class="label">Search by Level: </td>
+					<td><input type="search" name="searchByLevel" size="12" value="${searchByLevel}" /></td>
+				</tr>
+			</table>
+			<br>
+		</form>
 	</body>
 </html>
