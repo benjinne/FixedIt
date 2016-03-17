@@ -1,5 +1,6 @@
 package fixedIt.modelComponents;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -23,20 +24,42 @@ public class Authenticator implements EmailSender {
 	public static final String ALLOWED_CHARS="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.-_";
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 												+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	private Connection conn;
+	//private Connection conn;
 
 	public Authenticator(){
-		conn = null;
+//		File dbPath=new File("test.db");
+//		if(dbPath.exists()){
+//			System.out.println(dbPath.getAbsolutePath());
+//		}
+//		conn = null;
+//		try {
+//			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+//			conn = DriverManager.getConnection("jdbc:derby:" + dbPath.getAbsolutePath() + ";create=true");
+//			conn.setAutoCommit(true);
+//		} catch (SQLException | ClassNotFoundException e) {
+//			System.out.println("Error: " + e.getMessage());
+//		} finally {
+//			DBUtil.closeQuietly(conn); //error is NOT rooting from here, tested this
+//		}
+	}
+	
+	private Connection getConnection(){
+		Connection conn=null;
+		File dbPath=new File("test.db");
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+			conn = DriverManager.getConnection("jdbc:derby:" + dbPath.getAbsolutePath() + ";create=true");
 			conn.setAutoCommit(true);
+			return conn;
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
+			conn=null;
 		} finally {
-			DBUtil.closeQuietly(conn);
+			DBUtil.closeQuietly(conn); //error is NOT rooting from here, tested this
 		}
+		return conn;
 	}
+	
 	/**
 	 * adds a new basic user to the database.
 	 * @param user the user to add to the database.
@@ -44,10 +67,15 @@ public class Authenticator implements EmailSender {
 	 */
 	public boolean addNewUserToDB(User user){
 		String sql="insert into users values ( '" + user.getEmailAddress() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
+		Connection conn=getConnection();
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.close();
+			conn=null;
 			return true;
 		} catch (SQLException e) {
+			DBUtil.closeQuietly(conn);
+			conn=null;
 			e.printStackTrace();
 			return false;
 		}
@@ -59,18 +87,31 @@ public class Authenticator implements EmailSender {
 	 * @return true if a user is found, false otherwise.
 	 * @throws SQLException
 	 */
-	public boolean userExists(String emailAddress) throws SQLException{
+	public boolean userExists(String emailAddress){
 		String sql="select * from users where emailaddress='" + emailAddress + "'";
-		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-		if(rs.getString("emailaddress").contains(emailAddress)){
-			return true;
-		}
-		else{
+		Connection conn=getConnection();
+		ResultSet rs;
+		try {
+			rs = SQLWriter.executeDBCommand(conn, sql);
+			if(rs.getString("emailaddress").contains(emailAddress)){
+				conn.close();
+				conn=null;
+				return true;
+			}
+			else{
+				conn.close();
+				conn=null;
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			DBUtil.closeQuietly(conn);
+			conn=null;
 			return false;
 		}
 	}
 	/**
-	 * Populates a user object with data from database, if
+	 * Populates a user object with data from database by email address, if
 	 * a user with the given email address exists.
 	 * !!!POPULATING TREEMAP OF SCHEDULES IN UNTESTED!!!
 	 * 
@@ -78,7 +119,8 @@ public class Authenticator implements EmailSender {
 	 * @return user the user object associated with the given email address, if one exists.
 	 * @throws SQLException
 	 */
-	public User getUser(String emailAddress) throws SQLException{
+	private User getUser(String emailAddress) throws SQLException{
+		Connection conn=getConnection();
 		User user=new User();
 		if(this.userExists(emailAddress)){
 			String sql="select * from users where emailaddress='" + emailAddress + "'";
@@ -115,16 +157,79 @@ public class Authenticator implements EmailSender {
 				}
 				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
 			}
+			conn.close();
+			conn=null;
 			return user;		//return the generated user
 		}
-		else return null;	//if the user does not exist, or if a database error occurs, return null
+		conn.close();
+		conn=null;
+		return null;	//if the user does not exist, or if a database error occurs, return null
 	}
+	
+	/**
+	 * Populates a user object with data from database by user object (used
+	 * for User.reinitializeUser(this) ), if
+	 * a user with the given email address exists.
+	 * !!!POPULATING TREEMAP OF SCHEDULES IN UNTESTED!!!
+	 * 
+	 * @param emailAddress user's email address to lookup user by
+	 * @return user the user object associated with the given email address, if one exists.
+	 * @throws SQLException
+	 */
+	public User getUser(User user) throws SQLException{
+		String emailAddress=user.getEmailAddress();
+		Connection conn=getConnection();
+		if(this.userExists(emailAddress)){
+			String sql="select * from users where emailaddress='" + emailAddress + "'";
+			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+			user.setEmailAddress(emailAddress);
+			user.setPasswordHash(rs.getString("passwordhash"));
+			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
+			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
+			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
+			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
+			while(rs.next()){	//loop through all schedules
+				String scheduleName=rs.getString("tablename").substring(9, rs.getString("tablename").indexOf(emailAddress));
+				Schedule s=new Schedule(scheduleName);
+				sql="select * from " + rs.getString("tablename");
+				ResultSet courses=SQLWriter.executeDBCommand(conn, sql);  //get all courses in current schedule 
+				while(courses.next()){	//loop through all courses in current schedule 
+					Course c=new Course();
+					c.setCRN(Integer.parseInt(courses.getString("crn")));					//
+					c.setCourseAndSection(courses.getString("courseandsection"));			//
+					c.setTitle(courses.getString("title"));									//
+					c.setCredits(Double.parseDouble(courses.getString("credits")));			//
+					c.setType(courses.getString("type"));									//
+					c.setDays(courses.getString("days"));									//	add all course info
+					c.setTime(courses.getString("time"));									//	to a course object
+					c.addLocation(courses.getString("location_one"));						//
+					c.addLocation(courses.getString("location_two"));						//
+					c.addInstructor(courses.getString("instructor_one"));					//
+					c.addInstructor(courses.getString("instructor_two"));					//
+					c.setCapacity(Integer.parseInt(courses.getString("capacity")));			//
+					c.setSeatsRemain(Integer.parseInt(courses.getString("seatsremain")));	//
+					c.setSeatsFilled(Integer.parseInt(courses.getString("seatsfilled")));	//
+					c.setBeginEnd(courses.getString("beginend"));							//
+					s.addCourse(c);		//add course to a schedule
+				}
+				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
+			}
+			conn.close();
+			conn=null;
+			return user;		//return the generated user
+		}
+		conn.close();
+		conn=null;
+		return null;	//if the user does not exist, or if a database error occurs, return null
+	}
+	
 	/**
 	 * Erases all user data and writes new/current user data to database.
 	 * @param usr the user for which to write the data
 	 * @throws SQLException
 	 */
 	public void saveExistingUserNewDataToDB(User usr) throws SQLException{
+		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + usr.getEmailAddress() + "'";
 		SQLWriter.executeDBCommand(conn, sql);
 		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', '" +
@@ -143,6 +248,8 @@ public class Authenticator implements EmailSender {
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}
+		conn.close();
+		conn=null;
 	}
 	/**
 	 * updates the user's password, if the password is valid
@@ -152,21 +259,31 @@ public class Authenticator implements EmailSender {
 	 * @throws SQLException
 	 */
 	public boolean setPasswordForUser(String emailAddress, String password) throws SQLException{
+		Connection conn=getConnection();
 		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress + "' ";
 		if(isValidPassword(password)){
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.close();
+			conn=null;
 			return true;
 		}
+		conn.close();
+		conn=null;
 		return false;
 	}
 	
 	public boolean deleteUser(User user){
+		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "'";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.close();
+			conn=null;
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			DBUtil.closeQuietly(conn);
+			conn=null;
 			return false;
 		}
 	}
@@ -319,7 +436,7 @@ public class Authenticator implements EmailSender {
 	
 	public Session authorizeUser(String email, String password) throws SQLException{
 		if(credentialsMatch(email, password)){
-			return null; //implement!!
+			return createSession(getUser(email));
 		}
 		else{
 			return null;
@@ -328,12 +445,17 @@ public class Authenticator implements EmailSender {
 	
 	//implement with database
 	public boolean credentialsMatch(String email, String password) throws SQLException{
+		Connection conn=getConnection();
 		String hash=saltHashPassword(password);
 		String sql="select passwordhash from users where emailaddress='" + email + "'";
 		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
 		if(hash.equals(rs.getString("passwordhash"))){
+			conn.close();
+			conn=null;
 			return true;
 		}
+		conn.close();
+		conn=null;
 		return false;
 	}
 	private Session createSession(User user){

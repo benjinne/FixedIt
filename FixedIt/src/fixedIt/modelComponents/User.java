@@ -34,7 +34,7 @@ public class User{
 	}
 	
 	public void reInitializeUser() throws SQLException{
-		User tmp=auth.getUser(emailAddress);
+		User tmp=auth.getUser(this);
 		emailAddress=tmp.getEmailAddress();
 		schedules=tmp.getSchedules();
 		studentStatus=tmp.getStudentStatus();
