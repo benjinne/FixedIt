@@ -37,7 +37,7 @@ public class Authenticator implements EmailSender {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			conn = DriverManager.getConnection("jdbc:derby:" + dbPath.getAbsolutePath() + ";create=true");
-			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
 			return conn;
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -56,6 +56,7 @@ public class Authenticator implements EmailSender {
 		Connection conn=getConnection();
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.commit();
 			conn.close();
 			conn=null;
 			return true;
@@ -79,6 +80,7 @@ public class Authenticator implements EmailSender {
 		ResultSet rs;
 		try {
 			rs = SQLWriter.executeDBCommand(conn, sql);
+			rs.next();
 			if(rs.getString("emailaddress").contains(emailAddress)){
 				conn.close();
 				conn=null;
@@ -111,6 +113,7 @@ public class Authenticator implements EmailSender {
 		if(this.userExists(emailAddress)){
 			String sql="select * from users where emailaddress='" + emailAddress + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+			rs.next();
 			user.setEmailAddress(emailAddress);
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
@@ -168,6 +171,7 @@ public class Authenticator implements EmailSender {
 		if(this.userExists(emailAddress)){
 			String sql="select * from users where emailaddress='" + emailAddress + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+			rs.next();
 			user.setEmailAddress(emailAddress);
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
@@ -234,6 +238,7 @@ public class Authenticator implements EmailSender {
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}
+		conn.commit();
 		conn.close();
 		conn=null;
 	}
@@ -253,6 +258,7 @@ public class Authenticator implements EmailSender {
 			conn=null;
 			return true;
 		}
+		conn.commit();
 		conn.close();
 		conn=null;
 		return false;
@@ -263,6 +269,7 @@ public class Authenticator implements EmailSender {
 		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "'";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.commit();
 			conn.close();
 			conn=null;
 			return true;
@@ -309,6 +316,7 @@ public class Authenticator implements EmailSender {
 		Matcher emailMatcher=emailPattern.matcher(emailAddress);
 		return emailMatcher.matches();
 	}
+	
 	public void requestPasswordReset(String email){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
@@ -382,7 +390,7 @@ public class Authenticator implements EmailSender {
 	 * @param storedPassword the user's password as stored in the database
 	 * @return	boolean true if valid, false if not
 	 */
-	public boolean validatePassword(String originalPassword, String storedPassword){
+	private boolean validatePassword(String originalPassword, String storedPassword){
 		String[] parts = storedPassword.split(":");
 		int iterations = Integer.parseInt(parts[0]);
 		byte[] salt = fromHex(parts[1]);
@@ -428,127 +436,32 @@ public class Authenticator implements EmailSender {
 			return null;
 		}
 	}
-	
-	//implement with database
-	public boolean credentialsMatch(String email, String password) throws SQLException{
+	/**
+	 * 
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean credentialsMatch(String email, String password){
 		Connection conn=getConnection();
-		String hash=saltHashPassword(password);
 		String sql="select passwordhash from users where emailaddress='" + email + "'";
-		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-		if(hash.equals(rs.getString("passwordhash"))){
+		ResultSet rs;
+		String storedHash="";
+		try {
+			rs = SQLWriter.executeDBCommand(conn, sql);
+			rs.next();
+			storedHash=rs.getString("passwordhash");
 			conn.close();
 			conn=null;
-			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		conn.close();
-		conn=null;
-		return false;
+		
+		return validatePassword(password, storedHash);
 	}
 	private Session createSession(User user){
 		return new Session(user, this);
-	}
-	
-	
-	public void updateCoursesInDB() throws SQLException{
-		ArrayList<String>depts=new ArrayList<String>();
-		depts.add("ANT_01");
-		depts.add("BEH_01");
-		depts.add("CJA_01");
-		depts.add("GER_01");
-		depts.add("HSV_01");
-		depts.add("PSY_01");
-		depts.add("SOC_01");
-		depts.add("BIO_02");
-		depts.add("PMD_02");
-		depts.add("RT_02");
-		depts.add("ACC_03");
-		depts.add("ECO_03");
-		depts.add("ENT_03");
-		depts.add("FIN_03");
-		depts.add("BUS_03");
-		depts.add("IFS_03");
-		depts.add("IBS_03");
-		depts.add("MGT_03");
-		depts.add("MKT_03");
-		depts.add("QBA_03");
-		depts.add("SCM_03");
-		depts.add("ART_07");
-		depts.add("CM_07");
-		depts.add("MUS_07");
-		depts.add("THE_07");
-		depts.add("ECH_04");
-		depts.add("EDU_04");
-		depts.add("MLE_04");
-		depts.add("SE_04");
-		depts.add("SPE_04");
-		depts.add("CS_12");
-		depts.add("ECE_12");
-		depts.add("EGR_12");
-		depts.add("ME_12");
-		depts.add("PHY_12");
-		depts.add("FLM_05");
-		depts.add("FCO_05");
-		depts.add("FRN_05");
-		depts.add("GRM_05");
-		depts.add("HUM_05");
-		depts.add("INT_05");
-		depts.add("ITL_05");
-		depts.add("LAT_05");
-		depts.add("LIT_05");
-		depts.add("PHL_05");
-		depts.add("REL_05");
-		depts.add("RUS_05");
-		depts.add("SPN_05");
-		depts.add("WRT_05");
-		depts.add("G_06");
-		depts.add("HIS_06");
-		depts.add("IA_06");
-		depts.add("INT_06");
-		depts.add("PS_06");
-		depts.add("HSP_11");
-		depts.add("PE_11");
-		depts.add("REC_11");
-		depts.add("SPM_11");
-		depts.add("FYS_10");
-		depts.add("SES_10");
-		depts.add("WGS_10");
-		depts.add("NUR_08");
-		depts.add("CHM_09");
-		depts.add("ESS_09");
-		depts.add("FCM_09");
-		depts.add("MAT_09");
-		depts.add("PSC_09");
-		depts.add("PHY_09");
-		Registrar r;
-		for(String s : depts){
-			r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520" + "&stype=A&dmode=D&dept=" + s);
-			ArrayList<Course> fetched=new ArrayList<Course>();
-			fetched = r.fetch();
-			for (Course c : fetched) {
-				String sql="update courses set crn='" + c.getCRN() +
-						"', courseandsection='" + c.getCourseAndSection() +
-						"', title='" + c.getTitle() + "', credits='" + c.getCredits() +
-						"', type='" + c.getType() + "', days='" + c.getDays() +
-						"', time='" + c.getTime() + "'";
-				if(!(c.getLocation().size()>1)){
-					sql=sql+", location_one='" + c.getLocation().get(0) + "' + location_two='null', ";
-				}
-				else{
-					sql=sql+", location_one='" + c.getLocation().get(0) + "', location_two='" + c.getLocation().get(1) + "', ";
-				}
-				if(!(c.getInstructors().size()>1)){
-					sql=sql+", instructor_one='" + c.getInstructors().get(0) + "', instructor_two='null', ";
-				}
-				else{
-					sql=sql+", instructor_one='" + c.getInstructors().get(0) + "', instructor_two='" + c.getInstructors().get(1) + "', ";
-				}
-				sql=sql + "capacity='" + c.getCapacity() + "', seatsremain='" + c.getSeatsRemain() + "', seatsfilled='" + c.getSeatsFilled() + "', " +
-				"beginend='" + c.getBeginEnd() + "' ";
-				
-				Connection conn=getConnection();
-				SQLWriter.executeDBCommand(conn, sql);
-			}
-		}
 	}
 	
 	

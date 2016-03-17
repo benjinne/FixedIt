@@ -78,9 +78,8 @@ public class SQLWriter {
 				}
 			}
 			System.out.println("OK (" + rowCount + " rows(s))");
-		} finally {
-			DBUtil.closeQuietly(resultSet);
-			DBUtil.closeQuietly(stmt);
+		} finally{
+			
 		}
 		return resultSet;
 	}

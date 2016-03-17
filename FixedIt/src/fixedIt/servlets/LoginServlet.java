@@ -39,16 +39,11 @@ public class LoginServlet extends HttpServlet {
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
-			try {
-				if(controller.getAuth().userExists(emailAddress)){
-					credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
-				}
-				else{
-					errorMessage="No account exists for this email address.";
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(controller.getAuth().userExists(emailAddress)){
+				credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
+			}
+			else{
+				errorMessage="No account exists for this email address.";
 			}
 		}
 		
@@ -77,8 +72,6 @@ public class LoginServlet extends HttpServlet {
 			conn.setAutoCommit(true);
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
-		} finally {
-			DBUtil.closeQuietly(conn);
 		}
 		
 		ArrayList<String> depts=new ArrayList<String>();

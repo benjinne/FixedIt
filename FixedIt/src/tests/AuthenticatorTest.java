@@ -65,7 +65,7 @@ public class AuthenticatorTest {
 		String hash1=a.saltHashPassword(validPass);
 		String hash2=a.saltHashPassword(validPass2);
 		
-		assertTrue(a.validatePassword(validPass, hash1));
-		assertTrue(a.validatePassword(validPass2, hash2));
+		assertTrue(a.credentialsMatch(validPass, hash1));
+		assertTrue(a.credentialsMatch(validPass2, hash2));
 	}
 }
