@@ -7,6 +7,7 @@ public class QueryController {
 	private Query query;
 	
 	public QueryController(){
+		query= new Query();
 	}
 	
 	public QueryController(Query query){

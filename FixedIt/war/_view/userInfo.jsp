@@ -4,10 +4,39 @@
 
 <html>
 	<head>
-		<title>My Home</title>
+		<title>FixedIt Scheduler User Info</title>
+		<style type="text/css">
+		.error {
+			color: red;
+		}
+		
+		td.label {
+			text-align: left;
+		}
+		</style>
 	</head>
 
 	<body>
-		test test test test test test
+		<c:if test="${! empty errorMessage}">
+			<div class="error">${errorMessage}</div>
+		</c:if>
+	
+		<form action="${pageContext.servletContext.contextPath}/userInfo" method="post">
+			<table>
+				<tr>
+					<td class="label">Username: </td>
+				</tr>
+				<tr>
+					<td class="label">Email: </td>
+				</tr>
+				<tr> 
+					<td class="label">Year: </td>
+				</tr>
+				<tr> 
+					<td class="label">Schedules: </td>
+				</tr>					
+			</table>
+			<br>
+		</form>
 	</body>
 </html>

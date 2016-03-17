@@ -24,7 +24,7 @@
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<table>
 				<tr>
-					<td class="label">Search By Subject: </td>
+					<td class="label">Search by Subject: </td>
 					<td><input type="search" name="searchBySubject" size="12" value="${searchBySubject}" /></td>
 				</tr>
 				<tr>
@@ -36,6 +36,7 @@
 					<td><input type="search" name="searchByLevel" size="12" value="${searchByLevel}" /></td>
 				</tr>
 			</table>
+			<input type="Submit" name="search" value="Search">
 			<br>
 		</form>
 	</body>

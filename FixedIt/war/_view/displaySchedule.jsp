@@ -4,7 +4,7 @@
 
 <html>
 	<head>
-		<title>FixedIt Scheduler displaySchedule</title>
+		<title>FixedIt Scheduler Schedules</title>
 		<style type="text/css">
 		.error {
 			color: red;
