@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Thu Mar 17 14:40:03 EDT 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0153-85e0-9c40-00000602ef50 
-on database directory H:\git\FixedIt\FixedIt\test.db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
+Thu Mar 17 16:23:29 EDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0153-863f-4cec-000005f803b8 
+on database directory H:\git\FixedIt\FixedIt\test.db with class loader sun.misc.Launcher$AppClassLoader@c387f44 
 Loaded from file:/H:/git/FixedIt/FixedIt/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_51-b16

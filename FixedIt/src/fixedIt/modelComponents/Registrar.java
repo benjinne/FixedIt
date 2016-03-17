@@ -53,9 +53,15 @@ public class Registrar {
 	 * @return Courses an ArrayList of Course objects fetched based on Query
 	 * @throws IOException if the Query is invalid/the webpage source cannot be retrieved
 	 */
-	public ArrayList<Course> fetch() throws IOException{
-		String sourceHTML=getUrlSource(URL);
-		String[] lines=getLinesFromHTML(sourceHTML);
+	public ArrayList<Course> fetch() {
+		String sourceHTML;
+		String[] lines=null;
+		try {
+			sourceHTML = getUrlSource(URL);
+			lines=getLinesFromHTML(sourceHTML);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return parseCSVLines(lines);
 	}
 	
@@ -113,7 +119,7 @@ public class Registrar {
 				}
 				else{
 					course.setCRN(Integer.parseInt(data[0]));
-					course.setCourseAndSection(data[1]);
+					course.setCourseAndSection(data[1].replaceAll(" ", ""));
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
 					course.setType(data[4]);

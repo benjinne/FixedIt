@@ -229,15 +229,15 @@ public class SQLWriter {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+			System.out.println("Conn from SQLWriter=" + conn);
 			conn.setAutoCommit(true);
-	
 			queryLoop(conn);
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
 			DBUtil.closeQuietly(conn);
 		}
-}
+	}
 
 	private static void queryLoop(Connection conn) throws IOException {
 		StatementReader stmtReader = new StatementReader(new InputStreamReader(System.in));

@@ -1,6 +1,7 @@
 package fixedIt.modelComponents;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
@@ -24,23 +26,9 @@ public class Authenticator implements EmailSender {
 	public static final String ALLOWED_CHARS="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.-_";
 	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 												+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	//private Connection conn;
 
 	public Authenticator(){
-//		File dbPath=new File("test.db");
-//		if(dbPath.exists()){
-//			System.out.println(dbPath.getAbsolutePath());
-//		}
-//		conn = null;
-//		try {
-//			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-//			conn = DriverManager.getConnection("jdbc:derby:" + dbPath.getAbsolutePath() + ";create=true");
-//			conn.setAutoCommit(true);
-//		} catch (SQLException | ClassNotFoundException e) {
-//			System.out.println("Error: " + e.getMessage());
-//		} finally {
-//			DBUtil.closeQuietly(conn); //error is NOT rooting from here, tested this
-//		}
+		
 	}
 	
 	private Connection getConnection(){
@@ -54,9 +42,7 @@ public class Authenticator implements EmailSender {
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
 			conn=null;
-		} finally {
-			DBUtil.closeQuietly(conn); //error is NOT rooting from here, tested this
-		}
+		} 
 		return conn;
 	}
 	
@@ -461,6 +447,110 @@ public class Authenticator implements EmailSender {
 	private Session createSession(User user){
 		return new Session(user, this);
 	}
+	
+	
+	public void updateCoursesInDB() throws SQLException{
+		ArrayList<String>depts=new ArrayList<String>();
+		depts.add("ANT_01");
+		depts.add("BEH_01");
+		depts.add("CJA_01");
+		depts.add("GER_01");
+		depts.add("HSV_01");
+		depts.add("PSY_01");
+		depts.add("SOC_01");
+		depts.add("BIO_02");
+		depts.add("PMD_02");
+		depts.add("RT_02");
+		depts.add("ACC_03");
+		depts.add("ECO_03");
+		depts.add("ENT_03");
+		depts.add("FIN_03");
+		depts.add("BUS_03");
+		depts.add("IFS_03");
+		depts.add("IBS_03");
+		depts.add("MGT_03");
+		depts.add("MKT_03");
+		depts.add("QBA_03");
+		depts.add("SCM_03");
+		depts.add("ART_07");
+		depts.add("CM_07");
+		depts.add("MUS_07");
+		depts.add("THE_07");
+		depts.add("ECH_04");
+		depts.add("EDU_04");
+		depts.add("MLE_04");
+		depts.add("SE_04");
+		depts.add("SPE_04");
+		depts.add("CS_12");
+		depts.add("ECE_12");
+		depts.add("EGR_12");
+		depts.add("ME_12");
+		depts.add("PHY_12");
+		depts.add("FLM_05");
+		depts.add("FCO_05");
+		depts.add("FRN_05");
+		depts.add("GRM_05");
+		depts.add("HUM_05");
+		depts.add("INT_05");
+		depts.add("ITL_05");
+		depts.add("LAT_05");
+		depts.add("LIT_05");
+		depts.add("PHL_05");
+		depts.add("REL_05");
+		depts.add("RUS_05");
+		depts.add("SPN_05");
+		depts.add("WRT_05");
+		depts.add("G_06");
+		depts.add("HIS_06");
+		depts.add("IA_06");
+		depts.add("INT_06");
+		depts.add("PS_06");
+		depts.add("HSP_11");
+		depts.add("PE_11");
+		depts.add("REC_11");
+		depts.add("SPM_11");
+		depts.add("FYS_10");
+		depts.add("SES_10");
+		depts.add("WGS_10");
+		depts.add("NUR_08");
+		depts.add("CHM_09");
+		depts.add("ESS_09");
+		depts.add("FCM_09");
+		depts.add("MAT_09");
+		depts.add("PSC_09");
+		depts.add("PHY_09");
+		Registrar r;
+		for(String s : depts){
+			r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520" + "&stype=A&dmode=D&dept=" + s);
+			ArrayList<Course> fetched=new ArrayList<Course>();
+			fetched = r.fetch();
+			for (Course c : fetched) {
+				String sql="update courses set crn='" + c.getCRN() +
+						"', courseandsection='" + c.getCourseAndSection() +
+						"', title='" + c.getTitle() + "', credits='" + c.getCredits() +
+						"', type='" + c.getType() + "', days='" + c.getDays() +
+						"', time='" + c.getTime() + "'";
+				if(!(c.getLocation().size()>1)){
+					sql=sql+", location_one='" + c.getLocation().get(0) + "' + location_two='null', ";
+				}
+				else{
+					sql=sql+", location_one='" + c.getLocation().get(0) + "', location_two='" + c.getLocation().get(1) + "', ";
+				}
+				if(!(c.getInstructors().size()>1)){
+					sql=sql+", instructor_one='" + c.getInstructors().get(0) + "', instructor_two='null', ";
+				}
+				else{
+					sql=sql+", instructor_one='" + c.getInstructors().get(0) + "', instructor_two='" + c.getInstructors().get(1) + "', ";
+				}
+				sql=sql + "capacity='" + c.getCapacity() + "', seatsremain='" + c.getSeatsRemain() + "', seatsfilled='" + c.getSeatsFilled() + "', " +
+				"beginend='" + c.getBeginEnd() + "' ";
+				
+				Connection conn=getConnection();
+				SQLWriter.executeDBCommand(conn, sql);
+			}
+		}
+	}
+	
 	
 	public static final String MESSAGE_FIRST_HALF=
 			"<h2>Dear FixedIt User,</h2>" +
