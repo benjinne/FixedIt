@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
 	</head>
 	<body>
-	<section class="page-header"> 
+	<section class="page-header">
       <h1 class="project-name">Fixedit</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/login" method="post">
