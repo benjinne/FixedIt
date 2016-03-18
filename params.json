@@ -1,1 +1,7 @@
-{"name":"Fixedit","tagline":"CS320 Software Engineering Project: York College Scheduling App","body":"### FixedIt Scheduler\r\nFixedIt Scheduler is a web-app for students of York College of Pennsylvania to make course scheduling seamless and painless.\r\n\r\n### Development Team\r\nMat Jones - @mrjones2014\r\n\r\nGarrett Ghafir - @gghafir\r\n\r\nMike Skurla - @mskur1","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
+{
+  "name": "Fixedit",
+  "tagline": "CS320 Software Engineering Project: York College Scheduling App",
+  "body": "### FixedIt Scheduler\r\nFixedIt Scheduler is a web-app for students of York College of Pennsylvania to make course scheduling seamless and painless.\r\n\r\n### Development Team\r\nMat Jones - @mrjones2014\r\n\r\nGarrett Ghafir - @gghafir\r\n\r\nMike Skurla - @mskur1",
+  "google": "",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
