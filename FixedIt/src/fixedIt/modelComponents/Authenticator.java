@@ -463,7 +463,7 @@ public class Authenticator implements EmailSender {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		//System.out.println(validatePassword(password, storedHash));
 		return validatePassword(password, storedHash);
 	}
 	private Session createSession(User user){
