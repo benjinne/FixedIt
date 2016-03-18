@@ -50,7 +50,7 @@ public class Authenticator implements EmailSender {
 	 * @return true if user is added successfully, false otherwise.
 	 */
 	public boolean addNewUserToDB(User user){
-		String sql="insert into users values ( '" + user.getEmailAddress() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
+		String sql="insert into users values ( '" + user.getEmailAddress().toLowerCase() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
 		Connection conn=getConnection();
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
@@ -73,13 +73,13 @@ public class Authenticator implements EmailSender {
 	 * @throws SQLException
 	 */
 	public boolean userExists(String emailAddress){
-		String sql="select * from users where emailaddress='" + emailAddress + "'";
+		String sql="select * from users where emailaddress='" + emailAddress.toLowerCase() + "'";
 		Connection conn=getConnection();
 		ResultSet rs;
 		try {
 			rs = SQLWriter.executeDBCommand(conn, sql);
 			rs.absolute(1);
-			if(rs.getString("emailaddress").contains(emailAddress)){
+			if(rs.getString("emailaddress").equals(emailAddress.toLowerCase())){
 				conn.commit();
 				conn.close();
 				conn=null;
@@ -111,7 +111,7 @@ public class Authenticator implements EmailSender {
 		Connection conn=getConnection();
 		User user=new User();
 		if(this.userExists(emailAddress)){
-			String sql="select * from users where emailaddress='" + emailAddress + "'";
+			String sql="select * from users where emailaddress='" + emailAddress.toLowerCase() + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
 			rs.absolute(1);
 			user.setPasswordHash(rs.getString("passwordhash"));
@@ -171,7 +171,7 @@ public class Authenticator implements EmailSender {
 		String emailAddress=user.getEmailAddress();
 		Connection conn=getConnection();
 		if(this.userExists(emailAddress)){
-			String sql="select * from users where emailaddress='" + emailAddress + "'";
+			String sql="select * from users where emailaddress='" + emailAddress.toLowerCase() + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
 			rs.absolute(1);
 			user.setPasswordHash(rs.getString("passwordhash"));
@@ -224,7 +224,7 @@ public class Authenticator implements EmailSender {
 	 */
 	public void saveExistingUserNewDataToDB(User usr) throws SQLException{
 		Connection conn=getConnection();
-		String sql="delete from users where emailaddress='" + usr.getEmailAddress() + "'";
+		String sql="delete from users where emailaddress='" + usr.getEmailAddress().toLowerCase() + "'";
 		SQLWriter.executeDBCommand(conn, sql);
 		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', '" +
 				usr.getStudentStatus() + "', '" + usr.getNumSchedules() + "' ) ";
@@ -235,10 +235,10 @@ public class Authenticator implements EmailSender {
 			sql="delete * from sys.systables where tablename='" + rs.getString("tablename");
 		}
 		for(Schedule s : usr.getSchedules().values()){
-			sql="create table schedule" + usr.getEmailAddress() + s.getName() + "( crn varchar(20) )";
+			sql="create table schedule" + usr.getEmailAddress().toLowerCase() + s.getName() + "( crn varchar(20) )";
 			SQLWriter.executeDBCommand(conn, sql);
 			for(Course c : s.getCourses()){
-				sql="insert into schedule" + usr.getEmailAddress() + s.getName() + " ( " + c.getCRN() + " ) ";
+				sql="insert into schedule" + usr.getEmailAddress().toLowerCase() + s.getName() + " ( " + c.getCRN() + " ) ";
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}
@@ -255,7 +255,7 @@ public class Authenticator implements EmailSender {
 	 */
 	public boolean setPasswordForUser(String emailAddress, String password) throws SQLException{
 		Connection conn=getConnection();
-		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress + "' ";
+		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress.toLowerCase() + "' ";
 		if(isValidPassword(password)){
 			SQLWriter.executeDBCommand(conn, sql);
 			conn.commit();
@@ -271,7 +271,7 @@ public class Authenticator implements EmailSender {
 	
 	public boolean deleteUser(User user){
 		Connection conn=getConnection();
-		String sql="delete from users where emailaddress='" + user.getEmailAddress() + "'";
+		String sql="delete from users where emailaddress='" + user.getEmailAddress().toLowerCase() + "'";
 		try {
 			SQLWriter.executeDBCommand(conn, sql);
 			conn.commit();
@@ -450,7 +450,7 @@ public class Authenticator implements EmailSender {
 	 */
 	public boolean credentialsMatch(String email, String password){
 		Connection conn=getConnection();
-		String sql="select passwordhash from users where emailaddress='" + email + "'";
+		String sql="select passwordhash from users where emailaddress='" + email.toLowerCase() + "'";
 		ResultSet rs;
 		String storedHash="";
 		try {
