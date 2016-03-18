@@ -28,13 +28,13 @@
 	<section class="page-header">
       <h1 class="project-name">Fixedit</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/login" method="post">
 					<center>
+		
+	
+		<form action="${pageContext.servletContext.contextPath}/register" method="post">
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-	
-		<form action="${pageContext.servletContext.contextPath}/register" method="post">
 			<table>
 				<tr>
 					<td class="label">Email Address: </td>
