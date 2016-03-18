@@ -1,7 +1,6 @@
 package fixedIt.modelComponents;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -10,7 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
@@ -80,13 +78,15 @@ public class Authenticator implements EmailSender {
 		ResultSet rs;
 		try {
 			rs = SQLWriter.executeDBCommand(conn, sql);
-			rs.next();
+			rs.absolute(1);
 			if(rs.getString("emailaddress").contains(emailAddress)){
+				conn.commit();
 				conn.close();
 				conn=null;
 				return true;
 			}
 			else{
+				conn.commit();
 				conn.close();
 				conn=null;
 				return false;
@@ -113,10 +113,10 @@ public class Authenticator implements EmailSender {
 		if(this.userExists(emailAddress)){
 			String sql="select * from users where emailaddress='" + emailAddress + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-			rs.next();
-			user.setEmailAddress(emailAddress);
+			rs.absolute(1);
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
+			user.setEmailAddress(emailAddress);
 			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
 			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
@@ -146,10 +146,12 @@ public class Authenticator implements EmailSender {
 				}
 				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
 			}
+			conn.commit();
 			conn.close();
 			conn=null;
 			return user;		//return the generated user
 		}
+		conn.commit();
 		conn.close();
 		conn=null;
 		return null;	//if the user does not exist, or if a database error occurs, return null
@@ -171,10 +173,10 @@ public class Authenticator implements EmailSender {
 		if(this.userExists(emailAddress)){
 			String sql="select * from users where emailaddress='" + emailAddress + "'";
 			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-			rs.next();
-			user.setEmailAddress(emailAddress);
+			rs.absolute(1);
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
+			user.setEmailAddress(emailAddress);
 			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
 			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
@@ -204,10 +206,12 @@ public class Authenticator implements EmailSender {
 				}
 				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
 			}
+			conn.commit();
 			conn.close();
 			conn=null;
 			return user;		//return the generated user
 		}
+		conn.commit();
 		conn.close();
 		conn=null;
 		return null;	//if the user does not exist, or if a database error occurs, return null
@@ -254,6 +258,7 @@ public class Authenticator implements EmailSender {
 		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress + "' ";
 		if(isValidPassword(password)){
 			SQLWriter.executeDBCommand(conn, sql);
+			conn.commit();
 			conn.close();
 			conn=null;
 			return true;
@@ -288,7 +293,7 @@ public class Authenticator implements EmailSender {
 	 * @return true if password meets requirements, false otherwise
 	 */
 	public boolean isValidPassword(String password){
-		if(password.equals("password")){ //LOL
+		if(password.equals("password") || password.equals("password123")){ //LOL
 			return false;
 		}
 		if(password.length()>=8){
@@ -450,8 +455,9 @@ public class Authenticator implements EmailSender {
 		String storedHash="";
 		try {
 			rs = SQLWriter.executeDBCommand(conn, sql);
-			rs.next();
+			rs.absolute(1);
 			storedHash=rs.getString("passwordhash");
+			conn.commit();
 			conn.close();
 			conn=null;
 		} catch (SQLException e) {

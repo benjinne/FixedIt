@@ -41,6 +41,9 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			if(controller.getAuth().userExists(emailAddress)){
 				credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
+				if(!credentialsMatch){
+					errorMessage="Email address and password do not match.";
+				}
 			}
 			else{
 				errorMessage="No account exists for this email address.";
@@ -57,11 +60,11 @@ public class LoginServlet extends HttpServlet {
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
-		try {
-			initializeCoursesTable();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			initializeCoursesTable();
+//		} catch (ClassNotFoundException | SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public static void initializeCoursesTable() throws SQLException, IOException, ClassNotFoundException{

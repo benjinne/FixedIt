@@ -54,7 +54,7 @@ public class SQLWriter {
 		ResultSet resultSet = null;
 
 		try {
-			stmt = conn.createStatement();
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			int rowCount = 0;
 			if (stmt.execute(sql)) {
@@ -201,7 +201,7 @@ public class SQLWriter {
 					buf.append("?");
 				}
 				buf.append(")");
-				stmt = conn.prepareStatement(buf.toString());
+				stmt = conn.prepareStatement(buf.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE);
 			}
 			for (int i = 0; i < row.size(); i++) {
 				String value = row.get(i);
@@ -215,9 +215,9 @@ public class SQLWriter {
 			stmt.addBatch();
 		}
 
-		conn.setAutoCommit(false);
+		//conn.setAutoCommit(false);
 		stmt.executeBatch();
-		conn.setAutoCommit(true);
+		//conn.setAutoCommit(true);
 
 		System.out.println("Successful import");
 	}
@@ -228,7 +228,6 @@ public class SQLWriter {
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
-			System.out.println("Conn from SQLWriter=" + conn);
 			conn.setAutoCommit(true);
 			queryLoop(conn);
 		} catch (SQLException e) {
