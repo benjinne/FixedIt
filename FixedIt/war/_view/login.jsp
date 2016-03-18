@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
-<link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
 	<head>
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler Login</title>
@@ -17,10 +17,10 @@
 		}		
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
 	</head>
 	<body>
 	<section class="page-header">
@@ -43,9 +43,9 @@
 					</table></center>
 					<input class="btn" type="Submit" name="submit" value="Login">
 					<br>
-					<c:if test="${credentialsMatch}">
+					<!--<c:if test="${credentialsMatch}">
 						<p><input class="btn" type="button" value="Go To User Home!" onclick="window.location='_view/userInfo.jsp'" ></p>
-					</c:if>
+					</c:if>-->
 				</form>
     </section>
     <section class="main-content">

@@ -33,7 +33,7 @@ public class UserInfoServlet extends HttpServlet {
 	
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);
+		req.getRequestDispatcher("/userInfo").forward(req, resp);
 	}
 
 	/*private String getStringFromParameter(String s) {

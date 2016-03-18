@@ -117,7 +117,7 @@ public class Authenticator implements EmailSender {
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
 			user.setEmailAddress(emailAddress);
-			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
+			sql="select * from sys.systables where tablename like '%" + emailAddress + "%' ";
 			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
 			while(rs.next()){	//loop through all schedules

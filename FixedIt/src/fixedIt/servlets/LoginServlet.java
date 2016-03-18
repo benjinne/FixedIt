@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Registrar;
+import fixedIt.modelComponents.Session;
 import fixedIt.sql.database.DBUtil;
 import fixedIt.sql.database.SQLWriter;
 
@@ -36,6 +37,7 @@ public class LoginServlet extends HttpServlet {
 		String emailAddress = getStringFromParameter(req.getParameter("emailAddress"));
 		String password = getStringFromParameter(req.getParameter("password"));
 		LoginController controller=new LoginController();
+		Session userSession=null;
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
@@ -43,6 +45,22 @@ public class LoginServlet extends HttpServlet {
 				credentialsMatch=controller.getAuth().credentialsMatch(emailAddress, password);
 				if(!credentialsMatch){
 					errorMessage="Email address and password do not match.";
+				}
+				else{
+					try {
+						userSession=controller.getAuth().authorizeUser(emailAddress, password);
+						req.getSession().setAttribute("userSession", userSession);
+						req.getRequestDispatcher("/userInfo").forward(req, resp);
+						if(userSession!=null){
+							resp.sendRedirect("/userInfo");
+							return;
+						}
+						else{
+							errorMessage="Failed to populate User object!";
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			else{
@@ -59,7 +77,7 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("credentialsMatch", credentialsMatch);
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+		req.getRequestDispatcher("/login").forward(req, resp);
 //		try {
 //			initializeCoursesTable();
 //		} catch (ClassNotFoundException | SQLException e) {
