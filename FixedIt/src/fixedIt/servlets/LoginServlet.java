@@ -50,9 +50,8 @@ public class LoginServlet extends HttpServlet {
 					try {
 						userSession=controller.getAuth().authorizeUser(emailAddress, password);
 						req.getSession().setAttribute("userSession", userSession);
-						req.getRequestDispatcher("/userInfo").forward(req, resp);
 						if(userSession!=null){
-							resp.sendRedirect("/userInfo");
+							req.getRequestDispatcher("/userInfo").forward(req, resp);
 							return;
 						}
 						else{
@@ -77,7 +76,7 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("credentialsMatch", credentialsMatch);
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/login").forward(req, resp);
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 //		try {
 //			initializeCoursesTable();
 //		} catch (ClassNotFoundException | SQLException e) {
