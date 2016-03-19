@@ -49,7 +49,7 @@ td.label {
 					<td class="label">Search by Section: &nbsp;&nbsp;</td>
 				</tr>
 				<tr>
-					<td class="alignTDTop" ><select name="term" size="7">
+					<td class="alignTDTop" ><select id="term" name="term" size="7">
 							<option class="option"  selected="selected" VALUE="201610">Fall 2016</option>
 							<option class="option"  VALUE="201590">Special Session 2016</option>
 							<option class="option"  VALUE="201550">Summer II 2016</option>
@@ -59,12 +59,12 @@ td.label {
 							<option class="option"  VALUE="201510">Fall 2015</option>
 						</select>
 					</td>
-					<td class="alignTDTop" ><select name="level" size="7">
+					<td class="alignTDTop" ><select id="level" name="level" size="7">
 							<option class="option"  selected="selected" VALUE="A">All Undergraduate Classes</option>
 							<option class="option"  VALUE="M">All Graduate Classes</option>
 							<option class="option"  VALUE="E">Eve. &amp; Sat. Undergraduate Classes</option>
 					</select></td>
-					<td class="alignTDTop" ><select name="dept" size="7">
+					<td class="alignTDTop" ><select id="dept" name="dept" size="7">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
 									<option class="option"  VALUE="ANT_01">&nbsp;&nbsp;&nbsp;Anthropology
 									</option>
@@ -212,7 +212,14 @@ td.label {
 				</table>
 			<input class="btn" type="Submit" value="Search">
 		<br>
+		<c:if test="${! empty returnedCourses}">
+			<script type="text/javascript">
+				var returnedCourses='${returnedCourses}';
+				document.getElementById('courseChart').innerHTML=returnedCourses;
+			</script>
+		</c:if>
 		</form>
 	</section>
+	<div id="courseChart"></div>
 </body>
 </html>
