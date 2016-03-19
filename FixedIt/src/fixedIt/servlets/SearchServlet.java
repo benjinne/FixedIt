@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fixedIt.modelComponents.Query;
-
 //NEEDS THE CONTROLLER TO IMPLEMENT
 
 public class SearchServlet extends HttpServlet {			

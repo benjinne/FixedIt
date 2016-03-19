@@ -5,7 +5,7 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler Login</title>
+		<title>FixedIt Scheduler - My Account</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -33,8 +33,7 @@
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
-			<center>
-			<table border="3">
+			<table border="1">
 				<tr>
 					<td class="label">Email Address:</td>
 					<td><c:out value="${emailAddress}" /></td>
@@ -46,9 +45,15 @@
 				<tr> 
 					<td class="label">Student Status: </td>
 					<td><c:out value="${studentStatus}" /></td>
-				</tr>				
+				</tr>			
 			</table>
-			</center>
+			<div class="sideBar">
+				<table>
+					<tr>
+						<td><input class="btn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+					</tr>
+				</table>
+			</div>
 		</form>
     </section>
 </html>

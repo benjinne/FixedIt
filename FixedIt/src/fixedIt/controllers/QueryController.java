@@ -101,7 +101,7 @@ public class QueryController {
 		depts.add("PSC_09");
 		depts.add("PHY_09");
 	}
-	public  void convertSearch(String course, String section , String level){
+	public void convertSearch(String course, String section , String level){
 		
 		if (level== "undergraduate"){
 			level = Query.LEVEL_UNDERGRAD;
