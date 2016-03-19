@@ -27,7 +27,7 @@
       <h1 class="project-name">Fixedit</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/login" method="post">
-					<center>
+			<center>
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
@@ -43,9 +43,6 @@
 					</table></center>
 					<input class="btn" type="Submit" name="submit" value="Login">
 					<br>
-					<!--<c:if test="${credentialsMatch}">
-						<p><input class="btn" type="button" value="Go To User Home!" onclick="window.location='_view/userInfo.jsp'" ></p>
-					</c:if>-->
 				</form>
     </section>
     <section class="main-content">

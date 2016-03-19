@@ -4,7 +4,8 @@
 
 <html>
 	<head>
-		<title>FixedIt Scheduler User Info</title>
+	<meta charset="UTF-8">
+		<title>FixedIt Scheduler Login</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -12,31 +13,42 @@
 		
 		td.label {
 			text-align: left;
-		}
+		}		
 		</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
 	</head>
-
-	<body>
-		<c:if test="${! empty errorMessage}">
+	
+	<section class="styled-body">
+      <h1 class="project-name">FixedIt</h1>
+      <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
+      <form action="${pageContext.servletContext.contextPath}/login" method="post">
+      	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-	
-		<form action="${pageContext.servletContext.contextPath}/userInfo" method="post">
-			<table>
+			<c:if test="${! empty errorMessage}">
+				<div class="error">${errorMessage}</div>
+			</c:if>
+			<center>
+			<table border="3">
 				<tr>
-					<td class="label">Username: </td>
-				</tr>
-				<tr>
-					<td class="label">Email: </td>
+					<td class="label">Email Address:</td>
+					<td><c:out value="${emailAddress}" /></td>
 				</tr>
 				<tr> 
-					<td class="label">Year: </td>
+					<td class="label">Number of Schedules:&nbsp;&nbsp;</td>
+					<td><c:out value="${numSchedules}" /> </td>
 				</tr>
 				<tr> 
-					<td class="label">Schedules: </td>
-				</tr>					
+					<td class="label">Student Status: </td>
+					<td><c:out value="${studentStatus}" /></td>
+				</tr>				
 			</table>
-			<br>
+			</center>
 		</form>
-	</body>
+    </section>
 </html>

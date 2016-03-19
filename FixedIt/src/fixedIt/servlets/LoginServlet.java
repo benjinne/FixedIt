@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 						userSession=controller.getAuth().authorizeUser(emailAddress, password);
 						req.getSession().setAttribute("userSession", userSession);
 						if(userSession!=null){
-							req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);
+							resp.sendRedirect("userInfo");
 							return;
 						}
 						else{
