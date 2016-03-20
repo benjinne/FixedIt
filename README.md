@@ -8,5 +8,6 @@ TODO:
 - [x] debug Authenticator database connection
 - [ ] !! TEST ALL DATABASE METHODS !!
 - [ ] finish jsp and servlet files
-- [ ] design Web interface
+- [x] design Web interface
 - [ ] implement method in search controller to translate user's search terms into database queries
+- [ ] put together milestone 1 presentation
