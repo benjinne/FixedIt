@@ -41,7 +41,7 @@ td.label {
 			York College Scheduling App</h2>
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
+				<div class="error">${errorMessage}</div> 
 			</c:if>
 			<div class="sideBar">
 				<table class="sideBarTable">
