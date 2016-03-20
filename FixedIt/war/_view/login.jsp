@@ -26,14 +26,14 @@
 	<section class="page-header">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/login" method="post">
+      <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
 			<center>
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
 					<table>
 						<tr>
-							<td class="label">Email Address: &nbsp;&nbsp;</td>
+							<td class="label" autofocus>Email Address: &nbsp;&nbsp;</td>
 							<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
 						</tr>
 						<tr>

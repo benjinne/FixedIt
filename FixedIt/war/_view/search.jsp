@@ -37,8 +37,7 @@ td.label {
 <body>
 	<section class="styled-body">
 		<h1 class="project-name">FixedIt</h1>
-		<h2 class="project-tagline">CS320 Software Engineering Project:
-			York College Scheduling App</h2>
+		<h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div> 
@@ -50,6 +49,9 @@ td.label {
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>

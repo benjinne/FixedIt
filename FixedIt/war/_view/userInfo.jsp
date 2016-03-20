@@ -33,7 +33,8 @@
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
-			<table border="1">
+			<center>
+			<table>
 				<tr>
 					<td class="label">Email Address:</td>
 					<td><c:out value="${emailAddress}" /></td>
@@ -47,6 +48,7 @@
 					<td><c:out value="${studentStatus}" /></td>
 				</tr>			
 			</table>
+			</center>
 			<div class="sideBar">
 				<table class="sideBarTable">
 					<tr>
@@ -54,6 +56,9 @@
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>

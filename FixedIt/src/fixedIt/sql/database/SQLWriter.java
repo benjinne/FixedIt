@@ -77,7 +77,7 @@ public class SQLWriter {
 					printRow(row, colWidths);
 				}
 			}
-			System.out.println("OK (" + rowCount + " rows(s))");
+			//System.out.println("OK (" + rowCount + " rows(s))");
 		} finally{
 			
 		}
@@ -87,13 +87,13 @@ public class SQLWriter {
 	private static void printRow(List<String> row, List<Integer> colWidths) {
 		for (int i = 0; i < row.size(); i++) {
 			if (i > 0) {
-				System.out.print(" ");
+				//System.out.print(" ");
 			}
 			String item = row.get(i);
-			System.out.print(PAD.substring(0, colWidths.get(i) - item.length()));
-			System.out.print(item);
+			//System.out.print(PAD.substring(0, colWidths.get(i) - item.length()));
+			//System.out.print(item);
 		}
-		System.out.println();
+		//System.out.println();
 	}
 
 	private static void printSeparator(List<Integer> colWidths) {
@@ -181,7 +181,7 @@ public class SQLWriter {
 				// DJH2: What really needs to be done is that the column names
 				// should be read from the CSV file,
 				// DJH2: and then substituted into the 'insert' statement
-				System.out.println("Importing data for table: <" + tableName + ">");
+				//System.out.println("Importing data for table: <" + tableName + ">");
 				if (tableName.toLowerCase().equals("books")) {
 					buf.append("insert into " + tableName + " (author_id, title, isbn) values (");
 				} else if (tableName.toLowerCase().equals("authors")) {
@@ -219,7 +219,7 @@ public class SQLWriter {
 		stmt.executeBatch();
 		//conn.setAutoCommit(true);
 
-		System.out.println("Successful import");
+		//System.out.println("Successful import");
 	}
 	
 	
