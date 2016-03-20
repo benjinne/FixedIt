@@ -1,5 +1,6 @@
 package fixedIt.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import fixedIt.modelComponents.Course;
@@ -28,7 +29,12 @@ public class QueryController {
 	
 	public ArrayList<Course> getCourses(){
 		Registrar registrar = query.createRegistrar();
-		return registrar.fetch();
+		try {
+			return registrar.fetch();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	public void searchSetUp(){
 		depts=new ArrayList<String>();

@@ -20,6 +20,7 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.setAttribute("returnedCourses", null);
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 	}
 	
@@ -32,38 +33,48 @@ public class SearchServlet extends HttpServlet {
 		String dept = req.getParameter("dept");
 		String level = req.getParameter("level");
 		String term = req.getParameter("term");
-		String returnedCourses="<table class=\"courseTable\"><tr><td>CRN</td><td>Course</td><td>Title</td>" +
+		String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
 				"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
 				"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
-				"<td>Seats Open</td><td>Seats Filled</td><td>Begin-End</td></tr>";
+				"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
 		QueryController controller=new QueryController(new Query(Integer.parseInt(term), level, dept));
-		for(Course c : controller.getCourses()){
-			returnedCourses.concat("<tr><td>" + c.getCRN() + "</td>");
-			returnedCourses.concat("<td>" + c.getCourseAndSection() + "</td>");
-			returnedCourses.concat("<td>" + c.getTitle() + "</td>");
-			returnedCourses.concat("<td>" + c.getCredits() + "</td>");
-			returnedCourses.concat("<td>" + c.getType() + "</td>");
-			returnedCourses.concat("<td>" + c.getDays() + "</td>");
-			returnedCourses.concat("<td>" + c.getTime() + "</td>");
-			returnedCourses.concat("<td>" + c.getLocation().get(0) + "</td>");
-			if(c.getLocation().size()>1){
-				returnedCourses.concat("<td>" + c.getLocation().get(1) + "</td>");
+		try{
+			ArrayList<Course> courses=controller.getCourses();
+			for(Course c : courses){
+				returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
+				if(c.getLocation().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
+				}
+				else{
+					returnedCourses=returnedCourses+("<td> </td>");
+				}
+				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
+				if(c.getInstructors().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
+				}
+				else{
+					returnedCourses=returnedCourses+("<td> </td>");
+				}
+				returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
+				returnedCourses=returnedCourses+"<td><input type=\"button\" name=\"button" 
+						+ c.getCRN() + "\" value=\"Dummy Button\"</tr>";
 			}
-			else{
-				returnedCourses.concat("<td> </td>");
-			}
-			returnedCourses.concat("<td>" + c.getInstructors().get(0) + "</td>");
-			if(c.getInstructors().size()>1){
-				returnedCourses.concat("<td>" + c.getInstructors().get(1) + "</td>");
-			}
-			else{
-				returnedCourses.concat("<td> </td>");
-			}
-			returnedCourses.concat("<td>" + c.getCapacity() + "</td>");
-			returnedCourses.concat("<td>" + c.getSeatsRemain() + "</td>");
-			returnedCourses.concat("<td>" + c.getSeatsFilled() + "</td>");
-			returnedCourses.concat("<td>" + c.getBeginEnd() + "</td></tr>");
 		}
+		catch(Exception e){
+			returnedCourses=null;
+			errorMessage="Invalid combination of search parameters. Try another search.";
+		}
+		
 		
 		// Add parameters as request attributes
 		req.setAttribute("dept", req.getParameter("dept"));

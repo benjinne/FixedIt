@@ -10,6 +10,7 @@
 <style type="text/css">
 .error {
 	color: red;
+	font-weight: bold;
 }
 
 td.label {
@@ -66,7 +67,7 @@ td.label {
 					</select></td>
 					<td class="alignTDTop" ><select id="dept" name="dept" size="7">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
-									<option class="option"  VALUE="ANT_01">&nbsp;&nbsp;&nbsp;Anthropology
+									<option class="option" selected="selected" VALUE="ANT_01">&nbsp;&nbsp;&nbsp;Anthropology
 									</option>
 									<option class="option"  VALUE="BEH_01">&nbsp;&nbsp;&nbsp;Behavioral
 										Sciences</option>
@@ -212,14 +213,14 @@ td.label {
 				</table>
 			<input class="btn" type="Submit" value="Search">
 		<br>
+		<div id="courseChart">
+		</div>
 		<c:if test="${! empty returnedCourses}">
-			<script type="text/javascript">
-				var returnedCourses='${returnedCourses}';
-				document.getElementById('courseChart').innerHTML=returnedCourses;
-			</script>
+			<table class="courseTable">
+				<c:out value="${returnedCourses}" escapeXml="false"/>
+			</table>
 		</c:if>
 		</form>
 	</section>
-	<div id="courseChart"></div>
 </body>
 </html>

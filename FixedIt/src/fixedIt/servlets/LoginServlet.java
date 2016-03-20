@@ -14,7 +14,6 @@ import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Registrar;
 import fixedIt.modelComponents.Session;
-import fixedIt.sql.database.DBUtil;
 import fixedIt.sql.database.SQLWriter;
 
 
@@ -25,6 +24,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.getSession().setAttribute("userSession", null);
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 	
@@ -51,6 +51,11 @@ public class LoginServlet extends HttpServlet {
 						userSession=controller.getAuth().authorizeUser(emailAddress, password);
 						req.getSession().setAttribute("userSession", userSession);
 						if(userSession!=null){
+							try {
+								initializeCoursesTable();
+							} catch (ClassNotFoundException | SQLException e) {
+								e.printStackTrace();
+							}
 							resp.sendRedirect("userInfo");
 							return;
 						}
@@ -77,11 +82,6 @@ public class LoginServlet extends HttpServlet {
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
-//		try {
-//			initializeCoursesTable();
-//		} catch (ClassNotFoundException | SQLException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	public static void initializeCoursesTable() throws SQLException, IOException, ClassNotFoundException{

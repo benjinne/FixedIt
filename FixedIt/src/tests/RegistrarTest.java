@@ -87,7 +87,7 @@ public class RegistrarTest {
 	}
 	
 	@Test
-	public void testFetch() {
+	public void testFetch() throws IOException {
 		for(String s : depts){
 			r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520" + "&stype=A&dmode=D&dept=" + s);
 			for (Course c : r.fetch()) {
