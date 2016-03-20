@@ -48,9 +48,21 @@
 				</tr>			
 			</table>
 			<div class="sideBar">
-				<table>
+				<table class="sideBarTable">
 					<tr>
-						<td><input class="btn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+						<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
 					</tr>
 				</table>
 			</div>

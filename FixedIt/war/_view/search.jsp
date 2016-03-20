@@ -36,13 +36,32 @@ td.label {
 </head>
 <body>
 	<section class="styled-body">
-		<h1 class="project-name">Fixedit</h1>
+		<h1 class="project-name">FixedIt</h1>
 		<h2 class="project-tagline">CS320 Software Engineering Project:
 			York College Scheduling App</h2>
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
-				<c:if test="${! empty errorMessage}">
-					<div class="error">${errorMessage}</div>
-				</c:if>
+			<c:if test="${! empty errorMessage}">
+				<div class="error">${errorMessage}</div>
+			</c:if>
+			<div class="sideBar">
+				<table class="sideBarTable">
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+					</tr>
+					<tr>
+						<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
+					</tr>
+				</table>
+			</div>
 				<table align="center">
 					<tr>
 					<td class="label">Search by Term: &nbsp;&nbsp;</td>

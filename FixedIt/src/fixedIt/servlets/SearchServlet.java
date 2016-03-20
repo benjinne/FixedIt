@@ -20,6 +20,12 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setHeader("Cache-Control","no-cache");
+		resp.setHeader("Cache-Control","no-store");
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
+			resp.sendRedirect("login");
+			return;
+		}
 		req.setAttribute("returnedCourses", null);
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 	}
@@ -77,9 +83,9 @@ public class SearchServlet extends HttpServlet {
 		
 		
 		// Add parameters as request attributes
-		req.setAttribute("dept", req.getParameter("dept"));
-		req.setAttribute("level", req.getParameter("level"));
-		req.setAttribute("term", req.getParameter("term"));
+		req.setAttribute("dept", dept);
+		req.setAttribute("level", level);
+		req.setAttribute("term", term);
 		req.setAttribute("returnedCourses", returnedCourses);
 				
 		// Add result objects as request attributes

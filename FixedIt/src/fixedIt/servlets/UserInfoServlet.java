@@ -19,9 +19,14 @@ public class UserInfoServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setHeader("Cache-Control","no-cache");
+		resp.setHeader("Cache-Control","no-store");
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
+			resp.sendRedirect("login");
+			return;
+		}
 		String errorMessage = null;
 		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
-		//System.out.println(session.toString());
 		String emailAddress="";
 		String numSchedules="";
 		String studentStatus="";

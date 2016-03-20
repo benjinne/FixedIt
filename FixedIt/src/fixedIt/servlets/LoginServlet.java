@@ -24,6 +24,8 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setHeader("Cache-Control","no-cache");
+		resp.setHeader("Cache-Control","no-store");
 		req.getSession().setAttribute("userSession", null);
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
