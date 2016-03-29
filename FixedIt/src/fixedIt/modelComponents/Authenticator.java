@@ -268,7 +268,11 @@ public class Authenticator implements EmailSender {
 		conn=null;
 		return false;
 	}
-	
+	/**
+	 * Deletes a user from the database. BE CAREFUL WITH THIS.
+	 * @param user user to delete
+	 * @return true if user is removed successfully, false otherwise
+	 */
 	public boolean deleteUser(User user){
 		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + user.getEmailAddress().toLowerCase() + "'";
@@ -321,7 +325,11 @@ public class Authenticator implements EmailSender {
 		Matcher emailMatcher=emailPattern.matcher(emailAddress);
 		return emailMatcher.matches();
 	}
-	
+	/**
+	 * Request a password reset for the user associated with the given
+	 * email address.
+	 * @param email address for which to lookup user
+	 */
 	public void requestPasswordReset(String email){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
@@ -432,7 +440,21 @@ public class Authenticator implements EmailSender {
 		}
 		return bytes;
 	}
-	
+	/**
+	 * Authorize a user and create a session,
+	 * if the credentials are valid and a user
+	 * exists. All read/write operations that
+	 * need to be done from other classes
+	 * should be done THROUGH a Session object
+	 * created by this method.
+	 * 
+	 * @param email email address for desired user
+	 * @param password password to check against email address
+	 * @return Session a Session object for the desired user, if
+	 * the user is authorized, null if credentials do not match or
+	 * an SQL error occurs.
+	 * @throws SQLException
+	 */
 	public Session authorizeUser(String email, String password) throws SQLException{
 		if(credentialsMatch(email, password)){
 			return createSession(getUser(email));
@@ -442,10 +464,13 @@ public class Authenticator implements EmailSender {
 		}
 	}
 	/**
-	 * 
-	 * @param email
-	 * @param password
-	 * @return
+	 * Checks whether a user exists that is
+	 * associated with the given email address;
+	 * if so, checks whether the password hash
+	 * matches the password hash for that user. 
+	 * @param email email address by which to lookup user
+	 * @param password password to hash and check against email address
+	 * @return true if such a user exists and the credentials are valid, false otherwise
 	 * @throws SQLException
 	 */
 	public boolean credentialsMatch(String email, String password){
@@ -466,6 +491,12 @@ public class Authenticator implements EmailSender {
 		//System.out.println(validatePassword(password, storedHash));
 		return validatePassword(password, storedHash);
 	}
+	
+	/**
+	 * Creates a new Session object for the given user.
+	 * @param user the User for which to create a Session
+	 * @return Session a Session for the given User
+	 */
 	private Session createSession(User user){
 		return new Session(user, this);
 	}
