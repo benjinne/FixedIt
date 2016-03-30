@@ -47,8 +47,14 @@ public class NewUserServlet extends HttpServlet {
 		}
 		else {
 			User user=new User(emailAddress, controller.getAuth().saltHashPassword(password), 0, 0, controller.getAuth());
-			controller.getAuth().addNewUserToDB(user);
-			accountCreated=true;
+			boolean userExists=controller.getAuth().addNewUserToDB(user);
+			if(userExists){
+				errorMessage="An account already exists associated with this email address.";
+				accountCreated=false;
+			}
+			else{
+				accountCreated=true;
+			}
 		}
 		
 		// Add parameters as request attributes

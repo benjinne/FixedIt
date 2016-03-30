@@ -50,18 +50,23 @@ public class Authenticator implements EmailSender {
 	 * @return true if user is added successfully, false otherwise.
 	 */
 	public boolean addNewUserToDB(User user){
-		String sql="insert into users values ( '" + user.getEmailAddress().toLowerCase() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
-		Connection conn=getConnection();
-		try {
-			SQLWriter.executeDBCommand(conn, sql);
-			conn.commit();
-			conn.close();
-			conn=null;
-			return true;
-		} catch (SQLException e) {
-			DBUtil.closeQuietly(conn);
-			conn=null;
-			e.printStackTrace();
+		if(userExists(user.getEmailAddress())){
+			String sql="insert into users values ( '" + user.getEmailAddress().toLowerCase() + "', '" + user.getPasswordHash() + "', 0, 0 ) ";
+			Connection conn=getConnection();
+			try {
+				SQLWriter.executeDBCommand(conn, sql);
+				conn.commit();
+				conn.close();
+				conn=null;
+				return true;
+			} catch (SQLException e) {
+				DBUtil.closeQuietly(conn);
+				conn=null;
+				e.printStackTrace();
+				return false;
+			}
+		}
+		else{
 			return false;
 		}
 	}
