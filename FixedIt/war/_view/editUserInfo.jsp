@@ -5,7 +5,7 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler - My Account</title>
+		<title>FixedIt Scheduler - Edit Account</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -33,22 +33,7 @@
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
-			<center>
-			<table>
-				<tr>
-					<td class="label">Email Address:</td>
-					<td><c:out value="${emailAddress}" /></td>
-				</tr>
-				<tr> 
-					<td class="label">Number of Schedules:&nbsp;&nbsp;</td>
-					<td><c:out value="${numSchedules}" /> </td>
-				</tr>
-				<tr> 
-					<td class="label">Student Status: </td>
-					<td><c:out value="${studentStatus}" /></td>
-				</tr>			
-			</table>
-			</center>
+					
 			<div class="sideBar">
 				<table class="sideBarTable">
 					<tr>
@@ -58,7 +43,7 @@
 						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
 					</tr>
 					<tr>
-						<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';" /></td>
+						<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo':" /></td>
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
@@ -71,6 +56,19 @@
 					</tr>
 				</table>
 			</div>
+				<table align="center">
+					<tr>
+					<td class="label">Edit Student Status: &nbsp;&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="alignTDTop" ><select id="studentStatus" name="studentStatus" size="2">
+							<option class="option"  selected="selected" VALUE="0">Full-time</option>
+							<option class="option"  selected="selected" VALUE="234">Part-time</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<input class="btn" type="Submit" value="Submit">
 		</form>
     </section>
 </html>

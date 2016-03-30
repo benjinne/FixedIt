@@ -51,7 +51,7 @@
 			<br>
 			<c:set var="accountCreated" value="${accountCreated}"/>
 			<c:if test="${accountCreated}">
-				<a class="btn" href="_view/login.jsp">Login to your new account!</a>
+				<a class="btn" href="login">Login to your new account!</a>
 			</c:if>
 		</form>
 		</center>
