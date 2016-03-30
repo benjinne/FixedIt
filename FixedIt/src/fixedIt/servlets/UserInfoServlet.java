@@ -6,10 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.session.JDBCSessionManager.Session;
-
 import fixedIt.controllers.UserInfoController;
-import fixedIt.modelComponents.User;
 
 
 public class UserInfoServlet extends HttpServlet {			

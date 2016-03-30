@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fixedIt.modelComponents.Authenticator;
-import fixedIt.modelComponents.FakeDatabase;
-import fixedIt.modelComponents.User;
 
 public class AuthenticatorTest {
 	private Authenticator a;

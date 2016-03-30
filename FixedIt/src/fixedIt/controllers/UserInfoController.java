@@ -1,7 +1,5 @@
 package fixedIt.controllers;
 
-
-import fixedIt.modelComponents.Authenticator;
 import fixedIt.modelComponents.Session;
 import fixedIt.modelComponents.User;
 //HAVE TO BE ABLE TO GRAB VARIABLES FROM JSP

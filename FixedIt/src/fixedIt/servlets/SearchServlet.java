@@ -94,13 +94,5 @@ public class SearchServlet extends HttpServlet {
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 	}
-
-	private String getStringFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return s;
-		}
-	}
 }
 

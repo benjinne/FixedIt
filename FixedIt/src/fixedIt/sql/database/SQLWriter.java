@@ -33,12 +33,12 @@ public class SQLWriter {
 	static class RowList extends ArrayList<List<String>> {
 		private static final long serialVersionUID = 1L;
 	}
-
-	private static final String PAD = 
-			  "                                                    "
-			+ "                                                    "
-			+ "                                                    "
-			+ "                                                    ";
+//
+//	private static final String PAD = 
+//			  "                                                    "
+//			+ "                                                    "
+//			+ "                                                    "
+//			+ "                                                    ";
 	private static final String SEP = 
 			  "----------------------------------------------------"
 			+ "----------------------------------------------------"
@@ -56,7 +56,7 @@ public class SQLWriter {
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-			int rowCount = 0;
+			//int rowCount = 0;
 			if (stmt.execute(sql)) {
 				resultSet = stmt.getResultSet();
 				ResultSetMetaData schema = resultSet.getMetaData();
@@ -67,7 +67,7 @@ public class SQLWriter {
 				}
 
 				RowList rowList = getRows(resultSet, schema.getColumnCount());
-				rowCount = rowList.size();
+				//rowCount = rowList.size();
 
 				List<Integer> colWidths = getColumnWidths(colNames, rowList);
 
@@ -89,7 +89,7 @@ public class SQLWriter {
 			if (i > 0) {
 				//System.out.print(" ");
 			}
-			String item = row.get(i);
+			//String item = row.get(i);
 			//System.out.print(PAD.substring(0, colWidths.get(i) - item.length()));
 			//System.out.print(item);
 		}
