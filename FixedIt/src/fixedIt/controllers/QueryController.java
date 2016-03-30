@@ -120,10 +120,10 @@ public class QueryController {
 	
 	public void convertSearch(String course, String section , String level){
 		
-		if (level== "undergraduate"){
+		if (level=="undergraduate"){
 			level = Query.LEVEL_UNDERGRAD;
 		}
-		else if (level == "graduate"){
+		else if (level =="graduate"){
 			level= Query.LEVEL_GRADUATE;
 		}
 		else{
@@ -131,25 +131,25 @@ public class QueryController {
 			
 		}
 		
-		if (section == "fall2016"){
-			section = "" + Query.FALL_2016;
+		if (section =="fall2016"){
+			section ="" + Query.FALL_2016;
 		}
-		else if(section == "special session"){
-			section = "" + Query.SPECIAL_SESSION_2016;
+		else if(section =="special session"){
+			section ="" + Query.SPECIAL_SESSION_2016;
 		}
-		else if (section == "summer I"){
-		section = ""+ Query.SUMMER_I_2016;
+		else if (section=="summer I"){
+		section =""+ Query.SUMMER_I_2016;
 		}
-		else if (section == "summer II"){
-			section = "" + Query.SUMMER_II_2016;
+		else if (section=="summer II"){
+			section ="" + Query.SUMMER_II_2016;
 			
 		}
 		else if(section == "spring 2016"){
-			section = ""+ Query.SPRING_2016;
+			section ="" + Query.SPRING_2016;
 			
 		}
 		else{
-			section = "" + Query.MINIMESTER_2016;
+			section="" + Query.MINIMESTER_2016;
 		}
 	}
 	
@@ -166,7 +166,7 @@ public class QueryController {
 			conn=null;
 		}
 		
-		String sql="select * from courses where crn like " + CRN;
+		String sql="select * from courses where crn like '" + CRN + "'";
 		ResultSet rs=null;
 		try {
 			rs=SQLWriter.executeDBCommand(conn, sql);

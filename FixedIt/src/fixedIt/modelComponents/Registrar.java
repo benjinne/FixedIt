@@ -23,13 +23,10 @@
 //OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package fixedIt.modelComponents; 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -69,17 +66,8 @@ public class Registrar {
 	 * @throws IOException if the HTML source code cannot be fetched or the webpage does not exist
 	 */
 	private String getUrlSource(String url) throws IOException {
-        URL link = new URL(url);
-        URLConnection connection = link.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-        String inputLine;
-        StringBuilder a = new StringBuilder();
-        while ((inputLine = in.readLine()) != null){
-        	a.append(inputLine);
-        }
-        in.close();
-
-        return a.toString();
+        Connection.Response html=Jsoup.connect(url).execute();
+        return html.body();
     }
 	
 	/**
@@ -96,11 +84,13 @@ public class Registrar {
 	private ArrayList<Course> parseCSVLines(String[] lines){
 		ArrayList<Course> courses=new ArrayList<Course>();
 		for(int i=0; i<lines.length; i++){
+			//System.out.println(lines[i]);
 			String[] data=lines[i].split(",");
 			Course course=new Course();
 			if(data[0].matches("[A-Za-z0-9]+")){
 				if(data[5].toLowerCase().contains("arranged")){
 					course.setCRN(Integer.parseInt(data[0]));
+					//System.out.println(data[0]);
 					course.setCourseAndSection(data[1]);
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
@@ -115,6 +105,7 @@ public class Registrar {
 				}
 				else{
 					course.setCRN(Integer.parseInt(data[0]));
+					//System.out.println(data[0]);
 					course.setCourseAndSection(data[1].replaceAll(" ", ""));
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
@@ -151,8 +142,9 @@ public class Registrar {
 	 * @return lines a String array containing data in CSV format
 	 */
 	private String[] getLinesFromHTML(String sourceHTML){
-		sourceHTML=sourceHTML.substring(sourceHTML.lastIndexOf("<table  class="));
+		sourceHTML=sourceHTML.substring(sourceHTML.lastIndexOf("<table"));
 		sourceHTML=sourceHTML.substring(0, sourceHTML.lastIndexOf("</table>")+8);
+		//sourceHTML=sourceHTML.substring(sourceHTML.indexOf("</tr>"));
 		 Document doc = Jsoup.parseBodyFragment(sourceHTML);
 		 //System.out.println(doc);
 		 Elements rows = doc.getElementsByTag("tr");

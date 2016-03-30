@@ -87,13 +87,13 @@ public class SQLWriter {
 	private static void printRow(List<String> row, List<Integer> colWidths) {
 		for (int i = 0; i < row.size(); i++) {
 			if (i > 0) {
-				//System.out.print(" ");
+				System.out.print(" ");
 			}
-			//String item = row.get(i);
-			//System.out.print(PAD.substring(0, colWidths.get(i) - item.length()));
-			//System.out.print(item);
+			String item = row.get(i);
+			System.out.print(PAD.substring(0, colWidths.get(i) - item.length()));
+			System.out.print(item);
 		}
-		//System.out.println();
+		System.out.println();
 	}
 
 	private static void printSeparator(List<Integer> colWidths) {

@@ -53,11 +53,11 @@ public class LoginServlet extends HttpServlet {
 						userSession=controller.getAuth().authorizeUser(emailAddress, password);
 						req.getSession().setAttribute("userSession", userSession);
 						if(userSession!=null){
-							try {
-								initializeCoursesTable();
-							} catch (ClassNotFoundException | SQLException e) {
-								e.printStackTrace();
-							}
+//							try {
+//								initializeCoursesTable();
+//							} catch (ClassNotFoundException | SQLException e) {
+//								e.printStackTrace();
+//							}
 							resp.sendRedirect("userInfo");
 							return;
 						}
@@ -103,6 +103,7 @@ public class LoginServlet extends HttpServlet {
 		for(String s : depts){
 			Registrar r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520" + "&stype=A&dmode=D&dept=" + s);
 			for (Course c : r.fetch()) {
+				System.out.println(c.getCRN());
 				String sql="insert into courses \n" +
 						"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 						"values (\n'" +

@@ -90,12 +90,13 @@ public class RegistrarTest {
 	public void testFetch() throws IOException {
 		for(String s : depts){
 			r=new Registrar("http://ycpweb.ycp.edu/schedule-of-classes/index.html?term=201520" + "&stype=A&dmode=D&dept=" + s);
-			for (Course c : r.fetch()) {
-				System.out.println(c.toCSVLine());
-			}
-			System.out.println();
-			System.out.println();
-			System.out.println();
+			r.fetch();
+//			for (Course c : r.fetch()) {
+//				System.out.println(c.toCSVLine());
+//			}
+//			System.out.println();
+//			System.out.println();
+//			System.out.println();
 		}
 	}
 
