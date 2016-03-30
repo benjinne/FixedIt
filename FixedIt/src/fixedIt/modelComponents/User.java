@@ -23,6 +23,7 @@ public class User{
 		studentStatus=0;
 		numSchedules=0;
 		auth=null;
+		schedules=new TreeMap<String, Schedule>();
 	}
 	
 	public User(String emailAddress, String passwordHash, int studentStatus, int numSchedules, Authenticator auth){

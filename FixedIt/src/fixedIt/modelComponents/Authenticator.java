@@ -40,7 +40,7 @@ public class Authenticator implements EmailSender {
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
 			conn=null;
-		} 
+		}
 		return conn;
 	}
 	

@@ -33,12 +33,12 @@ public class SQLWriter {
 	static class RowList extends ArrayList<List<String>> {
 		private static final long serialVersionUID = 1L;
 	}
-//
-//	private static final String PAD = 
-//			  "                                                    "
-//			+ "                                                    "
-//			+ "                                                    "
-//			+ "                                                    ";
+
+	private static final String PAD = 
+			  "                                                    "
+			+ "                                                    "
+			+ "                                                    "
+			+ "                                                    ";
 	private static final String SEP = 
 			  "----------------------------------------------------"
 			+ "----------------------------------------------------"
