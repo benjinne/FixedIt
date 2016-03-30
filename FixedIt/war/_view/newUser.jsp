@@ -16,7 +16,7 @@
 		}		
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="_view/styles.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
@@ -28,9 +28,7 @@
 	<section class="page-header">
       <h1 class="project-name">Fixedit</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-					<center>
-		
-	
+		<center>
 		<form action="${pageContext.servletContext.contextPath}/register" method="post">
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
@@ -56,6 +54,7 @@
 				<a class="btn" href="_view/login.jsp">Login to your new account!</a>
 			</c:if>
 		</form>
+		</center>
     </section>
     <section class="main-content">
       <h3>
