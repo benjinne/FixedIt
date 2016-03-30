@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fixedIt.modelComponents.Schedule;
+
 
 public class DisplayScheduleServlet extends HttpServlet {			
 	
@@ -47,4 +49,107 @@ public class DisplayScheduleServlet extends HttpServlet {
 			return s;
 		}
 	}*/
+	
+	public String generateHTMLScheduleTable(Schedule s){
+		String html="<table>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td> </td>\r\n" + 
+				"					<td>Mon</td>\r\n" + 
+				"					<td>Tue</td>\r\n" + 
+				"					<td>Wed</td>\r\n" + 
+				"					<td>Thu</td>\r\n" + 
+				"					<td>Fri</td>\r\n" + 
+				"					<td>Sat</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>8:00 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>8:30 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>9:00 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>9:30 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>10:00 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>10:30 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>11:00 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>11:30 AM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>12:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>12:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>1:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>1:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>2:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>2:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>3:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>3:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>4:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>4:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>5:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>5:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>6:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>6:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>7:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>7:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>8:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>8:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>9:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>9:30 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"				<tr>\r\n" + 
+				"					<td>10:00 PM</td>\r\n" + 
+				"				</tr>\r\n" + 
+				"			</table>";
+		
+		return "";
+	}
 }
