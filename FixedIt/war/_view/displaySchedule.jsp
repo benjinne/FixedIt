@@ -48,10 +48,10 @@
 						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
 					</tr>
 					<tr>
-						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+						<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo':"  /></td>
 					</tr>
 					<tr>
-						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+						<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
 					</tr>
 					<tr>
 						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>

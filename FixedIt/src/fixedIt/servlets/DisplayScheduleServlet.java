@@ -24,7 +24,14 @@ public class DisplayScheduleServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-		Schedule s=session.getCurrentUser().getSchedules().get("testSchedule");
+		System.out.println(session.getCurrentUser().getSchedules().size());
+		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		
+//		System.out.print("Null Session: ");
+//		System.out.println(session==null);
+//		System.out.print("Null Schedule: ");
+//		System.out.println(s==null);
+		
 		String html=generateHTMLScheduleTable(s);
 		req.setAttribute("scheduleHTML", html);
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);

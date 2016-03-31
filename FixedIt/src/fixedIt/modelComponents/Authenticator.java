@@ -7,8 +7,10 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -113,7 +115,7 @@ public class Authenticator implements EmailSender {
 	 * @return user the user object associated with the given email address, if one exists.
 	 * @throws SQLException
 	 */
-	private User getUser(String emailAddress) throws SQLException{
+	public User getUser(String emailAddress) throws SQLException{
 		Connection conn=getConnection();
 		User user=new User();
 		if(this.userExists(emailAddress)){
@@ -123,31 +125,40 @@ public class Authenticator implements EmailSender {
 			user.setPasswordHash(rs.getString("passwordhash"));
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
 			user.setEmailAddress(emailAddress);
-			sql="select * from sys.systables where tablename like '%" + emailAddress + "%' ";
-			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
+			sql="select * from sys.systables where tablename like '%" + emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@")) + "%' ";
+			//System.out.println(sql);
+			Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs=stmnt1.executeQuery(sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
+			System.out.println(rs.isBeforeFirst());			
 			while(rs.next()){	//loop through all schedules
-				String scheduleName=rs.getString("tablename").substring(9, rs.getString("tablename").indexOf(emailAddress));
+				String scheduleName=rs.getString("tablename").substring("schedule".length(), rs.getString("tablename").indexOf(emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@"))));
+				System.out.println(rs.getString("tablename").substring("schedule".length() + emailAddress.substring(emailAddress.indexOf('@')).length()));
 				Schedule s=new Schedule(scheduleName);
 				sql="select * from " + rs.getString("tablename");
-				ResultSet courses=SQLWriter.executeDBCommand(conn, sql);  //get all courses in current schedule 
+				Statement stmnt2=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet courses=stmnt2.executeQuery(sql);  //get all courses in current schedule 
+				//System.out.println(courses.isBeforeFirst());
 				while(courses.next()){	//loop through all courses in current schedule 
 					Course c=new Course();
-					c.setCRN(Integer.parseInt(courses.getString("crn")));					//
-					c.setCourseAndSection(courses.getString("courseandsection"));			//
-					c.setTitle(courses.getString("title"));									//
-					c.setCredits(Double.parseDouble(courses.getString("credits")));			//
-					c.setType(courses.getString("type"));									//
-					c.setDays(courses.getString("days"));									//	add all course info
-					c.setTime(courses.getString("time"));									//	to a course object
-					c.addLocation(courses.getString("location_one"));						//
-					c.addLocation(courses.getString("location_two"));						//
-					c.addInstructor(courses.getString("instructor_one"));					//
-					c.addInstructor(courses.getString("instructor_two"));					//
-					c.setCapacity(Integer.parseInt(courses.getString("capacity")));			//
-					c.setSeatsRemain(Integer.parseInt(courses.getString("seatsremain")));	//
-					c.setSeatsFilled(Integer.parseInt(courses.getString("seatsfilled")));	//
-					c.setBeginEnd(courses.getString("beginend"));							//
+					sql="select * from courses where crn='" + courses.getString("crn") + "'";
+					ResultSet course=SQLWriter.executeDBCommand(conn, sql);
+					course.absolute(1);
+					c.setCRN(Integer.parseInt(course.getString("crn")));					//
+					c.setCourseAndSection(course.getString("courseandsection"));			//
+					c.setTitle(course.getString("title"));									//
+					c.setCredits(Double.parseDouble(course.getString("credits")));			//
+					c.setType(course.getString("type"));									//
+					c.setDays(course.getString("days"));									//	add all course info
+					c.setTime(course.getString("time"));									//	to a course object
+					c.addLocation(course.getString("location_one"));						//
+					c.addLocation(course.getString("location_two"));						//
+					c.addInstructor(course.getString("instructor_one"));					//
+					c.addInstructor(course.getString("instructor_two"));					//
+					c.setCapacity(Integer.parseInt(course.getString("capacity")));			//
+					c.setSeatsRemain(Integer.parseInt(course.getString("seatsremain")));	//
+					c.setSeatsFilled(Integer.parseInt(course.getString("seatsfilled")));	//
+					c.setBeginEnd(course.getString("beginend"));							//
 					s.addCourse(c);		//add course to a schedule
 				}
 				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
@@ -155,66 +166,7 @@ public class Authenticator implements EmailSender {
 			conn.commit();
 			conn.close();
 			conn=null;
-			return user;		//return the generated user
-		}
-		conn.commit();
-		conn.close();
-		conn=null;
-		return null;	//if the user does not exist, or if a database error occurs, return null
-	}
-	
-	/**
-	 * Populates a user object with data from database by user object (used
-	 * for User.reinitializeUser(this) ), if
-	 * a user with the given email address exists.
-	 * !!!POPULATING TREEMAP OF SCHEDULES IN UNTESTED!!!
-	 * 
-	 * @param emailAddress user's email address to lookup user by
-	 * @return user the user object associated with the given email address, if one exists.
-	 * @throws SQLException
-	 */
-	public User getUser(User user) throws SQLException{
-		String emailAddress=user.getEmailAddress();
-		Connection conn=getConnection();
-		if(this.userExists(emailAddress)){
-			String sql="select * from users where emailaddress='" + emailAddress.toLowerCase() + "'";
-			ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-			rs.absolute(1);
-			user.setPasswordHash(rs.getString("passwordhash"));
-			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
-			user.setEmailAddress(emailAddress);
-			sql="select * from sys.systables where tablename like '%" + emailAddress + "'% ";
-			rs=SQLWriter.executeDBCommand(conn, sql);  //gets all of the user's schedules as ResultSet
-			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
-			while(rs.next()){	//loop through all schedules
-				String scheduleName=rs.getString("tablename").substring(9, rs.getString("tablename").indexOf(emailAddress));
-				Schedule s=new Schedule(scheduleName);
-				sql="select * from " + rs.getString("tablename");
-				ResultSet courses=SQLWriter.executeDBCommand(conn, sql);  //get all courses in current schedule 
-				while(courses.next()){	//loop through all courses in current schedule 
-					Course c=new Course();
-					c.setCRN(Integer.parseInt(courses.getString("crn")));					//
-					c.setCourseAndSection(courses.getString("courseandsection"));			//
-					c.setTitle(courses.getString("title"));									//
-					c.setCredits(Double.parseDouble(courses.getString("credits")));			//
-					c.setType(courses.getString("type"));									//
-					c.setDays(courses.getString("days"));									//	add all course info
-					c.setTime(courses.getString("time"));									//	to a course object
-					c.addLocation(courses.getString("location_one"));						//
-					c.addLocation(courses.getString("location_two"));						//
-					c.addInstructor(courses.getString("instructor_one"));					//
-					c.addInstructor(courses.getString("instructor_two"));					//
-					c.setCapacity(Integer.parseInt(courses.getString("capacity")));			//
-					c.setSeatsRemain(Integer.parseInt(courses.getString("seatsremain")));	//
-					c.setSeatsFilled(Integer.parseInt(courses.getString("seatsfilled")));	//
-					c.setBeginEnd(courses.getString("beginend"));							//
-					s.addCourse(c);		//add course to a schedule
-				}
-				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
-			}
-			conn.commit();
-			conn.close();
-			conn=null;
+			user.setSchedules(schedules); //add schedules TreeMap
 			return user;		//return the generated user
 		}
 		conn.commit();
