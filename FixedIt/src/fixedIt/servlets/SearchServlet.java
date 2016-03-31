@@ -86,6 +86,7 @@ public class SearchServlet extends HttpServlet {
 				System.out.println(c.getCRN());
 				if(req.getParameter("" + c.getCRN())!=null){
 					controller.addToSchedule(c.getCRN());
+					session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
 					errorMessage="Course added successfully";
 				}
 				req.setAttribute("" + c.getCRN(), null);

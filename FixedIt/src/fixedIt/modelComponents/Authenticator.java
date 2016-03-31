@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -231,19 +232,26 @@ public class Authenticator implements EmailSender {
 		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + usr.getEmailAddress().toLowerCase() + "'";
 		SQLWriter.executeDBCommand(conn, sql);
-		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', '" +
-				usr.getStudentStatus() + "', '" + usr.getNumSchedules() + "' ) ";
+		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', " +
+				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
 		SQLWriter.executeDBCommand(conn, sql);
-		sql="select * from sys.systables where tablename like 'schedule%" + usr.getEmailAddress() + "%' ";
-		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-		while(rs.next()){
-			sql="delete * from sys.systables where tablename='" + rs.getString("tablename");
+//		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
+//		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
+		for(Entry s : usr.getSchedules().entrySet()){
+			sql="drop table SCHEDULE" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toUpperCase() +
+					s.getKey().toString().toUpperCase();
+			System.out.println(sql);
+			SQLWriter.executeDBCommand(conn, sql);
 		}
+//		while(rs.next()){
+//			sql="drop table " + rs.getString("tablename").toUpperCase();
+//			SQLWriter.executeDBCommand(conn, sql);
+//		}
 		for(Schedule s : usr.getSchedules().values()){
-			sql="create table schedule" + usr.getEmailAddress().toLowerCase() + s.getName() + "( crn varchar(20) )";
+			sql="create table schedule" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toLowerCase() + s.getName() + "( crn varchar(20) )";
 			SQLWriter.executeDBCommand(conn, sql);
 			for(Course c : s.getCourses()){
-				sql="insert into schedule" + usr.getEmailAddress().toLowerCase() + s.getName() + " ( " + c.getCRN() + " ) ";
+				sql="insert into SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + s.getName() + " VALUES ( '" + c.getCRN() + "' ) ";
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}

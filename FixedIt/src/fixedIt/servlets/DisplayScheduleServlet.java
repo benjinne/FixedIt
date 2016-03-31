@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Schedule;
 
 
@@ -18,10 +19,14 @@ public class DisplayScheduleServlet extends HttpServlet {
 			throws ServletException, IOException {
 		resp.setHeader("Cache-Control","no-cache");
 		resp.setHeader("Cache-Control","no-store");
-		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
+		fixedIt.modelComponents.Session session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
+		if(session==null){
 			resp.sendRedirect("login");
 			return;
 		}
+		Schedule s=session.getCurrentUser().getSchedules().get("testSchedule");
+		String html=generateHTMLScheduleTable(s);
+		req.setAttribute("scheduleHTML", html);
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
 	
@@ -51,105 +56,53 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}*/
 	
 	public String generateHTMLScheduleTable(Schedule s){
-		String html="<table>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td> </td>\r\n" + 
-				"					<td>Mon</td>\r\n" + 
-				"					<td>Tue</td>\r\n" + 
-				"					<td>Wed</td>\r\n" + 
-				"					<td>Thu</td>\r\n" + 
-				"					<td>Fri</td>\r\n" + 
-				"					<td>Sat</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>8:00 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>8:30 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>9:00 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>9:30 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>10:00 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>10:30 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>11:00 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>11:30 AM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>12:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>12:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>1:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>1:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>2:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>2:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>3:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>3:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>4:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>4:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>5:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>5:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>6:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>6:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>7:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>7:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>8:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>8:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>9:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>9:30 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"				<tr>\r\n" + 
-				"					<td>10:00 PM</td>\r\n" + 
-				"				</tr>\r\n" + 
-				"			</table>";
+		String html="<table class=\"courseTable\" align=\"left\" >" + 
+				"<tr>" + 
+				"	<td>Time</td>" + 
+				"	<td>Monday</td>" + 
+				"	<td>Tuesday</td>" + 
+				"	<td>Wednesday</td>" + 
+				"	<td>Thursday</td>" + 
+				"	<td>Friday</td>" + 
+				"	<td>Saturday</td>" + 
+				"</tr>";
+		String[] days={"m", "t", "w", "th", "f", "s"};
+		for(Course c : s.getCourses()){
+			for(int j=8; j<=22; j++){
+				int timeInt=j%12;
+				if(timeInt==0){
+					timeInt=12;
+				}
+				String time="" + timeInt;
+				String amPm;
+				if(j>11){
+					amPm="PM";
+				}
+				else{
+					amPm="AM";
+				}
+				html=html + "<tr>" +
+							"<td>" + time + ":00" + amPm + "</td>";
+				
+				for(int i=0; i<days.length; i++){
+					if(c.getDays().toLowerCase().contains(days[i])){
+						if(c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(time) 
+								&& c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(amPm)){
+							html=html + "<td>" + c.getCourseAndSection() + "<br>" + c.getTime() + "</td>";
+						}
+						else{
+							html=html + "<td> </td>";
+						}
+					}
+					else{
+						html=html + "<td> </td>";
+					}
+				}
+				html=html + "</tr>";
+			}
+		}
+		html=html + "</table>";
 		
-		return "";
+		return html;
 	}
 }

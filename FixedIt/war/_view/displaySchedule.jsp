@@ -13,7 +13,7 @@
 		
 		td.label {
 			text-align: left;
-		}		
+		}
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
@@ -33,6 +33,11 @@
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
+			<div style="width:80%">
+				<c:if test="${! empty scheduleHTML}">
+					<c:out value="${scheduleHTML}" escapeXml="false"/>
+				</c:if>
+			</div>
 			
 			<div class="sideBar">
 				<table class="sideBarTable">

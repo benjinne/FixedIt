@@ -22,6 +22,10 @@ public class Session {
 		return sessionSearchHistory;
 	}
 	
+	public Authenticator getAuth(){
+		return auth;
+	}
+	
 	public void endSessionAndLogout() throws SQLException{
 		auth.saveExistingUserNewDataToDB(user);
 		user.dispose();
