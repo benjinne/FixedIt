@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Registrar;
 
 public class RegistrarTest {

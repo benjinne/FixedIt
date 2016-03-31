@@ -24,8 +24,20 @@ public class DisplayScheduleServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-		System.out.println(session.getCurrentUser().getSchedules().size());
+//		System.out.println(session.getCurrentUser().getSchedules().size());
 		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		System.out.println(session.getCurrentUser().getSchedules().firstKey());
+		for(Course c : s.getCourses()){
+			if(req.getParameter("" + c.getCRN())!=null){
+				s.deleteCourse(c.getCRN());
+			}
+		}
+//		try {
+//			session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 //		System.out.print("Null Session: ");
 //		System.out.println(session==null);
@@ -74,7 +86,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 				"	<td>Saturday</td>" + 
 				"</tr>";
 		String[] days={"m", "t", "w", "th", "f", "s"};
-		for(Course c : s.getCourses()){
+		for(Course c : s.getCourses()){			
 			for(int j=8; j<=22; j++){
 				int timeInt=j%12;
 				if(timeInt==0){
@@ -95,7 +107,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 					if(c.getDays().toLowerCase().contains(days[i])){
 						if(c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(time) 
 								&& c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(amPm)){
-							html=html + "<td>" + c.getCourseAndSection() + "<br>" + c.getTime() + "</td>";
+							html=html + "<td>" + c.getCourseAndSection() + "<br>" + c.getTime() + 
+									"<br><input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\" </td>";
 						}
 						else{
 							html=html + "<td> </td>";

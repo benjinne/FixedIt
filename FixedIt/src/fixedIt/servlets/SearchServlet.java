@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
-import fixedIt.modelComponents.Session;
+import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.sql.database.SQLWriter;
 
 //NEEDS THE CONTROLLER TO IMPLEMENT
@@ -52,50 +52,58 @@ public class SearchServlet extends HttpServlet {
 				"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
 				"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
 				"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
-		try{
-			ArrayList<Course> courses=controller.getCourses();
+		ArrayList<Course> courses=controller.getCourses();
+		try {
 			addCoursesToDB(courses);
-			for(Course c : courses){
-				returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
-				if(c.getLocation().size()>1){
-					returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
-				}
-				else{
-					returnedCourses=returnedCourses+("<td> </td>");
-				}
-				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
-				if(c.getInstructors().size()>1){
-					returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
-				}
-				else{
-					returnedCourses=returnedCourses+("<td> </td>");
-				}
-				returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
-				returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
-				returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
-						+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
-				System.out.println(c.getCRN());
-				if(req.getParameter("" + c.getCRN())!=null){
-					controller.addToSchedule(c.getCRN());
-					session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
-					errorMessage="Course added successfully";
-				}
-				req.setAttribute("" + c.getCRN(), null);
-			}
-		}
-		catch(Exception e){
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			returnedCourses=null;
-			errorMessage="Invalid combination of search parameters. Try another search.";
+		}
+		for(Course c : courses){
+			returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
+			if(c.getLocation().size()>1){
+				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
+			}
+			else{
+				returnedCourses=returnedCourses+("<td> </td>");
+			}
+			returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
+			if(c.getInstructors().size()>1){
+				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
+			}
+			else{
+				returnedCourses=returnedCourses+("<td> </td>");
+			}
+			returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
+			returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
+			returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
+					+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
+			System.out.println(c.getCRN());
+			if(req.getParameter("" + c.getCRN())!=null){
+				try {
+					controller.addToSchedule(c.getCRN());
+					errorMessage="Course added successfully";
+				} catch (ConflictException e) {
+					errorMessage="Course conflicts with one on your schedule.";
+					e.printStackTrace();
+				}
+				try {
+					session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+			req.setAttribute("" + c.getCRN(), null);
 		}
 		
 		

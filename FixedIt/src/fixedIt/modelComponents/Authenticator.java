@@ -7,13 +7,11 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +19,7 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.sql.database.*;
 
 public class Authenticator implements EmailSender {
@@ -114,8 +113,9 @@ public class Authenticator implements EmailSender {
 	 * @param emailAddress user's email address to lookup user by
 	 * @return user the user object associated with the given email address, if one exists.
 	 * @throws SQLException
+	 * @throws ConflictException 
 	 */
-	public User getUser(String emailAddress) throws SQLException{
+	public User getUser(String emailAddress) throws SQLException, ConflictException{
 		Connection conn=getConnection();
 		User user=new User();
 		if(this.userExists(emailAddress)){
@@ -130,7 +130,7 @@ public class Authenticator implements EmailSender {
 			Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs=stmnt1.executeQuery(sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
-			System.out.println(rs.isBeforeFirst());			
+			//System.out.println(rs.isBeforeFirst());			
 			while(rs.next()){	//loop through all schedules
 				String scheduleName=rs.getString("tablename").substring("schedule".length(), rs.getString("tablename").indexOf(emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@"))));
 				System.out.println(rs.getString("tablename").substring("schedule".length() + emailAddress.substring(emailAddress.indexOf('@')).length()));
@@ -187,18 +187,13 @@ public class Authenticator implements EmailSender {
 		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', " +
 				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
 		SQLWriter.executeDBCommand(conn, sql);
-//		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
-//		ResultSet rs=SQLWriter.executeDBCommand(conn, sql);
-		for(Entry s : usr.getSchedules().entrySet()){
-			sql="drop table SCHEDULE" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toUpperCase() +
-					s.getKey().toString().toUpperCase();
-			System.out.println(sql);
+		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
+		Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs=stmnt1.executeQuery(sql);
+		while(rs.next()){
+			sql="drop table " + rs.getString("tablename").toUpperCase();
 			SQLWriter.executeDBCommand(conn, sql);
 		}
-//		while(rs.next()){
-//			sql="drop table " + rs.getString("tablename").toUpperCase();
-//			SQLWriter.executeDBCommand(conn, sql);
-//		}
 		for(Schedule s : usr.getSchedules().values()){
 			sql="create table schedule" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toLowerCase() + s.getName() + "( crn varchar(20) )";
 			SQLWriter.executeDBCommand(conn, sql);
@@ -232,7 +227,7 @@ public class Authenticator implements EmailSender {
 		conn.close();
 		conn=null;
 		return false;
-	}
+	}	
 	/**
 	 * Deletes a user from the database. BE CAREFUL WITH THIS.
 	 * @param user user to delete
@@ -419,8 +414,9 @@ public class Authenticator implements EmailSender {
 	 * the user is authorized, null if credentials do not match or
 	 * an SQL error occurs.
 	 * @throws SQLException
+	 * @throws ConflictException 
 	 */
-	public Session authorizeUser(String email, String password) throws SQLException{
+	public Session authorizeUser(String email, String password) throws SQLException, ConflictException{
 		if(credentialsMatch(email, password)){
 			return createSession(getUser(email));
 		}

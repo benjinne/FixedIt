@@ -66,12 +66,12 @@ public class UserInfoServlet extends HttpServlet {
 		req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);
 	}
 
-	private String getStringFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return s;
-		}
-	}
+//	private String getStringFromParameter(String s) {
+//		if (s == null || s.equals("")) {
+//			return null;
+//		} else {
+//			return s;
+//		}
+//	}
 }
 

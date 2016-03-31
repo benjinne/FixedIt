@@ -23,18 +23,31 @@ public class Schedule {
 		courses=new ArrayList<Course>();
 	}
 	
-	public void addCourse(Course course){
-		if(!conflictsWithCourse(course)){
-			courses.add(course);
-		}
-		else{
-			throw new IllegalArgumentException("Course conflicts with schedule.");
+	public class ConflictException extends Exception {
+		private static final long serialVersionUID = 8792549347561965629L;
+		public ConflictException(String message){
+			super(message);
 		}
 	}
 	
-	public void addCourses(Course... coursesToAdd){
+	public void addCourse(Course course) throws ConflictException {
+		if(conflictsWithCourse(course)){
+			throw new RuntimeException("Course conflicts with schedule.");
+		}
+		courses.add(course);
+	}
+	
+	public void addCourses(Course... coursesToAdd) throws ConflictException{
 		for(Course c : coursesToAdd){
 			addCourse(c);
+		}
+	}
+	
+	public void deleteCourse(int CRN){
+		for(int i=0; i<courses.size(); i++){
+			if(courses.get(i).getCRN()==CRN){
+				courses.remove(i);
+			}
 		}
 	}
 	

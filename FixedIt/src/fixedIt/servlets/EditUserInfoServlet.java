@@ -60,11 +60,11 @@ public class EditUserInfoServlet extends HttpServlet {
 		req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
 	}
 
-	private String getStringFromParameter(String s) {
-		if (s == null || s.equals("")) {
-			return null;
-		} else {
-			return s;
-		}
-	}
+//	private String getStringFromParameter(String s) {
+//		if (s == null || s.equals("")) {
+//			return null;
+//		} else {
+//			return s;
+//		}
+//	}
 }

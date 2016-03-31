@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
 import fixedIt.modelComponents.Registrar;
+import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.modelComponents.User;
 //HAVE TO BE ABLE TO GRAB VARIABLES FROM JSP
 import fixedIt.sql.database.SQLWriter;
@@ -91,7 +92,7 @@ public class QueryController {
 	}
 	//potentially more methods for fetching course data
 	
-	public void addToSchedule(int CRN){
+	public void addToSchedule(int CRN) throws ConflictException{
 		if(user.getSchedules().isEmpty()){
 			user.createSchedule("testSchedule");
 		}
