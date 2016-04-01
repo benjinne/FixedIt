@@ -134,7 +134,7 @@ public class SearchServlet extends HttpServlet {
 		SQLWriter.executeDBCommand(conn, sqlDelete);
 		
 		for (Course c : courses) {
-			System.out.println(c.getCRN());
+			//System.out.println(c.getCRN());
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 					"values (\n'" +
