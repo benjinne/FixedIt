@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.sql.database.*;
 
 public class Authenticator implements EmailSender {
@@ -115,7 +114,7 @@ public class Authenticator implements EmailSender {
 	 * @throws SQLException
 	 * @throws ConflictException 
 	 */
-	public User getUser(String emailAddress) throws SQLException, ConflictException{
+	public User getUser(String emailAddress) throws SQLException{
 		Connection conn=getConnection();
 		User user=new User();
 		if(this.userExists(emailAddress)){
@@ -416,7 +415,7 @@ public class Authenticator implements EmailSender {
 	 * @throws SQLException
 	 * @throws ConflictException 
 	 */
-	public Session authorizeUser(String email, String password) throws SQLException, ConflictException{
+	public Session authorizeUser(String email, String password) throws SQLException{
 		if(credentialsMatch(email, password)){
 			return createSession(getUser(email));
 		}

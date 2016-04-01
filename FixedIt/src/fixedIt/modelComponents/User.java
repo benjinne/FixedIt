@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.TreeMap;
 
-import fixedIt.modelComponents.Schedule.ConflictException;
-
 public class User{
 	public static final int STATUS_FULL_TIME=0;
 	public static final int STATUS_PART_TIME=1;
@@ -36,7 +34,7 @@ public class User{
 		this.auth=auth;
 	}
 	
-	public void reInitializeUser() throws SQLException, ConflictException{
+	public void reInitializeUser() throws SQLException{
 		User tmp=auth.getUser(emailAddress);
 		emailAddress=tmp.getEmailAddress();
 		schedules=tmp.getSchedules();

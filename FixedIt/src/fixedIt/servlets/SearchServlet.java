@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
-import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.sql.database.SQLWriter;
 
 //NEEDS THE CONTROLLER TO IMPLEMENT
@@ -52,7 +51,12 @@ public class SearchServlet extends HttpServlet {
 				"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
 				"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
 				"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
-		ArrayList<Course> courses=controller.getCourses();
+		ArrayList<Course> courses=null;
+		try{
+			courses=controller.getCourses();
+		}catch(IOException e){
+			errorMessage="Failed to read user from database properly.";
+		}
 		try {
 			addCoursesToDB(courses);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -89,12 +93,12 @@ public class SearchServlet extends HttpServlet {
 					+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
 			System.out.println(c.getCRN());
 			if(req.getParameter("" + c.getCRN())!=null){
-				try {
-					controller.addToSchedule(c.getCRN());
+				boolean success=controller.addToSchedule(c.getCRN());
+				if(success){
 					errorMessage="Course added successfully";
-				} catch (ConflictException e) {
-					errorMessage="Course conflicts with one on your schedule.";
-					e.printStackTrace();
+				}
+				else{
+					errorMessage="Course conflicts with one on schedule";
 				}
 				try {
 					session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());

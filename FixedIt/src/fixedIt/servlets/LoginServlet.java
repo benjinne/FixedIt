@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.LoginController;
-import fixedIt.modelComponents.Schedule.ConflictException;
 import fixedIt.modelComponents.Session;
 
 
@@ -54,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 						else{
 							errorMessage="Failed to populate User object!";
 						}
-					} catch (SQLException | ConflictException e) {
+					} catch (SQLException  e) {
 						e.printStackTrace();
 					}
 				}

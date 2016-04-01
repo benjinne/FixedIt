@@ -23,21 +23,16 @@ public class Schedule {
 		courses=new ArrayList<Course>();
 	}
 	
-	public class ConflictException extends Exception {
-		private static final long serialVersionUID = 8792549347561965629L;
-		public ConflictException(String message){
-			super(message);
-		}
-	}
 	
-	public void addCourse(Course course) throws ConflictException {
+	public boolean addCourse(Course course)  {
 		if(conflictsWithCourse(course)){
-			throw new RuntimeException("Course conflicts with schedule.");
+			return false;
 		}
 		courses.add(course);
+		return true;
 	}
 	
-	public void addCourses(Course... coursesToAdd) throws ConflictException{
+	public void addCourses(Course... coursesToAdd) {
 		for(Course c : coursesToAdd){
 			addCourse(c);
 		}
