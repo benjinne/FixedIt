@@ -25,6 +25,14 @@ public class Schedule {
 		courses=new ArrayList<Course>();
 	}
 	
+	public Schedule(Schedule s){
+		this.name="" + s.getName();
+		this.courses=new ArrayList<Course>();
+		this.courses.addAll(s.getCourses());
+		this.term="" + s.getTerm();
+		this.level="" + s.getLevel();
+	}
+	
 	
 	public boolean addCourse(Course course)  {
 		if(conflictsWithCourse(course)){

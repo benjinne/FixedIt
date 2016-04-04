@@ -1,5 +1,6 @@
 package fixedIt.servlets;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,25 +25,12 @@ public class DisplayScheduleServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-//		System.out.println(session.getCurrentUser().getSchedules().size());
 		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
-		System.out.println(session.getCurrentUser().getSchedules().firstKey());
 		for(Course c : s.getCourses()){
 			if(req.getParameter("" + c.getCRN())!=null){
 				s.deleteCourse(c.getCRN());
 			}
 		}
-//		try {
-//			session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-//		System.out.print("Null Session: ");
-//		System.out.println(session==null);
-//		System.out.print("Null Schedule: ");
-//		System.out.println(s==null);
 		
 		String html=generateHTMLScheduleTable(s);
 		req.setAttribute("scheduleHTML", html);
@@ -54,13 +42,33 @@ public class DisplayScheduleServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		// Decode form parameters and dispatch to controller
-		//String errorMessage = null;
+		String errorMessage = null;
+		fixedIt.modelComponents.Session session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
+		if(session==null){
+			resp.sendRedirect("login");
+			return;
+		}
 		
+		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		for(int i=0; i<s.getCourses().size(); i++){
+			Course c=s.getCourses().get(i);
+			if(req.getParameter("" + c.getCRN())!=null){
+				session.getCurrentUser().getSchedules().firstEntry().getValue().deleteCourse(c.getCRN());
+			}
+		}
 		
-		
+		try {
+			session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+		} catch (SQLException e) {
+			errorMessage="Error saving data.";
+			e.printStackTrace();
+		}
 		
 		// Add parameters as request attributes
-	
+		//req.getSession().setAttribute("userSession", session);
+		String html=generateHTMLScheduleTable(s);
+		req.setAttribute("scheduleHTML", html);
+		req.setAttribute("errorMessage", errorMessage);
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
@@ -92,7 +100,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 			if(timeInt==0){
 				timeInt=12;
 			}
-			String time="" + timeInt;
+			String timeHr="" + timeInt;
 			String amPm;
 			if(j>11){
 				amPm="PM";
@@ -100,22 +108,31 @@ public class DisplayScheduleServlet extends HttpServlet {
 			else{
 				amPm="AM";
 			}
-			html=html + "<tr>" +
-						"<td>" + time + ":00" + amPm + "</td>";
-			
-			for(int i=0; i<days.length; i++){
-				html=html  +"<td> ";
-				for(Course c : s.getCourses()){
-					if(c.getTime().substring(0, c.getTime().indexOf('-')).contains(time) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
-						if(c.getDays().toLowerCase().contains(days[i])){
-							html=html + c.getCourseAndSection() + "<br>" + c.getTime() + 
-									"<br><input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\" ";
+			for(int k=0; k<2; k++){
+				String timeMin="";
+				if(k==0){
+					timeMin="00";
+					
+				}
+				else{
+					timeMin="30";
+				}
+				html=html + "<tr>" +
+						"<td>" + timeHr + ":" + timeMin + amPm + "</td>";
+				
+				for(int i=0; i<days.length; i++){
+					html=html  +"<td> ";
+					for(Course c : s.getCourses()){
+						if(c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeHr) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
+							if(c.getDays().toLowerCase().contains(days[i])){
+								html=html + c.getCourseAndSection() + "&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>" + "<br>" + c.getTime();
+							}
 						}
 					}
+					html=html + "</td>";
 				}
-				html=html + "</td>";
+				html=html + "</tr>";
 			}
-			html=html + "</tr>";
 		}
 		html=html + "</table>";
 		

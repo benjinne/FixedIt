@@ -21,46 +21,48 @@
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</head>
 	
-	<section class="styled-body">
+	<div class="styled-body">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/schedule" method="post">
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
-			</c:if>
-			<div style="width:80%">
-				<c:if test="${! empty scheduleHTML}">
-					<c:out value="${scheduleHTML}" escapeXml="false"/>
-				</c:if>
+		<c:if test="${! empty scheduleHTML}">
+			<div class="course-table">
+				<c:out value="${scheduleHTML}" escapeXml="false"/>
 			</div>
-			
-			<div class="sideBar">
-				<table class="sideBarTable">
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo':"  /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
-					</tr>
-				</table>
-			</div>
+		</c:if>
 		</form>
-    </section>
+		<div class="sideBar">
+			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
+			<div id="menu" class="collapse">
+			<table class="sideBarTable">
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo':"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
+				</tr>
+			</table>
+			</div>
+		</div>
+    </div>
 </html>

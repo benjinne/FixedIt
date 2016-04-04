@@ -24,15 +24,14 @@ td.label {
 	vertical-align: top;
 }
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css"
-	media="screen">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700'
-	rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css"
-	media="screen">
-<link rel="stylesheet" type="text/css"
-	href="_view/stylesheets/github-light.css" media="screen">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<section class="styled-body">
@@ -42,36 +41,11 @@ td.label {
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
-			<div class="sideBar">
-				<table class="sideBarTable">
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';" /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
-					</tr>
-					<tr>
-						<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
-					</tr>
-				</table>
-			</div>
 				<table align="center">
-					<tr>
-					<td class="label">Search by Term: &nbsp;&nbsp;</td>
-					<td class="label">Search by Level: &nbsp;&nbsp;</td>
-					<td class="label">Search by Section: &nbsp;&nbsp;</td>
-				</tr>
 				<tr>
-					<td class="alignTDTop" ><select id="term" name="term" size="7">
+					<td class="alignTDTop" >
+						Select by Term:<br>
+						<select id="term" name="term" size="7">
 							<option class="option"  selected="selected" VALUE="201610">Fall 2016</option>
 							<option class="option"  VALUE="201590">Special Session 2016</option>
 							<option class="option"  VALUE="201550">Summer II 2016</option>
@@ -81,12 +55,16 @@ td.label {
 							<option class="option"  VALUE="201510">Fall 2015</option>
 						</select>
 					</td>
-					<td class="alignTDTop" ><select id="level" name="level" size="7">
+					<td class="alignTDTop" >
+						select by Level:<br>
+						<select id="level" name="level" size="7">
 							<option class="option"  selected="selected" VALUE="A">All Undergraduate Classes</option>
 							<option class="option"  VALUE="M">All Graduate Classes</option>
 							<option class="option"  VALUE="E">Eve. &amp; Sat. Undergraduate Classes</option>
 					</select></td>
-					<td class="alignTDTop" ><select id="dept" name="dept" size="7">
+					<td class="alignTDTop" >
+						Select by Department:<br>
+						<select id="dept" name="dept" size="7">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
 									<option class="option" selected="selected" VALUE="ANT_01">&nbsp;&nbsp;&nbsp;Anthropology
 									</option>
@@ -242,6 +220,31 @@ td.label {
 			</table>
 		</c:if>
 		</form>
+		<div class="sideBar">
+			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
+			<div id="menu" class="collapse">
+			<table class="sideBarTable">
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo':"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+				</tr>
+				<tr>
+					<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
+				</tr>
+			</table>
+			</div>
+		</div>
 	</section>
 </body>
 </html>
