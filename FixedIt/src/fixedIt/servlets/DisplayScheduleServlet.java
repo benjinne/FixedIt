@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fixedIt.controllers.DisplayScheduleController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Schedule;
 
@@ -25,7 +26,16 @@ public class DisplayScheduleServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		Schedule s;
+		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
+		try{
+			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		}
+		catch(NullPointerException e){
+			controller.initializeSchedule();
+			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		}
+		
 		for(Course c : s.getCourses()){
 			if(req.getParameter("" + c.getCRN())!=null){
 				s.deleteCourse(c.getCRN());
@@ -49,7 +59,16 @@ public class DisplayScheduleServlet extends HttpServlet {
 			return;
 		}
 		
-		Schedule s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		Schedule s;
+		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
+		try{
+			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		}
+		catch(NullPointerException e){
+			controller.initializeSchedule();
+			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+		}
+		
 		for(int i=0; i<s.getCourses().size(); i++){
 			Course c=s.getCourses().get(i);
 			if(req.getParameter("" + c.getCRN())!=null){
