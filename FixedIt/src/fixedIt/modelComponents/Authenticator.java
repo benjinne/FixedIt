@@ -132,7 +132,7 @@ public class Authenticator implements EmailSender {
 			//System.out.println(rs.isBeforeFirst());			
 			while(rs.next()){	//loop through all schedules
 				String scheduleName=rs.getString("tablename").substring("schedule".length(), rs.getString("tablename").indexOf(emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@"))));
-				System.out.println(rs.getString("tablename").substring("schedule".length() + emailAddress.substring(emailAddress.indexOf('@')).length()));
+				//System.out.println(rs.getString("tablename").substring("schedule".length() + emailAddress.substring(emailAddress.indexOf('@')).length()));
 				Schedule s=new Schedule(scheduleName);
 				sql="select * from " + rs.getString("tablename");
 				Statement stmnt2=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

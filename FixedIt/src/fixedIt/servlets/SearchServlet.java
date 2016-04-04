@@ -44,7 +44,6 @@ public class SearchServlet extends HttpServlet {
 		String level = req.getParameter("level");
 		String term = req.getParameter("term");
 		QueryController controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session.getCurrentUser());
-		System.out.println(session.getCurrentUser());
 		
 		
 		String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
@@ -91,7 +90,6 @@ public class SearchServlet extends HttpServlet {
 			returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
 			returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
 					+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
-			System.out.println(c.getCRN());
 			if(req.getParameter("" + c.getCRN())!=null){
 				boolean success=controller.addToSchedule(c.getCRN());
 				if(success){
@@ -138,7 +136,6 @@ public class SearchServlet extends HttpServlet {
 		SQLWriter.executeDBCommand(conn, sqlDelete);
 		
 		for (Course c : courses) {
-			//System.out.println(c.getCRN());
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 					"values (\n'" +

@@ -2,6 +2,8 @@ package fixedIt.modelComponents;
 
 import java.util.ArrayList;
 
+import org.joda.time.LocalTime;
+
 public class Schedule {
 	
 	public ArrayList<Course> courses;
@@ -83,24 +85,55 @@ public class Schedule {
 	 * @return boolean
 	 */
 	public boolean timeConflicts(Course course){
-		TimeInterval courseTime=course.getTimeAsTimeInverval();
-		for(Course c : courses){
-			TimeInterval cTime=c.getTimeAsTimeInverval();
-			if(courseTime.getStart()==cTime.getStart() || courseTime.getEnd()==cTime.getEnd()){
+		String t=course.getTime().substring(0, course.getTime().indexOf(':')+3);
+		LocalTime courseStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+		t=course.getTime().substring(course.getTime().indexOf('-')+1);
+		t=t.substring(0, t.indexOf(':')+3);
+		LocalTime courseEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+		
+		for(Course c : getCourses()){
+			t=c.getTime().substring(0, c.getTime().indexOf(':')+3);
+			LocalTime cStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+			t=c.getTime().substring(c.getTime().indexOf('-')+1);
+			t=t.substring(0, t.indexOf(':')+3);
+			LocalTime cEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+			
+			if(courseStart.equals(cStart) || courseEnd.equals(cEnd)){
 				return true;
-			}
-			else if(courseTime.getStart()<cTime.getStart()){
-				if(courseTime.getEnd()>=cTime.getStart()){
+			}else if(courseStart.isBefore(cStart)){
+				if(courseEnd.isAfter(cStart)){
+					//System.out.println(true);
 					return true;
 				}
 			}
-			else if(cTime.getStart()<courseTime.getStart()){
-				if(cTime.getEnd()>=courseTime.getStart()){
+			else if(cStart.isBefore(courseStart)){
+				if(cEnd.isAfter(courseStart)){
+					//System.out.println(true);
 					return true;
 				}
 			}
 		}
+		//System.out.println(false);
 		return false;
+		
+		
+//		TimeInterval courseTime=course.getTimeAsTimeInverval();
+//		for(Course c : courses){
+//			TimeInterval cTime=c.getTimeAsTimeInverval();
+//			if(courseTime.getStart()==cTime.getStart() || courseTime.getEnd()==cTime.getEnd()){
+//				return true;
+//			}
+//			else if(courseTime.getStart()<cTime.getStart()){
+//				if(courseTime.getEnd()>=cTime.getStart()){
+//					return true;
+//				}
+//			}
+//			else if(cTime.getStart()<courseTime.getStart()){
+//				if(cTime.getEnd()>=courseTime.getStart()){
+//					return true;
+//				}
+//			}
+//		}
 	}
 	
 	public String getTerm(){

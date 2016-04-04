@@ -91,6 +91,6 @@ public class QueryController {
 			user.createSchedule("testSchedule");
 		}
 		Course c=getCourse(CRN);
-		return user.getSchedule("testSchedule").addCourse(c);
+		return user.getSchedules().firstEntry().getValue().addCourse(c);
 	}
 }

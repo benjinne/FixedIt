@@ -84,13 +84,11 @@ public class Registrar {
 	private ArrayList<Course> parseCSVLines(String[] lines){
 		ArrayList<Course> courses=new ArrayList<Course>();
 		for(int i=0; i<lines.length; i++){
-			//System.out.println(lines[i]);
 			String[] data=lines[i].split(",");
 			Course course=new Course();
 			if(data[0].matches("[A-Za-z0-9]+")){
 				if(data[5].toLowerCase().contains("arranged")){
 					course.setCRN(Integer.parseInt(data[0]));
-					//System.out.println(data[0]);
 					course.setCourseAndSection(data[1]);
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
@@ -105,7 +103,6 @@ public class Registrar {
 				}
 				else{
 					course.setCRN(Integer.parseInt(data[0]));
-					//System.out.println(data[0]);
 					course.setCourseAndSection(data[1].replaceAll(" ", ""));
 					course.setTitle(data[2]);
 					course.setCredits(Double.parseDouble(data[3]));
@@ -144,9 +141,7 @@ public class Registrar {
 	private String[] getLinesFromHTML(String sourceHTML){
 		sourceHTML=sourceHTML.substring(sourceHTML.lastIndexOf("<table"));
 		sourceHTML=sourceHTML.substring(0, sourceHTML.lastIndexOf("</table>")+8);
-		//sourceHTML=sourceHTML.substring(sourceHTML.indexOf("</tr>"));
 		 Document doc = Jsoup.parseBodyFragment(sourceHTML);
-		 //System.out.println(doc);
 		 Elements rows = doc.getElementsByTag("tr");
 		 String csv="";
 		 for (Element row : rows) {
@@ -159,7 +154,6 @@ public class Registrar {
 		 csv=csv.substring(csv.indexOf('\n'));
 		 csv=csv.replace(" view book info", "");
 		 csv=csv.substring(1);
-		// csv=csv.replaceAll("\u00a0", "");
 		 String[] lines=csv.split("\\n");
 		 return lines;
 	}

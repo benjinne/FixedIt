@@ -85,41 +85,37 @@ public class DisplayScheduleServlet extends HttpServlet {
 				"	<td>Friday</td>" + 
 				"	<td>Saturday</td>" + 
 				"</tr>";
-		String[] days={"m", "t", "w", "th", "f", "s"};
-		for(Course c : s.getCourses()){			
-			for(int j=8; j<=22; j++){
-				int timeInt=j%12;
-				if(timeInt==0){
-					timeInt=12;
-				}
-				String time="" + timeInt;
-				String amPm;
-				if(j>11){
-					amPm="PM";
-				}
-				else{
-					amPm="AM";
-				}
-				html=html + "<tr>" +
-							"<td>" + time + ":00" + amPm + "</td>";
-				
-				for(int i=0; i<days.length; i++){
-					if(c.getDays().toLowerCase().contains(days[i])){
-						if(c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(time) 
-								&& c.getTime().substring(0, c.getTime().indexOf("-")).toUpperCase().contains(amPm)){
-							html=html + "<td>" + c.getCourseAndSection() + "<br>" + c.getTime() + 
-									"<br><input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\" </td>";
-						}
-						else{
-							html=html + "<td> </td>";
-						}
-					}
-					else{
-						html=html + "<td> </td>";
-					}
-				}
-				html=html + "</tr>";
+		String[] days={"m", "t", "w", "r", "f", "s"};
+		
+		for(int j=8; j<=22; j++){
+			int timeInt=j%12;
+			if(timeInt==0){
+				timeInt=12;
 			}
+			String time="" + timeInt;
+			String amPm;
+			if(j>11){
+				amPm="PM";
+			}
+			else{
+				amPm="AM";
+			}
+			html=html + "<tr>" +
+						"<td>" + time + ":00" + amPm + "</td>";
+			
+			for(int i=0; i<days.length; i++){
+				html=html  +"<td> ";
+				for(Course c : s.getCourses()){
+					if(c.getTime().substring(0, c.getTime().indexOf('-')).contains(time) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
+						if(c.getDays().toLowerCase().contains(days[i])){
+							html=html + c.getCourseAndSection() + "<br>" + c.getTime() + 
+									"<br><input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\" ";
+						}
+					}
+				}
+				html=html + "</td>";
+			}
+			html=html + "</tr>";
 		}
 		html=html + "</table>";
 		
