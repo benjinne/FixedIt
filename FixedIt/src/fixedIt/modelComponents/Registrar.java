@@ -3,7 +3,7 @@
 //distributed under the open source MIT license as described below.
 //
 //The MIT License
-//Copyright © 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
+//Copyright ï¿½ 2009 - 2013 Jonathan Hedley (jonathan@hedley.net)
 //
 //Permission is hereby granted, free of charge, to any person obtaining
 //a copy of this software and associated documentation files (the "Software"),
@@ -147,12 +147,18 @@ public class Registrar {
 		 for (Element row : rows) {
 			 Elements cells = row.getElementsByTag("td");
 			 for (Element cell : cells) {
+				 Elements viewBookInfo=cell.getElementsByTag("div");
+				 if(!viewBookInfo.isEmpty()){
+					for(Element d : viewBookInfo){
+						d.remove();
+					}
+				 }
 				 csv=csv+cell.text().replace(",", "").concat(", ");
 			 }
 			 csv=csv+"\n";
 		 }
 		 csv=csv.substring(csv.indexOf('\n'));
-		 csv=csv.replace(" view book info", "");
+		 csv=csv.replace(" viewï¿½bookï¿½info", "");
 		 csv=csv.substring(1);
 		 String[] lines=csv.split("\\n");
 		 return lines;
