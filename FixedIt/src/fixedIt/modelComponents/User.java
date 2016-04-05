@@ -64,29 +64,30 @@ public class User{
 		return new Query(term, level, dept);
 	}
 	
-	/**
+	/*
 	 * Download a schedule
 	 * @param schedule the schedule to download
 	 * @param filepath the path in which to save the file (not including the filename itself)
 	 * @return File a file for download
 	 */
-	public void downloadSchedule(Schedule schedule, String filepath) throws IOException{
-		File file=new File(filepath+schedule.getName().replaceAll("[^a-zA-Z0-9.-]", "_")+".csv");
-		if(!file.exists()){
-			file.createNewFile();
-		}
-		System.out.println(file.getAbsolutePath());
-		FileWriter fw=new FileWriter(file.getAbsoluteFile());
-		BufferedWriter bw=new BufferedWriter(fw);
-		bw.write("CRN, Course and Section, Title, Credits, Type, Days, Time, Locations, Instructors, " +
-		"Capacity, Seats Open, Seats Filled, Begin/End Dates");
-		bw.newLine();
+	public String getScheduleAsCSV(Schedule schedule){
+		String csv="CRN, Course and Section, Title, Credits, Type, Days, Time, Locations, Instructors, " +
+		"Capacity, Seats Open, Seats Filled, Begin/End Dates \n";
 		for(Course c : schedule.getCourses()){
-			bw.write(c.toCSVLine());
-			bw.newLine();
+			csv=csv + c.getCRN() + ", " + c.getCourseAndSection() + ", " + c.getTitle() +
+					", " + c.getCredits() + ", " + c.getType() + ", " + c.getDays() +
+					", " + c.getTime() + ", " + c.getLocation().get(0);
+			if(c.getLocation().size()>1){
+				csv=csv + " and " + c.getLocation().get(1) + ", ";
+			}
+			csv=csv + c.getInstructors().get(0);
+			if(c.getInstructors().size()>1){
+				csv=csv + " and " + c.getInstructors().get(1) + ", ";
+			}
+			csv=csv + c.getCapacity() + ", " + c.getSeatsRemain() + ", " + c.getSeatsFilled() + ", " +
+					c.getBeginEnd() + "\n";
 		}
-		bw.close();
-		fw.close();
+		return csv;
 	}
 	
 	public Schedule getSchedule(String key){

@@ -1,5 +1,6 @@
 package fixedIt.controllers;
 
+import fixedIt.modelComponents.Schedule;
 import fixedIt.modelComponents.User;
 
 public class DisplayScheduleController {
@@ -14,5 +15,8 @@ public class DisplayScheduleController {
 			user.createSchedule("testSchedule");
 		}
 	}
-
+	
+	public String getScheduleAsCSV(Schedule s){
+		return user.getScheduleAsCSV(s);
+	}
 }

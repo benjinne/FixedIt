@@ -33,11 +33,31 @@
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
+		<input class="btn" type="submit" name="dlAsCSV" value="Download Schedule as CSV" />
+		<input class="btn" type="submit" name="dlAsHtml" value="Dowload Schedule as HTML View" />	
+		
 		<c:if test="${! empty scheduleHTML}">
-			<div class="course-table">
+			<div class="course-table" id="courses">
 				<c:out value="${scheduleHTML}" escapeXml="false"/>
 			</div>
 		</c:if>
+		<script>
+			$(function() { 
+			    $("#dlAsImg").click(function() { 
+			        html2canvas($("#courses"), {
+			            onrendered: function(canvas) {
+			                theCanvas = canvas;
+			                //document.body.appendChild(canvas);
+	
+			                // Convert and download as image 
+			                Canvas2Image.saveAsPNG(canvas); 
+			                //$("#img-out").append(canvas);
+			                //document.body.removeChild(canvas);
+			            }
+			        });
+			    });
+			});
+		</script>
 		</form>
 		<div class="sideBar">
 			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
