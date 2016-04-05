@@ -5,6 +5,19 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
+  <error-page>
+  	<error-code>404</error-code>
+  	<location>/error.html</location>
+  </error-page>
+  <error-page>
+  	<error-code>500</error-code>
+  	<location>/error.html</location>
+  </error-page>
+  <error-page>
+  	<error-code>505</error-code>
+  	<location>/error.html</location>
+  </error-page>
+
   <!-- Servlets -->
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
