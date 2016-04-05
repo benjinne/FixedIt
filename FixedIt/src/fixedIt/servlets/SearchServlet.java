@@ -1,7 +1,6 @@
 package fixedIt.servlets;
+
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,10 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
-import fixedIt.sql.database.SQLWriter;
 
-//NEEDS THE CONTROLLER TO IMPLEMENT
-
+//Fixed conflicts
 public class SearchServlet extends HttpServlet {			
 	
 	private static final long serialVersionUID = 1L;
