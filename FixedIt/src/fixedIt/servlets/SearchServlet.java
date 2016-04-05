@@ -43,18 +43,10 @@ public class SearchServlet extends HttpServlet {
 		String dept = req.getParameter("dept");
 		String level = req.getParameter("level");
 		String term = req.getParameter("term");
-		if(req.getSession().getAttribute("dept")!=null){
-			dept=(String) req.getSession().getAttribute("dept");
-		}
-		if(req.getSession().getAttribute("level")!=null){
-			level=(String) req.getSession().getAttribute("level");
-		}
-		if(req.getSession().getAttribute("term")!=null){
-			term=(String) req.getSession().getAttribute("term");
-		}
+		
 		QueryController controller=null;
 		try{
-			controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session.getCurrentUser());
+			controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session);
 		}catch(Exception e){
 			errorMessage="Please select an option for all 3 parameters.";
 			// Add parameters as request attributes
@@ -80,9 +72,9 @@ public class SearchServlet extends HttpServlet {
 			errorMessage="Failed to read user from database properly.";
 		}
 		try {
-			addCoursesToDB(courses);
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
+			session.getAuth().addCoursesToDB(courses);
+		} catch (SQLException e) {
+			errorMessage="Something went wrong with the search. Please try again.";
 			e.printStackTrace();
 		}
 		for(Course c : courses){
@@ -120,21 +112,11 @@ public class SearchServlet extends HttpServlet {
 					errorMessage="Course added successfully";
 				}
 				else{
-					errorMessage="Course conflicts with one on schedule";
-				}
-				try {
-					session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					errorMessage="Course conflicts with one on schedule, or something went wrong.";
 				}
 			}
 			req.setAttribute("" + c.getCRN(), null);
 		}
-		
-		req.getSession().setAttribute("dept", dept);
-		req.getSession().setAttribute("level", level);
-		req.getSession().setAttribute("term", term);
 		
 		// Add parameters as request attributes
 		req.setAttribute("dept", dept);
@@ -147,43 +129,5 @@ public class SearchServlet extends HttpServlet {
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
-	}
-	
-	public void addCoursesToDB(ArrayList<Course> courses) throws ClassNotFoundException, SQLException {
-		Connection conn = null;
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
-			conn.setAutoCommit(true);
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-		
-		String sqlDelete="delete from courses where 1=1";
-		SQLWriter.executeDBCommand(conn, sqlDelete);
-		
-		for (Course c : courses) {
-			String sql="insert into courses \n" +
-					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
-					"values (\n'" +
-					c.getCRN() + "', \n'" + c.getCourseAndSection() + "', \n'" +
-					c.getTitle().replace("'", "''") + "', \n'" + c.getCredits() + "', \n'" + c.getType().replace("'", "''") + "', \n'" +
-					c.getDays() + "', \n'" + c.getTime() + "', \n";
-			if(c.getLocation().size()<2){
-				sql=sql+"'" + c.getLocation().get(0) + "', \n" + "'null', \n";
-			}
-			else{
-				sql=sql+"'" + c.getLocation().get(0) + "', \n'" + c.getLocation().get(1) + "', \n";
-			}
-			if(c.getInstructors().size()<2){
-				sql=sql+"'" + c.getInstructors().get(0).replace("'", "''") + "', \n" + "'null', \n";
-			}
-			else{
-				sql=sql+"'" + c.getInstructors().get(0).replace("'", "''") + "', \n'" + c.getInstructors().get(1).replace("'", "''") + "', \n";
-			}
-			sql=sql +"'" + c.getCapacity() + "', \n'" + c.getSeatsRemain() + "', \n'" + c.getSeatsFilled()
-				+ "', \n'" + c.getBeginEnd() + "'" + ")";
-			SQLWriter.executeDBCommand(conn, sql);
-		}
 	}
 }

@@ -46,166 +46,166 @@ td.label {
 					<td class="alignTDTop" >
 						Select by Term:<br>
 						<select id="term" name="term" size="7">
-							<option class="option"  selected="selected" VALUE="201610">Fall 2016</option>
-							<option class="option"  VALUE="201590">Special Session 2016</option>
-							<option class="option"  VALUE="201550">Summer II 2016</option>
-							<option class="option"  VALUE="201540">Summer I 2016</option>
-							<option class="option"  VALUE="201530">Mini-Mester 2016</option>
-							<option class="option"  VALUE="201520">Spring 2016</option>
-							<option class="option"  VALUE="201510">Fall 2015</option>
+							<option class="option"  VALUE="201610" ${"201610"==term ? 'selected="selected"' : ''}>Fall 2016</option>
+							<option class="option"  VALUE="201590" ${"201590"==term ? 'selected="selected"' : ''}>Special Session 2016</option>
+							<option class="option"  VALUE="201550" ${"201550"==term ? 'selected="selected"' : ''}>Summer II 2016</option>
+							<option class="option"  VALUE="201540" ${"201540"==term ? 'selected="selected"' : ''}>Summer I 2016</option>
+							<option class="option"  VALUE="201530" ${"201530"==term ? 'selected="selected"' : ''}>Mini-Mester 2016</option>
+							<option class="option"  VALUE="201520" ${"201520"==term ? 'selected="selected"' : ''}>Spring 2016</option>
+							<option class="option"  VALUE="201510" ${"201510"==term ? 'selected="selected"' : ''}>Fall 2015</option>
 						</select>
 					</td>
 					<td class="alignTDTop" >
 						select by Level:<br>
 						<select id="level" name="level" size="7">
-							<option class="option"  selected="selected" VALUE="A">All Undergraduate Classes</option>
-							<option class="option"  VALUE="M">All Graduate Classes</option>
-							<option class="option"  VALUE="E">Eve. &amp; Sat. Undergraduate Classes</option>
+							<option class="option"  VALUE="A" ${"A"==level ? 'selected="selected"' : ''}>All Undergraduate Classes</option>
+							<option class="option"  VALUE="M" ${"M"==level ? 'selected="selected"' : ''}>All Graduate Classes</option>
+							<option class="option"  VALUE="E" ${"E"==level ? 'selected="selected"' : ''}>Eve. &amp; Sat. Undergraduate Classes</option>
 					</select></td>
 					<td class="alignTDTop" >
 						Select by Department:<br>
 						<select id="dept" name="dept" size="7">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
-									<option class="option" selected="selected" VALUE="ANT_01">&nbsp;&nbsp;&nbsp;Anthropology
+									<option class="option"  VALUE="ANT_01" ${"ANT_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Anthropology
 									</option>
-									<option class="option"  VALUE="BEH_01">&nbsp;&nbsp;&nbsp;Behavioral
+									<option class="option"  VALUE="BEH_01" ${"BEH_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Behavioral
 										Sciences</option>
-									<option class="option"  VALUE="CJA_01">&nbsp;&nbsp;&nbsp;Criminal
+									<option class="option"  VALUE="CJA_01" ${"CJA_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Criminal
 										Justice</option>
-									<option class="option"  VALUE="GER_01">&nbsp;&nbsp;&nbsp;Gerontology
+									<option class="option"  VALUE="GER_01" ${"GER_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Gerontology
 									</option>
-									<option class="option"  VALUE="HSV_01">&nbsp;&nbsp;&nbsp;Human
+									<option class="option"  VALUE="HSV_01" ${"HSV_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Human
 										Services</option>
-									<option class="option"  VALUE="PSY_01">&nbsp;&nbsp;&nbsp;Psychology
+									<option class="option"  VALUE="PSY_01" ${"PSY_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Psychology
 									</option>
-									<option class="option"  VALUE="SOC_01">&nbsp;&nbsp;&nbsp;Sociology
+									<option class="option"  VALUE="SOC_01" ${"SOC_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Sociology
 									</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Biological Sciences:">
-									<option class="option"  VALUE="BIO_02">&nbsp;&nbsp;&nbsp;Biological
+									<option class="option"  VALUE="BIO_02" ${"BIO_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Biological
 										Science</option>
-									<option class="option"  VALUE="PMD_02">&nbsp;&nbsp;&nbsp;Pre-Med</option>
-									<option class="option"  VALUE="RT_02">&nbsp;&nbsp;&nbsp;Respiratory
+									<option class="option"  VALUE="PMD_02" ${"PMD_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Pre-Med</option>
+									<option class="option"  VALUE="RT_02" ${"RT_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Respiratory
 										Therapy</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Business Administration:">
-									<option class="option"  VALUE="ACC_03">&nbsp;&nbsp;&nbsp;Accounting
+									<option class="option"  VALUE="ACC_03" ${"AC_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Accounting
 									</option>
-									<option class="option"  VALUE="ECO_03">&nbsp;&nbsp;&nbsp;Economics
+									<option class="option"  VALUE="ECO_03" ${"ECO_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Economics
 									</option>
-									<option class="option"  VALUE="ENT_03">&nbsp;&nbsp;&nbsp;Entrepreneurship
+									<option class="option"  VALUE="ENT_03" ${"ENT_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Entrepreneurship
 									</option>
-									<option class="option"  VALUE="FIN_03">&nbsp;&nbsp;&nbsp;Finance</option>
-									<option class="option"  VALUE="BUS_03">&nbsp;&nbsp;&nbsp;General
+									<option class="option"  VALUE="FIN_03" ${"FIN_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Finance</option>
+									<option class="option"  VALUE="BUS_03" ${"BUS_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;General
 										Business Courses</option>
-									<option class="option"  VALUE="IFS_03">&nbsp;&nbsp;&nbsp;Information
+									<option class="option"  VALUE="IFS_03" ${"IFS_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Information
 										Systems</option>
-									<option class="option"  VALUE="IBS_03">&nbsp;&nbsp;&nbsp;International
+									<option class="option"  VALUE="IBS_03" ${"IBS_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;International
 										Business</option>
-									<option class="option"  VALUE="MGT_03">&nbsp;&nbsp;&nbsp;Management
+									<option class="option"  VALUE="MGT_03" ${"MGT_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Management
 									</option>
-									<option class="option"  VALUE="MKT_03">&nbsp;&nbsp;&nbsp;Marketing
+									<option class="option"  VALUE="MKT_03" ${"MKT_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Marketing
 									</option>
-									<option class="option"  VALUE="QBA_03">&nbsp;&nbsp;&nbsp;Quantitative
+									<option class="option"  VALUE="QBA_03" ${"QBA_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Quantitative
 										Business</option>
-									<option class="option"  VALUE="SCM_03">&nbsp;&nbsp;&nbsp;Supply Chain
+									<option class="option"  VALUE="SCM_03" ${"SCM_03"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Supply Chain
 										Op Mgmt</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Communication &amp; the Arts:">
-									<option class="option"  VALUE="ART_07">&nbsp;&nbsp;&nbsp;Art</option>
-									<option class="option"  VALUE="CM_07">&nbsp;&nbsp;&nbsp;Communication
+									<option class="option"  VALUE="ART_07" ${"ART_07"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Art</option>
+									<option class="option"  VALUE="CM_07" ${"CM_07"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Communication
 									</option>
-									<option class="option"  VALUE="MUS_07">&nbsp;&nbsp;&nbsp;Music</option>
-									<option class="option"  VALUE="THE_07">&nbsp;&nbsp;&nbsp;Theatre</option>
+									<option class="option"  VALUE="MUS_07" ${"MUS_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Music</option>
+									<option class="option"  VALUE="THE_07" ${"THE_07"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Theatre</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Education:">
-									<option class="option"  VALUE="ECH_04">&nbsp;&nbsp;&nbsp;Early
+									<option class="option"  VALUE="ECH_04" ${"ECHO_04"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Early
 										Childhood Education</option>
-									<option class="option"  VALUE="EDU_04">&nbsp;&nbsp;&nbsp;Education
+									<option class="option"  VALUE="EDU_04" ${"EDU_04"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Education
 									</option>
-									<option class="option"  VALUE="MLE_04">&nbsp;&nbsp;&nbsp;Middle Level
+									<option class="option"  VALUE="MLE_04" ${"MLE_04"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Middle Level
 										Education</option>
-									<option class="option"  VALUE="SE_04">&nbsp;&nbsp;&nbsp;Secondary
+									<option class="option"  VALUE="SE_04" ${"SE_04"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Secondary
 										Education</option>
-									<option class="option"  VALUE="SPE_04">&nbsp;&nbsp;&nbsp;Special
+									<option class="option"  VALUE="SPE_04" ${"SPE_04"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Special
 										Education</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Engineering &amp; Computer Science:">
-									<option class="option"  VALUE="CS_12">&nbsp;&nbsp;&nbsp;Computer
+									<option class="option"  VALUE="CS_12" ${"CS_12"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Computer
 										Science</option>
-									<option class="option"  VALUE="ECE_12">&nbsp;&nbsp;&nbsp;Electric/Computer
+									<option class="option"  VALUE="ECE_12" ${"ECE_12"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Electric/Computer
 										Engineering</option>
-									<option class="option"  VALUE="EGR_12">&nbsp;&nbsp;&nbsp;Engineering
+									<option class="option"  VALUE="EGR_12" ${"EGR_12"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Engineering
 									</option>
-									<option class="option"  VALUE="ME_12">&nbsp;&nbsp;&nbsp;Mechanical
+									<option class="option"  VALUE="ME_12" ${"ME_12"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Mechanical
 										Engineering</option>
-									<option class="option"  VALUE="PHY_12">&nbsp;&nbsp;&nbsp;Physics</option>
+									<option class="option"  VALUE="PHY_12" ${"PHY_12"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Physics</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="English &amp; Humanities:">
-									<option class="option"  VALUE="CRW_05">&nbsp;&nbsp;&nbsp;Creative
+									<option class="option"  VALUE="CRW_05" ${"CRW_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Creative
 										Writing</option>
-									<option class="option"  VALUE="FLM_05">&nbsp;&nbsp;&nbsp;Film</option>
-									<option class="option"  VALUE="FCO_05">&nbsp;&nbsp;&nbsp;Foundation
+									<option class="option"  VALUE="FLM_05" ${"FLM_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Film</option>
+									<option class="option"  VALUE="FCO_05" ${"FCO_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Foundation
 										Communication</option>
-									<option class="option"  VALUE="FRN_05">&nbsp;&nbsp;&nbsp;French</option>
-									<option class="option"  VALUE="GRM_05">&nbsp;&nbsp;&nbsp;German</option>
-									<option class="option"  VALUE="HUM_05">&nbsp;&nbsp;&nbsp;Humanities
+									<option class="option"  VALUE="FRN_05" ${"FRN_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;French</option>
+									<option class="option"  VALUE="GRM_05" ${"GRM_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;German</option>
+									<option class="option"  VALUE="HUM_05" ${"HUM_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Humanities
 									</option>
-									<option class="option"  VALUE="INT_05">&nbsp;&nbsp;&nbsp;International
+									<option class="option"  VALUE="INT_05" ${"INT_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;International
 										Studies</option>
-									<option class="option"  VALUE="ITL_05">&nbsp;&nbsp;&nbsp;Italian</option>
-									<option class="option"  VALUE="LAT_05">&nbsp;&nbsp;&nbsp;Latin)</option>
-									<option class="option"  VALUE="LIT_05">&nbsp;&nbsp;&nbsp;Literature
+									<option class="option"  VALUE="ITL_05" ${"ITL_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Italian</option>
+									<option class="option"  VALUE="LAT_05" ${"LAT_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Latin)</option>
+									<option class="option"  VALUE="LIT_05" ${"LIT_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Literature
 									</option>
-									<option class="option"  VALUE="PHL_05">&nbsp;&nbsp;&nbsp;Philosophy
+									<option class="option"  VALUE="PHL_05" ${"PHL_O5"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Philosophy
 									</option>
-									<option class="option"  VALUE="REL_05">&nbsp;&nbsp;&nbsp;Religious
+									<option class="option"  VALUE="REL_05" ${"REL_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Religious
 										Studies</option>
-									<option class="option"  VALUE="RUS_05">&nbsp;&nbsp;&nbsp;Russian</option>
-									<option class="option"  VALUE="SPN_05">&nbsp;&nbsp;&nbsp;Spanish</option>
-									<option class="option"  VALUE="WRT_05">&nbsp;&nbsp;&nbsp;Writing</option>
+									<option class="option"  VALUE="RUS_05" ${"RUS_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Russian</option>
+									<option class="option"  VALUE="SPN_05" ${"SPN_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Spanish</option>
+									<option class="option"  VALUE="WRT_05" ${"WRT_05"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Writing</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="History &amp; Poli Sci:">
-									<option class="option"  VALUE="G_06">&nbsp;&nbsp;&nbsp;Geography</option>
-									<option class="option"  VALUE="HIS_06">&nbsp;&nbsp;&nbsp;History</option>
-									<option class="option"  VALUE="IA_06">&nbsp;&nbsp;&nbsp;Intelligence
+									<option class="option"  VALUE="G_06" ${"G_06"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Geography</option>
+									<option class="option"  VALUE="HIS_06" ${"HIS_06"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;History</option>
+									<option class="option"  VALUE="IA_06" ${"IA_06"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Intelligence
 										Analysis</option>
-									<option class="option"  VALUE="INT_06">&nbsp;&nbsp;&nbsp;International
+									<option class="option"  VALUE="INT_06" ${"INT_06"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;International
 										Studies</option>
-									<option class="option"  VALUE="PS_06">&nbsp;&nbsp;&nbsp;Political Sci
+									<option class="option"  VALUE="PS_06" ${"PS_06"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Political Sci
 										&amp; Govt</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Hospitality, Recr &amp; Sport Mgmt:">
-									<option class="option"  VALUE="HSP_11">&nbsp;&nbsp;&nbsp;Hospitality
+									<option class="option"  VALUE="HSP_11" ${"HSP_11"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Hospitality
 										Management</option>
-									<option class="option"  VALUE="PE_11">&nbsp;&nbsp;&nbsp;Physical
+									<option class="option"  VALUE="PE_11" ${"PE_11"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Physical
 										Education</option>
-									<option class="option"  VALUE="REC_11">&nbsp;&nbsp;&nbsp;Recreation
+									<option class="option"  VALUE="REC_11" ${"REC_11"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Recreation
 										&amp; Leisure Admin</option>
-									<option class="option"  VALUE="SPM_11">&nbsp;&nbsp;&nbsp;Sport
+									<option class="option"  VALUE="SPM_11" ${"SPM_11"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Sport
 										Management</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Interdisciplinary Programs:">
-									<option class="option"  VALUE="FYS_10">&nbsp;&nbsp;&nbsp;First Year
+									<option class="option"  VALUE="FYS_10" ${"FYS_10"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;First Year
 										Seminar</option>
-									<option class="option"  VALUE="WGS_10">&nbsp;&nbsp;&nbsp;Women's &amp;
+									<option class="option"  VALUE="WGS_10" ${"WGS_10"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Women's &amp;
 										Gender Studies</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Nursing:">
-									<option class="option"  VALUE="NUR_08">&nbsp;&nbsp;&nbsp;Nursing</option>
+									<option class="option"  VALUE="NUR_08" ${"NUR_08"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Nursing</option>
 								</optgroup>
 								<optgroup class="optgroupColor"  label="Physical Sciences:">
-									<option class="option"  VALUE="CHM_09">&nbsp;&nbsp;&nbsp;Chemistry
+									<option class="option"  VALUE="CHM_09" ${"CHM_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Chemistry
 									</option>
-									<option class="option"  VALUE="ESS_09">&nbsp;&nbsp;&nbsp;Earth/Space
+									<option class="option"  VALUE="ESS_09" ${"ESS_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Earth/Space
 										Science</option>
-									<option class="option"  VALUE="FCM_09">&nbsp;&nbsp;&nbsp;Forensic
+									<option class="option"  VALUE="FCM_09" ${"FCM_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Forensic
 										Chemistry</option>
-									<option class="option"  VALUE="MAT_09">&nbsp;&nbsp;&nbsp;Mathematics
+									<option class="option"  VALUE="MAT_09" ${"MAT_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Mathematics
 									</option>
-									<option class="option"  VALUE="PSC_09">&nbsp;&nbsp;&nbsp;Physical
+									<option class="option"  VALUE="PSC_09" ${"PSC_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Physical
 										Science</option>
-									<option class="option"  VALUE="PHY_09">&nbsp;&nbsp;&nbsp;Physics</option>
+									<option class="option"  VALUE="PHY_09" ${"PHY_09"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Physics</option>
 								</optgroup>
 						</select></td>
 					</tr>

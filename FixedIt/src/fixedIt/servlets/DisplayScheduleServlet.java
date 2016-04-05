@@ -177,7 +177,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 				for(int i=0; i<days.length; i++){
 					html=html  +"<td> ";
 					for(Course c : s.getCourses()){
-						if(c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
+						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
 								html=html + c.getCourseAndSection() + "&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>" + "<br>" + c.getTime();
 							}

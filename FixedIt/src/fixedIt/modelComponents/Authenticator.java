@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
@@ -70,6 +71,40 @@ public class Authenticator implements EmailSender {
 		else{
 			return false;
 		}
+	}
+	
+	public void addCoursesToDB(ArrayList<Course> courses) throws SQLException {
+		Connection conn = null;
+		conn=getConnection();
+		
+		for (Course c : courses) {
+			String sqlDelete="delete from courses where crn='" + c.getCRN() + "'";
+			SQLWriter.executeDBCommand(conn, sqlDelete);
+			String sql="insert into courses \n" +
+					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
+					"values (\n'" +
+					c.getCRN() + "', \n'" + c.getCourseAndSection() + "', \n'" +
+					c.getTitle().replace("'", "''") + "', \n'" + c.getCredits() + "', \n'" + c.getType().replace("'", "''") + "', \n'" +
+					c.getDays() + "', \n'" + c.getTime() + "', \n";
+			if(c.getLocation().size()<2){
+				sql=sql+"'" + c.getLocation().get(0) + "', \n" + "'null', \n";
+			}
+			else{
+				sql=sql+"'" + c.getLocation().get(0) + "', \n'" + c.getLocation().get(1) + "', \n";
+			}
+			if(c.getInstructors().size()<2){
+				sql=sql+"'" + c.getInstructors().get(0).replace("'", "''") + "', \n" + "'null', \n";
+			}
+			else{
+				sql=sql+"'" + c.getInstructors().get(0).replace("'", "''") + "', \n'" + c.getInstructors().get(1).replace("'", "''") + "', \n";
+			}
+			sql=sql +"'" + c.getCapacity() + "', \n'" + c.getSeatsRemain() + "', \n'" + c.getSeatsFilled()
+				+ "', \n'" + c.getBeginEnd() + "'" + ")";
+			SQLWriter.executeDBCommand(conn, sql);
+		}
+		conn.commit();
+		conn.close();
+		conn=null;
 	}
 	/**
 	 * Checks if a user already exists in the database

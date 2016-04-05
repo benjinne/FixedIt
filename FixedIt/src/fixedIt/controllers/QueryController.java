@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
 import fixedIt.modelComponents.Registrar;
+import fixedIt.modelComponents.Session;
 import fixedIt.modelComponents.User;
 //HAVE TO BE ABLE TO GRAB VARIABLES FROM JSP
 import fixedIt.sql.database.SQLWriter;
@@ -18,14 +19,16 @@ import fixedIt.sql.database.SQLWriter;
 public class QueryController {
 	private Query query;
 	private User user;
+	private Session session;
 	ArrayList <String> depts;
 	public QueryController(){
 		query= new Query();
 	}
 	
-	public QueryController(Query query, User user){
+	public QueryController(Query query, Session session){
 		this.query=query;
-		this.user=user;
+		this.session=session;
+		this.user=session.getCurrentUser();
 	}
 	
 	public void setQuery(Query query){
@@ -91,6 +94,13 @@ public class QueryController {
 			user.createSchedule("testSchedule");
 		}
 		Course c=getCourse(CRN);
-		return user.getSchedules().firstEntry().getValue().addCourse(c);
+		boolean success=user.getSchedules().firstEntry().getValue().addCourse(c);
+		try {
+			session.getAuth().saveExistingUserNewDataToDB(user);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return success;
 	}
 }
