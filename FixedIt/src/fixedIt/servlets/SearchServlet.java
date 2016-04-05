@@ -13,7 +13,6 @@ import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
 
-//Fixed conflicts
 public class SearchServlet extends HttpServlet {			
 	
 	private static final long serialVersionUID = 1L;
@@ -64,12 +63,16 @@ public class SearchServlet extends HttpServlet {
 				"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
 		ArrayList<Course> courses=null;
 		try{
+			System.out.println("Search started...");
 			courses=controller.getCourses();
+			System.out.println("Search done.");
 		}catch(IOException e){
-			errorMessage="Failed to read user from database properly.";
+			errorMessage="Failed to read courses from database properly.";
 		}
 		try {
+			System.out.println("Adding courses to DB...");
 			session.getAuth().addCoursesToDB(courses);
+			System.out.println("Done adding courses to DB.");
 		} catch (SQLException e) {
 			errorMessage="Something went wrong with the search. Please try again.";
 			e.printStackTrace();

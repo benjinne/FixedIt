@@ -110,38 +110,16 @@ public class Schedule {
 				return true;
 			}else if(courseStart.isBefore(cStart)){
 				if(courseEnd.isAfter(cStart)){
-					//System.out.println(true);
 					return true;
 				}
 			}
 			else if(cStart.isBefore(courseStart)){
 				if(cEnd.isAfter(courseStart)){
-					//System.out.println(true);
 					return true;
 				}
 			}
 		}
-		//System.out.println(false);
 		return false;
-		
-		
-//		TimeInterval courseTime=course.getTimeAsTimeInverval();
-//		for(Course c : courses){
-//			TimeInterval cTime=c.getTimeAsTimeInverval();
-//			if(courseTime.getStart()==cTime.getStart() || courseTime.getEnd()==cTime.getEnd()){
-//				return true;
-//			}
-//			else if(courseTime.getStart()<cTime.getStart()){
-//				if(courseTime.getEnd()>=cTime.getStart()){
-//					return true;
-//				}
-//			}
-//			else if(cTime.getStart()<courseTime.getStart()){
-//				if(cTime.getEnd()>=courseTime.getStart()){
-//					return true;
-//				}
-//			}
-//		}
 	}
 	
 	public String getTerm(){
