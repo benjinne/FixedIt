@@ -159,10 +159,10 @@ public class SearchServlet extends HttpServlet {
 			System.out.println("Error: " + e.getMessage());
 		}
 		
-		String sqlDelete="delete from courses where 1=1";
-		SQLWriter.executeDBCommand(conn, sqlDelete);
-		
 		for (Course c : courses) {
+			String sqlDelete="delete from courses where crn='" + c.getCRN() + "'";
+			SQLWriter.executeDBCommand(conn, sqlDelete);
+			
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 					"values (\n'" +
