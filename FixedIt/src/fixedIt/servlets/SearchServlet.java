@@ -43,7 +43,30 @@ public class SearchServlet extends HttpServlet {
 		String dept = req.getParameter("dept");
 		String level = req.getParameter("level");
 		String term = req.getParameter("term");
-		QueryController controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session.getCurrentUser());
+		if(req.getSession().getAttribute("dept")!=null){
+			dept=(String) req.getSession().getAttribute("dept");
+		}
+		if(req.getSession().getAttribute("level")!=null){
+			level=(String) req.getSession().getAttribute("level");
+		}
+		if(req.getSession().getAttribute("term")!=null){
+			term=(String) req.getSession().getAttribute("term");
+		}
+		QueryController controller=null;
+		try{
+			controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session.getCurrentUser());
+		}catch(Exception e){
+			errorMessage="Please select an option for all 3 parameters.";
+			// Add parameters as request attributes
+			req.setAttribute("dept", dept);
+			req.setAttribute("level", level);
+			req.setAttribute("term", term);
+					
+			// Add result objects as request attributes
+			req.setAttribute("errorMessage", errorMessage);
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			return;
+		}
 		
 		
 		String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
@@ -93,6 +116,7 @@ public class SearchServlet extends HttpServlet {
 			if(req.getParameter("" + c.getCRN())!=null){
 				boolean success=controller.addToSchedule(c.getCRN());
 				if(success){
+					System.out.println("Course added successfully.");
 					errorMessage="Course added successfully";
 				}
 				else{
@@ -103,11 +127,14 @@ public class SearchServlet extends HttpServlet {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}	
+				}
 			}
 			req.setAttribute("" + c.getCRN(), null);
 		}
 		
+		req.getSession().setAttribute("dept", dept);
+		req.getSession().setAttribute("level", level);
+		req.getSession().setAttribute("term", term);
 		
 		// Add parameters as request attributes
 		req.setAttribute("dept", dept);

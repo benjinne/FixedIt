@@ -30,10 +30,12 @@ public class DisplayScheduleServlet extends HttpServlet {
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
 		try{
 			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+			System.out.print(s.getName());
 		}
 		catch(NullPointerException e){
 			controller.initializeSchedule();
 			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+			System.out.print(s.getName());
 		}
 		
 		for(Course c : s.getCourses()){
@@ -142,7 +144,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 				for(int i=0; i<days.length; i++){
 					html=html  +"<td> ";
 					for(Course c : s.getCourses()){
-						if(c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeHr) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
+						if(c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
 								html=html + c.getCourseAndSection() + "&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>" + "<br>" + c.getTime();
 							}
