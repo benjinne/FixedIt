@@ -41,23 +41,6 @@
 				<c:out value="${scheduleHTML}" escapeXml="false"/>
 			</div>
 		</c:if>
-		<script>
-			$(function() { 
-			    $("#dlAsImg").click(function() { 
-			        html2canvas($("#courses"), {
-			            onrendered: function(canvas) {
-			                theCanvas = canvas;
-			                //document.body.appendChild(canvas);
-	
-			                // Convert and download as image 
-			                Canvas2Image.saveAsPNG(canvas); 
-			                //$("#img-out").append(canvas);
-			                //document.body.removeChild(canvas);
-			            }
-			        });
-			    });
-			});
-		</script>
 		</form>
 		<div class="sideBar">
 			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
