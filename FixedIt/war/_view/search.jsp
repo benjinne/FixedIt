@@ -44,7 +44,7 @@ td.label {
 				<table align="center">
 				<tr>
 					<td class="alignTDTop" >
-						Select by Term:<br>
+						Select Term:<br>
 						<select id="term" name="term" size="7">
 							<option class="option"  VALUE="201610" ${"201610"==term ? 'selected="selected"' : ''}>Fall 2016</option>
 							<option class="option"  VALUE="201590" ${"201590"==term ? 'selected="selected"' : ''}>Special Session 2016</option>
@@ -56,14 +56,14 @@ td.label {
 						</select>
 					</td>
 					<td class="alignTDTop" >
-						select by Level:<br>
+						Select Level:<br>
 						<select id="level" name="level" size="7">
 							<option class="option"  VALUE="A" ${"A"==level ? 'selected="selected"' : ''}>All Undergraduate Classes</option>
 							<option class="option"  VALUE="M" ${"M"==level ? 'selected="selected"' : ''}>All Graduate Classes</option>
 							<option class="option"  VALUE="E" ${"E"==level ? 'selected="selected"' : ''}>Eve. &amp; Sat. Undergraduate Classes</option>
 					</select></td>
 					<td class="alignTDTop" >
-						Select by Department:<br>
+						Select Department:<br>
 						<select id="dept" name="dept" size="7">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
 									<option class="option"  VALUE="ANT_01" ${"ANT_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Anthropology
