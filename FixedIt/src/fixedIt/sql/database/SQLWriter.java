@@ -79,7 +79,7 @@ public class SQLWriter {
 			}
 			//System.out.println("OK (" + rowCount + " rows(s))");
 		} finally{
-			
+			System.out.println("		Done executing SQL command.");
 		}
 		return resultSet;
 	}

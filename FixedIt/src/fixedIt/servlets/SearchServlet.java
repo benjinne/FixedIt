@@ -70,9 +70,9 @@ public class SearchServlet extends HttpServlet {
 			errorMessage="Failed to read courses from database properly.";
 		}
 		try {
-			System.out.println("Adding courses to DB...");
+			System.out.println("Writing to DB...");
 			session.getAuth().addCoursesToDB(courses);
-			System.out.println("Done adding courses to DB.");
+			System.out.println("Done.");
 		} catch (SQLException e) {
 			errorMessage="Something went wrong with the search. Please try again.";
 			e.printStackTrace();

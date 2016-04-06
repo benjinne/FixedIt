@@ -76,10 +76,13 @@ public class Authenticator implements EmailSender {
 	public void addCoursesToDB(ArrayList<Course> courses) throws SQLException {
 		Connection conn = null;
 		conn=getConnection();
+		conn.setAutoCommit(false);
 		
 		for (Course c : courses) {
+			System.out.println("		Deleting course " + c.getCRN() + "...");
 			String sqlDelete="delete from courses where crn='" + c.getCRN() + "'";
 			SQLWriter.executeDBCommand(conn, sqlDelete);
+			System.out.println("	Done deleting " + c.getCRN() + ".");
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 					"values (\n'" +
