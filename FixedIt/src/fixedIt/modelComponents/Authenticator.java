@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -77,18 +78,20 @@ public class Authenticator implements EmailSender {
 		Connection conn = null;
 		conn=getConnection();
 		conn.setAutoCommit(false);
-		int count=0;
+		//int count=0;
 		for (Course c : courses) {
-			count++;
+			//count++;
 			System.out.println("	Deleting course " + c.getCRN() + "...");
 			String sqlDelete="delete from courses where crn='" + c.getCRN() + "'";
-			SQLWriter.executeDBCommand(conn, sqlDelete);
-			if(count==5){
-				System.out.println("		Committing DB changes...");
-				conn.commit();
-				System.out.println("		Done committing DB changes.");
-				count=0;
-			}
+			PreparedStatement preparedDelete=conn.prepareStatement(sqlDelete);
+			preparedDelete.executeUpdate();
+			//SQLWriter.executeDBCommand(conn, sqlDelete);
+//			if(count==5){
+//				System.out.println("		Committing DB changes...");
+//				conn.commit();
+//				System.out.println("		Done committing DB changes.");
+//				count=0;
+//			}
 			System.out.println("		Done deleting " + c.getCRN() + ".");
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +

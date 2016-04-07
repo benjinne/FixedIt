@@ -1,10 +1,6 @@
 package fixedIt.controllers;
 
-import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,8 +9,6 @@ import fixedIt.modelComponents.Query;
 import fixedIt.modelComponents.Registrar;
 import fixedIt.modelComponents.Session;
 import fixedIt.modelComponents.User;
-//HAVE TO BE ABLE TO GRAB VARIABLES FROM JSP
-import fixedIt.sql.database.SQLWriter;
 
 public class QueryController {
 	private Query query;
@@ -45,49 +39,22 @@ public class QueryController {
 	}
 	
 	private Course getCourse(int CRN){
-		Connection conn=null;
-		File dbPath=new File("test.db");
+		Course course=null;
 		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			conn = DriverManager.getConnection("jdbc:derby:" + dbPath.getAbsolutePath() + ";create=true");
-			conn.setAutoCommit(false);
-		} catch (SQLException | ClassNotFoundException e) {
-			System.out.println("Error: " + e.getMessage());
-			conn=null;
-		}
-		
-		String sql="select * from courses where crn like '" + CRN + "'";
-		ResultSet rs=null;
-		try {
-			rs=SQLWriter.executeDBCommand(conn, sql);
-			rs.absolute(1);
-			Course c=new Course();
-			c.setCRN(Integer.parseInt(rs.getString(1)));
-			c.setCourseAndSection(rs.getString(2));
-			c.setTitle(rs.getString(3));
-			c.setCredits(Double.parseDouble(rs.getString(4)));
-			c.setType(rs.getString(5));
-			c.setDays(rs.getString(6));
-			c.setTime(rs.getString(7));
-			c.addLocation(rs.getString(8));
-			if(!rs.getString(9).contains("null")){
-				c.addLocation(rs.getString(9));
+			for(Course c : getCourses()){
+				if(c.getCRN()==CRN){
+					course=c;
+					return course;
+				}
 			}
-			c.addInstructor(rs.getString(10));
-			if(!rs.getString(11).contains("null")){
-				c.addInstructor(rs.getString(11));
-			}
-			c.setCapacity(Integer.parseInt(rs.getString(12)));
-			c.setSeatsRemain(Integer.parseInt(rs.getString(13)));
-			c.setSeatsFilled(Integer.parseInt(rs.getString(14)));
-			c.setBeginEnd(rs.getString(15));
-			return c;
-		} catch (SQLException e) {
+			System.out.println("Couse not found...");
+			return course;
+		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			System.out.println("Couse not found...");
+			return course;
 		}
 	}
-	//potentially more methods for fetching course data
 	
 	public boolean addToSchedule(int CRN){
 		if(user.getSchedules().isEmpty()){

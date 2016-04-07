@@ -70,7 +70,7 @@ td.label {
 									</option>
 									<option class="option"  VALUE="BEH_01" ${"BEH_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Behavioral
 										Sciences</option>
-									<option class="option"  VALUE="CJA_01" ${"CJA_02"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Criminal
+									<option class="option"  VALUE="CJA_01" ${"CJA_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Criminal
 										Justice</option>
 									<option class="option"  VALUE="GER_01" ${"GER_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Gerontology
 									</option>
