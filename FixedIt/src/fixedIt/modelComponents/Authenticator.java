@@ -77,12 +77,19 @@ public class Authenticator implements EmailSender {
 		Connection conn = null;
 		conn=getConnection();
 		conn.setAutoCommit(false);
-		
+		int count=0;
 		for (Course c : courses) {
-			System.out.println("		Deleting course " + c.getCRN() + "...");
+			count++;
+			System.out.println("	Deleting course " + c.getCRN() + "...");
 			String sqlDelete="delete from courses where crn='" + c.getCRN() + "'";
 			SQLWriter.executeDBCommand(conn, sqlDelete);
-			System.out.println("	Done deleting " + c.getCRN() + ".");
+			if(count==5){
+				System.out.println("		Committing DB changes...");
+				conn.commit();
+				System.out.println("		Done committing DB changes.");
+				count=0;
+			}
+			System.out.println("		Done deleting " + c.getCRN() + ".");
 			String sql="insert into courses \n" +
 					"(CRN, courseAndSection, title, credits, type, days, time, location_one, location_two, instructor_one, instructor_two, capacity, seatsRemain, seatsFilled, beginEnd) \n" +
 					"values (\n'" +
