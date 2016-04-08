@@ -2,13 +2,12 @@
 CS320 Software Engineering Project: York College Scheduling App
 
 
-TODO:
+FixedIt Scheduler is a web-app for students of York College of Pennsylvania to make course scheduling seamless and painless.
 
-- [x] implement database methods in Authenticator class
-- [x] debug Authenticator database connection
-- [x] "My Schedule" servlet and jsp
-- [x] implement "add to my schedule" button on course search page
-- [x] design Web interface
-- [x] implement method in search controller to translate user's search terms into database queries
-- [ ] "Edit My Account" servlet and jsp
-- [ ] !! TEST ALL DATABASE METHODS !!
+Development Team:
+
+Mat Jones - @mrjones2014
+
+Garrett Ghafir - @gghafir
+
+Mike Skurla - @mskur1
