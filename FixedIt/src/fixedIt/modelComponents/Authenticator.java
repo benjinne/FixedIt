@@ -155,7 +155,6 @@ public class Authenticator implements EmailSender {
 	/**
 	 * Populates a user object with data from database by email address, if
 	 * a user with the given email address exists.
-	 * !!!POPULATING TREEMAP OF SCHEDULES IN UNTESTED!!!
 	 * 
 	 * @param emailAddress user's email address to lookup user by
 	 * @return user the user object associated with the given email address, if one exists.
