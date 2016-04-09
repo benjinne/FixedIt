@@ -8,6 +8,9 @@
 <meta charset="UTF-8">
 <title>FixedIt Scheduler Search</title>
 <style type="text/css">
+.selectBox{
+	color:black;
+}
 .error {
 	color: red;
 	font-weight: bold;
@@ -45,7 +48,7 @@ td.label {
 				<tr>
 					<td class="alignTDTop" >
 						Select Term:<br>
-						<select id="term" name="term" size="7">
+						<select class="selectBox" id="term" name="term" size="1">
 							<option class="option"  VALUE="201610" ${"201610"==term ? 'selected="selected"' : ''}>Fall 2016</option>
 							<option class="option"  VALUE="201590" ${"201590"==term ? 'selected="selected"' : ''}>Special Session 2016</option>
 							<option class="option"  VALUE="201550" ${"201550"==term ? 'selected="selected"' : ''}>Summer II 2016</option>
@@ -57,14 +60,14 @@ td.label {
 					</td>
 					<td class="alignTDTop" >
 						Select Level:<br>
-						<select id="level" name="level" size="7">
+						<select class="selectBox" id="level" name="level" size="1">
 							<option class="option"  VALUE="A" ${"A"==level ? 'selected="selected"' : ''}>All Undergraduate Classes</option>
 							<option class="option"  VALUE="M" ${"M"==level ? 'selected="selected"' : ''}>All Graduate Classes</option>
 							<option class="option"  VALUE="E" ${"E"==level ? 'selected="selected"' : ''}>Eve. &amp; Sat. Undergraduate Classes</option>
 					</select></td>
 					<td class="alignTDTop" >
 						Select Department:<br>
-						<select id="dept" name="dept" size="7">
+						<select class="selectBox" id="dept" name="dept" size="1">
 								<optgroup class="optgroupColor"  label="Behavioral Sciences:">
 									<option class="option"  VALUE="ANT_01" ${"ANT_01"==dept ? 'selected="selected"' : ''}>&nbsp;&nbsp;&nbsp;Anthropology
 									</option>

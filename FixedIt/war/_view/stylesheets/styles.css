@@ -89,8 +89,7 @@
 .courseTable tr:nth-child(odd){ background-color:#aad4ff; }
 .courseTable tr:nth-child(even)    { background-color:#ffffff; }.courseTable td{
 	vertical-align:middle;
-	
-	
+	width:16.66%;
 	border:1px solid #000000;
 	border-width:0px 1px 1px 0px;
 	text-align:left;

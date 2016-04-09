@@ -35,7 +35,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 		catch(NullPointerException e){
 			controller.initializeSchedule();
 			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
-			System.out.print(s.getName());
+			//System.out.print(s.getName());
 		}
 		
 		for(Course c : s.getCourses()){
@@ -144,9 +144,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 				"	<td>Wednesday</td>" + 
 				"	<td>Thursday</td>" + 
 				"	<td>Friday</td>" + 
-				"	<td>Saturday</td>" + 
 				"</tr>";
-		String[] days={"m", "t", "w", "r", "f", "s"};
+		String[] days={"m", "t", "w", "r", "f"};
 		
 		for(int j=8; j<=22; j++){
 			int timeInt=j%12;

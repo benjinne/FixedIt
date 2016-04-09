@@ -56,7 +56,6 @@ public class SearchServlet extends HttpServlet {
 			return;
 		}
 		
-		
 		String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
 				"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
 				"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
