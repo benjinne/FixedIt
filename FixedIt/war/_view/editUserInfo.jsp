@@ -29,7 +29,7 @@
 	<section class="styled-body">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/login" method="post">
+      <form action="${pageContext.servletContext.contextPath}/editUserInfo" method="post">
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
@@ -42,14 +42,19 @@
 					</tr>
 					<tr>
 						<td class="alignTDTop" ><select id="studentStatus" name="studentStatus" size="2">
-							<option class="option"  selected="selected" VALUE="0">Full-time</option>
-							<option class="option"  selected="selected" VALUE="234">Part-time</option>
+							<option class="option" VALUE="Full_Time">Full Time</option>
+							<option class="option" VALUE="Part_Time">Part Time</option>
 						</select>
 					</td>
+					<tr>
+						<td class="label">Edit Email Address: </td>
+						<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
 				</tr>
 			</table>
 			<input class="btn" type="Submit" value="Submit">
 		</form>
+		
+			
 		<div class="sideBar">
 			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
 			<div id="menu" class="collapse">

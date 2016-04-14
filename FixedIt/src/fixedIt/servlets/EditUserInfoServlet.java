@@ -1,5 +1,6 @@
 package fixedIt.servlets;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.UserInfoController;
+import fixedIt.modelComponents.Authenticator;
+import fixedIt.modelComponents.User;
 
 
 public class EditUserInfoServlet extends HttpServlet {			
@@ -14,7 +17,7 @@ public class EditUserInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)	
 			throws ServletException, IOException {
 		resp.setHeader("Cache-Control","no-cache");
 		resp.setHeader("Cache-Control","no-store");
@@ -22,28 +25,7 @@ public class EditUserInfoServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-		String errorMessage = null;
-		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
-		String emailAddress="";
-		String studentStatus="";
-		if(controller.isSessionNull()){
-			errorMessage="Error loading session.";
-		}
-		else{
-			emailAddress=controller.getUser().getEmailAddress();
-			if(controller.getUser().getStudentStatus()==0){
-				studentStatus="Full Time";
-			}
-			else{
-				studentStatus="Part Time";
-			}
-		}
-		
-		
-		req.setAttribute("emailAddress", emailAddress);
-		req.setAttribute("studentStatus", studentStatus);
-		req.setAttribute("errorMessage", errorMessage);		
-		req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
+		else req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -51,20 +33,47 @@ public class EditUserInfoServlet extends HttpServlet {
 			throws ServletException, IOException {
 			
 		// Decode form parameters and dispatch to controller	
-	
+		String errorMessage = null;
+		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
+		String emailAddress = getStringFromParameter(req.getParameter("emailAddress"));		//changed from blank
+		String studentStatus= req.getParameter("studentStatus");	//changed from blank
 		
-		// Add parameters as request attributes
-	
+		fixedIt.modelComponents.Session s = (fixedIt.modelComponents.Session)req.getSession().getAttribute("userSession");  
+		if(controller.isSessionNull()){
+			errorMessage="Error loading session.";
+		}
+		else{
+			emailAddress=controller.getUser().getEmailAddress();
+			if(studentStatus.toLowerCase().contains("full")){
+				controller.getUser().setStudentStatus(0);       //added this for testing			
+			}
+			else if(studentStatus.toLowerCase().contains("part")){
+				controller.getUser().setStudentStatus(1);     //added this for testing
+			}
+			else
+				errorMessage="studentStatus was not read correctly!";
+		try {
+			s.getAuth().saveExistingUserNewDataToDB(controller.getUser());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+		// Add parameters as request attributes			
+		req.setAttribute("emailAddress", emailAddress);
+		req.setAttribute("studentStatus", studentStatus);
+		req.setAttribute("errorMessage", errorMessage);	
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
 	}
 
-//	private String getStringFromParameter(String s) {
-//		if (s == null || s.equals("")) {
-//			return null;
-//		} else {
-//			return s;
-//		}
-//	}
+	private String getStringFromParameter(String s) {
+		if (s == null || s.equals("")) {
+			return null;
+		} else {
+			return s;
+		}
+	}
 }
