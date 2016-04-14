@@ -138,12 +138,12 @@ public class DisplayScheduleServlet extends HttpServlet {
 	public String generateHTMLScheduleTable(Schedule s){
 		String html="<table class=\"courseTable\" align=\"left\" >" + 
 				"<tr>" + 
-				"	<td>Time</td>" + 
-				"	<td>Monday</td>" + 
-				"	<td>Tuesday</td>" + 
-				"	<td>Wednesday</td>" + 
-				"	<td>Thursday</td>" + 
-				"	<td>Friday</td>" + 
+				"	<th>Time</th>" + 
+				"	<th>Monday</th>" + 
+				"	<th>Tuesday</th>" + 
+				"	<th>Wednesday</th>" + 
+				"	<th>Thursday</th>" + 
+				"	<th>Friday</th>" + 
 				"</tr>";
 		String[] days={"m", "t", "w", "r", "f"};
 		
@@ -177,7 +177,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 					for(Course c : s.getCourses()){
 						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
-								html=html + c.getTitle() + "<br>" +  c.getCourseAndSection() + "&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>" + "<br>" + c.getTime();
+								html=html + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
+										"<input class=\"removeButton\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
 							}
 						}
 					}
@@ -187,6 +188,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 			}
 		}
 		html=html + "</table>";
+		
+		System.out.println(html);
 		
 		return html;
 	}
