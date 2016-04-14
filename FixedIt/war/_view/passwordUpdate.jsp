@@ -40,15 +40,15 @@
 					<tr>
 					<tr>
 						<td class="label"> Current Password: </td>
-						<td><input class="textInput" type="text" name="password" size="12" value="${password}" /></td>
+						<td><input class="textInput" type="password" name="password" size="12" value="${password}" /></td>
 					</tr>
 					<tr>
 						<td class="label"> Enter New Password: </td>
-						<td><input class="textInput" type="text" name="newPassword" size="12" value="${newPassword}" /></td>
+						<td><input class="textInput" type="password" name="newPassword" size="12" value="${newPassword}" /></td>
 					</tr>
 					<tr>
 						<td class="label"> Confirm New Password: </td>
-						<td><input class="textInput" type="text" name="newPasswordConfirm" size="12" value="${newPasswordConfirm}" /></td>
+						<td><input class="textInput" type="password" name="newPasswordConfirm" size="12" value="${newPasswordConfirm}" /></td>
 					</tr>
 			</table>
 			<input class="btn" type="Submit" value="Submit">

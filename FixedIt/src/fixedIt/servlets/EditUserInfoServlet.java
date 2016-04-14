@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.mail.iap.Response;
+
 import fixedIt.controllers.UserInfoController;
 
 
@@ -65,7 +67,11 @@ public class EditUserInfoServlet extends HttpServlet {
 		req.setAttribute("errorMessage", errorMessage);	
 		
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
+		if(errorMessage!=null){
+			req.getRequestDispatcher("/_view/editUserInfo.jsp").forward(req, resp);
+			return;
+		}
+		resp.sendRedirect("userInfo");
 	}
 
 	private String getStringFromParameter(String s) {
