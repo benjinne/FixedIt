@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.UserInfoController;
-import fixedIt.modelComponents.Authenticator;
-import fixedIt.modelComponents.User;
+
 
 
 public class EditUserInfoServlet extends HttpServlet {			

@@ -70,7 +70,7 @@
 					<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
 				</tr>
 				<tr>
-					<td><input class="sideBarBtn" type="button" value="Dummy Button"  /></td>
+					<td><input class="sideBarBtn" type="button" value="Change Password" onclick="window.location='passwordUpdate';"  /></td>
 				</tr>
 				<tr>
 					<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>

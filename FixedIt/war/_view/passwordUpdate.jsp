@@ -5,7 +5,7 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler - Edit Account</title>
+		<title>FixedIt Scheduler - Change Password</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -29,7 +29,7 @@
 	<section class="styled-body">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/editUserInfo" method="post">
+      <form action="${pageContext.servletContext.contextPath}/passwordUpdate" method="post">
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
@@ -38,18 +38,18 @@
 			</c:if>
 				<table align="center">
 					<tr>
-					<td class="label">Edit Student Status: &nbsp;&nbsp;</td>
+					<tr>
+						<td class="label"> Current Password: </td>
+						<td><input class="textInput" type="text" name="password" size="12" value="${password}" /></td>
 					</tr>
 					<tr>
-						<td class="alignTDTop" ><select id="studentStatus" name="studentStatus" size="2">
-							<option class="option" VALUE="Full_Time">Full Time</option>
-							<option class="option" VALUE="Part_Time">Part Time</option>
-						</select>
-					</td>
+						<td class="label"> Enter New Password: </td>
+						<td><input class="textInput" type="text" name="newPassword" size="12" value="${newPassword}" /></td>
+					</tr>
 					<tr>
-						<td class="label">Edit Email Address: </td>
-						<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
-				</tr>
+						<td class="label"> Confirm New Password: </td>
+						<td><input class="textInput" type="text" name="newPasswordConfirm" size="12" value="${newPasswordConfirm}" /></td>
+					</tr>
 			</table>
 			<input class="btn" type="Submit" value="Submit">
 		</form>
