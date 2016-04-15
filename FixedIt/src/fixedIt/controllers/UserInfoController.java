@@ -2,7 +2,6 @@ package fixedIt.controllers;
 
 import fixedIt.modelComponents.Session;
 import fixedIt.modelComponents.User;
-//HAVE TO BE ABLE TO GRAB VARIABLES FROM JSP
 
 public class UserInfoController {
 	private User user;

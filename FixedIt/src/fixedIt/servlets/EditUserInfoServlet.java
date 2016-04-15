@@ -36,8 +36,8 @@ public class EditUserInfoServlet extends HttpServlet {
 		// Decode form parameters and dispatch to controller	
 		String errorMessage = null;
 		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
-		String emailAddress = getStringFromParameter(req.getParameter("emailAddress"));		//changed from blank
-		String studentStatus= req.getParameter("studentStatus");	//changed from blank
+		String emailAddress = getStringFromParameter(req.getParameter("emailAddress"));		
+		String studentStatus= req.getParameter("studentStatus");	
 		
 		fixedIt.modelComponents.Session s = (fixedIt.modelComponents.Session)req.getSession().getAttribute("userSession");  
 		if(controller.isSessionNull()){
@@ -46,13 +46,20 @@ public class EditUserInfoServlet extends HttpServlet {
 		else{
 			emailAddress=controller.getUser().getEmailAddress();
 			if(studentStatus.toLowerCase().contains("full")){
-				controller.getUser().setStudentStatus(0);       //added this for testing			
+				controller.getUser().setStudentStatus(0);     
 			}
 			else if(studentStatus.toLowerCase().contains("part")){
-				controller.getUser().setStudentStatus(1);     //added this for testing
-			}
-			else
+				controller.getUser().setStudentStatus(1);   
+			}		
+			else {
 				errorMessage="studentStatus was not read correctly!";
+			}
+		
+			
+			if(!emailAddress.isEmpty()) {
+				//make Authenticator method to change email
+			} 
+			
 		try {
 			s.getAuth().saveExistingUserNewDataToDB(controller.getUser());
 		} catch (SQLException e) {
