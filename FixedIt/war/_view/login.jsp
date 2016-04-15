@@ -25,9 +25,11 @@
 	</head>
 	<body>
 	<section class="page-header">
+      <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
+      <div style="margin-left:0px; text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div>
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
+      
 			<center>
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
@@ -64,6 +66,11 @@
 <p>Garrett Ghafir - <a href="https://github.com/gghafir" class="user-mention">@gghafir</a></p>
 
 <p>Mike Skurla - <a href="https://github.com/mskur1" class="user-mention">@mskur1</a></p>
+	<br>
+	
+	
+		<input class="btn" type="Submit" name="debug" value="DebugMode">
+    
     </section>
 	</body>
 </html>

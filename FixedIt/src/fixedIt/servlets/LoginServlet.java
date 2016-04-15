@@ -51,6 +51,12 @@ public class LoginServlet extends HttpServlet {
 		
 		LoginController controller=new LoginController();
 		Session userSession=null;
+		if(req.getParameter("debug")!= null){
+			userSession= controller.DebugMode();
+			req.getSession().setAttribute("userSession", userSession);
+			resp.sendRedirect("userInfo");
+			return;
+		}
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
