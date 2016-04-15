@@ -14,5 +14,5 @@ public class TimeInterval {
 
 	public int getEnd() {
 		return end;
-	}	
+	}
 }

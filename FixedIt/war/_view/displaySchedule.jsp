@@ -35,7 +35,7 @@
 		</c:if>
 		<input class="btn" type="submit" name="dlAsCSV" value="Download Schedule as CSV" />
 		<input class="btn" type="submit" name="dlAsHtml" value="Dowload Schedule as HTML View" />	
-		
+		<br><br>
 		<c:if test="${! empty scheduleHTML}">
 			<div class="course-table" id="courses">
 				<c:out value="${scheduleHTML}" escapeXml="false"/>

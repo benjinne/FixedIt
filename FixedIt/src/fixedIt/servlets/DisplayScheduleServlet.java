@@ -1,6 +1,7 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -136,7 +137,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}*/
 	
 	public String generateHTMLScheduleTable(Schedule s){
-		String html="<table class=\"courseTable\" align=\"left\" >" + 
+		TreeMap<Integer, String> colors=mapCoursesToColors(s);
+		String html="<table class=\"scheduleTable\">" + 
 				"<tr>" + 
 				"	<th>Time</th>" + 
 				"	<th>Monday</th>" + 
@@ -173,138 +175,87 @@ public class DisplayScheduleServlet extends HttpServlet {
 						"<td>" + timeHr + ":" + timeMin + amPm + "</td>";
 				
 				for(int i=0; i<days.length; i++){
-					html=html  +"<td> ";
 					for(Course c : s.getCourses()){
+						String currentColor=colors.get(c.getCRN());
 						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
-								html=html + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
-										"<input class=\"removeButton\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
+								String timeLastHalf=c.getTime().substring(c.getTime().indexOf('-')+1);
+								int startHr=Integer.parseInt(timeHr);
+								int endHr=Integer.parseInt(timeLastHalf.substring(0, timeLastHalf.indexOf(':')));
+								int numCells=endHr-startHr;
+								numCells=numCells*2;
+								if(c.getTime().substring(0, c.getTime().indexOf('-')).contains("30")){
+									if(!timeLastHalf.contains("30")){
+										numCells=numCells-1;
+									}
+								}
+								else{
+									if(timeLastHalf.contains("30")){
+										numCells=numCells+1;
+									}
+								}
+								if(numCells<2){
+									numCells=2;
+								}
+								
+								html=html + "<td style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
+										"<input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
+								html=html + "</td>";
+							}
+							else{
+								html=html+"<td></td>";
 							}
 						}
 					}
-					html=html + "</td>";
+					
 				}
 				html=html + "</tr>";
 			}
 		}
 		html=html + "</table>";
 		
-		System.out.println(html);
-		
 		return html;
 	}
 	
 	public String generateHTMLScheduleTableForDownload(Schedule s){
-		String css="<style type=\"text/css\">.courseTable {" + 
-				"	font-family: arial;" + 
-				"	margin:0px;" + 
-				"	padding:5px;" + 
-				"	width:100%;" + 
-				"	box-shadow: 10px 10px 5px #888888;" + 
-				"	border:1px solid #000000;" + 
-				"	" + 
-				"	-moz-border-radius-bottomleft:0px;" + 
-				"	-webkit-border-bottom-left-radius:0px;" + 
-				"	border-bottom-left-radius:0px;" + 
-				"	" + 
-				"	-moz-border-radius-bottomright:0px;" + 
-				"	-webkit-border-bottom-right-radius:0px;" + 
-				"	border-bottom-right-radius:0px;" + 
-				"	" + 
-				"	-moz-border-radius-topright:0px;" + 
-				"	-webkit-border-top-right-radius:0px;" + 
-				"	border-top-right-radius:0px;" + 
-				"	" + 
-				"	-moz-border-radius-topleft:0px;" + 
-				"	-webkit-border-top-left-radius:0px;" + 
-				"	border-top-left-radius:0px;" + 
-				"}.courseTable table{" + 
-				"    border-collapse: collapse;" + 
-				"    border-spacing: 0;" + 
-				"    text-align: center;" + 
-				"	width:100%;" + 
-				"	height:100%;" + 
-				"	margin:0px;padding:0px;" + 
-				"}.courseTable tr:last-child td:last-child {" + 
-				"	-moz-border-radius-bottomright:0px;" + 
-				"	-webkit-border-bottom-right-radius:0px;" + 
-				"	border-bottom-right-radius:0px;" + 
-				"}" + 
-				".courseTable table tr:first-child td:first-child {" + 
-				"	-moz-border-radius-topleft:0px;" + 
-				"	-webkit-border-top-left-radius:0px;" + 
-				"	border-top-left-radius:0px;" + 
-				"}" + 
-				".courseTable table tr:first-child td:last-child {" + 
-				"	-moz-border-radius-topright:0px;" + 
-				"	-webkit-border-top-right-radius:0px;" + 
-				"	border-top-right-radius:0px;" + 
-				"}.courseTable tr:last-child td:first-child{" + 
-				"	-moz-border-radius-bottomleft:0px;" + 
-				"	-webkit-border-bottom-left-radius:0px;" + 
-				"	border-bottom-left-radius:0px;" + 
-				"}.courseTable tr:hover td{" + 
-				"	" + 
-				"}" + 
-				".courseTable tr:nth-child(odd){ background-color:#aad4ff; }" + 
-				".courseTable tr:nth-child(even)    { background-color:#ffffff; }.courseTable td{" + 
-				"	vertical-align:middle;" + 
-				"	" + 
-				"	" + 
-				"	border:1px solid #000000;" + 
-				"	border-width:0px 1px 1px 0px;" + 
-				"	text-align:left;" + 
-				"	padding:7px;" + 
-				"	font-size:10px;" + 
-				"	font-family:Arial;" + 
-				"	font-weight:normal;" + 
-				"	color:#000000;" + 
-				"}.courseTable tr:last-child td{" + 
-				"	border-width:0px 1px 0px 0px;" + 
-				"}.courseTable tr td:last-child{" + 
-				"	border-width:0px 0px 1px 0px;" + 
-				"}.courseTable tr:last-child td:last-child{" + 
-				"	border-width:0px 0px 0px 0px;" + 
-				"}" + 
-				".courseTable tr:first-child td{" + 
-				"		background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );" + 
-				"	background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );" + 
-				"	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\"#005fbf\", endColorstr=\"#003f7f\");	background: -o-linear-gradient(top,#005fbf,003f7f);" + 
-				"" + 
-				"	background-color:#005fbf;" + 
-				"	border:0px solid #000000;" + 
-				"	text-align:center;" + 
-				"	border-width:0px 0px 1px 1px;" + 
-				"	font-size:14px;" + 
-				"	font-family:Arial;" + 
-				"	font-weight:bold;" + 
-				"	color:#ffffff;" + 
-				"}" + 
-				".courseTable tr:first-child:hover td{" + 
-				"	background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );" + 
-				"	background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );" + 
-				"	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\"#005fbf\", endColorstr=\"#003f7f\");	background: -o-linear-gradient(top,#005fbf,003f7f);" + 
-				"" + 
-				"	background-color:#005fbf;" + 
-				"}" + 
-				".courseTable tr:first-child td:first-child{" + 
-				"	border-width:0px 0px 1px 0px;" + 
-				"}" + 
-				".courseTable tr:first-child td:last-child{" + 
-				"	border-width:0px 0px 1px 1px;" + 
-				"}</style>";
+		String css=".scheduleTable {\n" + 
+				"	font-family:Arial;\n" + 
+				"	width: 95%;\n" + 
+				"	text-align:center;\n" + 
+				"	margin:0 auto;\n" + 
+				"}\n" + 
+				".scheduleTable td{\n" + 
+				"	line-height:20px;\n" + 
+				"	font-family:Arial;\n" + 
+				"	width:18%;\n" + 
+				"	padding:0px;\n" + 
+				"}\n" + 
+				".scheduleTable td:first-child{\n" + 
+				"	line-height:20px;\n" + 
+				"	border-style: solid;\n" + 
+				"	border-width:1px;\n" + 
+				"	border-color:#000000;\n" + 
+				"	font-family:Arial;\n" + 
+				"	width: 10%;\n" + 
+				"	padding:10px;\n" + 
+				"}\n" + 
+				".scheduleTable th{\n" + 
+				"	text-align: center;\n" + 
+				"	background: #008080;\n" + 
+				"}";
 		
-		String html="<table class=\"courseTable\" align=\"left\" >" + 
+		TreeMap<Integer, String> colors=mapCoursesToColors(s);
+		String html="<style>" + css + "</style>";
+		html=html+"<table class=\"scheduleTable\">" + 
 				"<tr>" + 
-				"	<td>Time</td>" + 
-				"	<td>Monday</td>" + 
-				"	<td>Tuesday</td>" + 
-				"	<td>Wednesday</td>" + 
-				"	<td>Thursday</td>" + 
-				"	<td>Friday</td>" + 
-				"	<td>Saturday</td>" + 
+				"	<th>Time</th>" + 
+				"	<th>Monday</th>" + 
+				"	<th>Tuesday</th>" + 
+				"	<th>Wednesday</th>" + 
+				"	<th>Thursday</th>" + 
+				"	<th>Friday</th>" + 
 				"</tr>";
-		String[] days={"m", "t", "w", "r", "f", "s"};
+		String[] days={"m", "t", "w", "r", "f"};
 		
 		for(int j=8; j<=22; j++){
 			int timeInt=j%12;
@@ -332,22 +283,58 @@ public class DisplayScheduleServlet extends HttpServlet {
 						"<td>" + timeHr + ":" + timeMin + amPm + "</td>";
 				
 				for(int i=0; i<days.length; i++){
-					html=html  +"<td> ";
 					for(Course c : s.getCourses()){
-						if(c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeHr) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
+						String currentColor=colors.get(c.getCRN());
+						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
-								html=html + c.getCourseAndSection() + "&nbsp;&nbsp;&nbsp; <br>" + c.getTime();
+								String timeLastHalf=c.getTime().substring(c.getTime().indexOf('-')+1);
+								int startHr=Integer.parseInt(timeHr);
+								int endHr=Integer.parseInt(timeLastHalf.substring(0, timeLastHalf.indexOf(':')));
+								int numCells=endHr-startHr;
+								numCells=numCells*2;
+								if(c.getTime().substring(0, c.getTime().indexOf('-')).contains("30")){
+									if(!timeLastHalf.contains("30")){
+										numCells=numCells-1;
+									}
+								}
+								else{
+									if(timeLastHalf.contains("30")){
+										numCells=numCells+1;
+									}
+								}
+								if(numCells<1){
+									numCells=2;
+								}
+								
+								html=html + "<td style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>";
+								html=html + "</td>";
+							}
+							else{
+								html=html+"<td></td>";
 							}
 						}
 					}
-					html=html + "</td>";
+					
 				}
 				html=html + "</tr>";
 			}
 		}
 		html=html + "</table>";
+		
 		html=css+html;
 		
 		return html;
+	}
+	
+	public TreeMap<Integer, String> mapCoursesToColors(Schedule s){
+		String[] colors={"#FF5733", "#FFBD33", "#33FF57", "#33FFBD", "#71FF33",
+				 		 "#5B33FF", "#C133FF", "#FF5B33", "#FFC300"};
+		TreeMap<Integer, String> result=new TreeMap<Integer, String>();
+		int i=0;
+		for(Course c : s.getCourses()){
+			result.put(c.getCRN(), colors[i]);
+			i++;
+		}
+		return result;
 	}
 }
