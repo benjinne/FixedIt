@@ -49,6 +49,12 @@
     <servlet-class>fixedIt.servlets.EditUserInfoServlet</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>PasswordUpdateServlet</servlet-name>
+    <servlet-class>fixedIt.servlets.PasswordUpdateServlet</servlet-class>
+  </servlet>
+  
+  
   <!-- Servlet mappings -->
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -78,6 +84,11 @@
   <servlet-mapping>
     <servlet-name>EditUserInfoServlet</servlet-name>
     <url-pattern>/editUserInfo</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>PasswordUpdateServlet</servlet-name>
+    <url-pattern>/passwordUpdate</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>
