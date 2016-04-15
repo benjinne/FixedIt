@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.TreeMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -109,6 +110,44 @@ public class DisplayScheduleServlet extends HttpServlet {
 			if(req.getParameter("" + c.getCRN())!=null){
 				session.getCurrentUser().getSchedules().firstEntry().getValue().deleteCourse(c.getCRN());
 			}
+			if(req.getParameter(c.getCRN() + "View")!=null){
+				String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
+						"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
+						"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
+						"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
+				returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
+				if(c.getLocation().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
+				}
+				else{
+					returnedCourses=returnedCourses+("<td> </td>");
+				}
+				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
+				if(c.getInstructors().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
+				}
+				else{
+					returnedCourses=returnedCourses+("<td> </td>");
+				}
+				returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
+				returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
+						+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
+				
+				req.setAttribute("returnedCourses", returnedCourses);
+				RequestDispatcher rd=req.getRequestDispatcher("search");
+				rd.forward(req, resp);
+				return;
+			}
 		}
 		
 		try {
@@ -199,7 +238,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 								}
 								
 								html=html + "<td style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
-										"<input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
+										"<input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "View\" value=\"More Info\"/> <input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
 								html=html + "</td>";
 							}
 							else{

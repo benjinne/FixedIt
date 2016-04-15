@@ -43,8 +43,10 @@ public class SearchServlet extends HttpServlet {
 		QueryController controller=null;
 		try{
 			controller=new QueryController(new Query(Integer.parseInt(term), level, dept), session);
-		}catch(Exception e){
-			errorMessage="Please select an option for all 3 parameters.";
+		}catch(NumberFormatException e){
+			if(req.getParameter("returnedCourses")!=null){
+				errorMessage="Please select an option for all 3 parameters.";
+			}
 			// Add parameters as request attributes
 			req.setAttribute("dept", dept);
 			req.setAttribute("level", level);
