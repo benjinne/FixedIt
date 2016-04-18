@@ -28,6 +28,7 @@ public class User{
 		this.studentStatus=studentStatus;
 		this.numSchedules=numSchedules;
 		this.auth=auth;
+		schedules=new TreeMap<String, Schedule>();
 	}
 	
 	public void reInitializeUser() throws SQLException{

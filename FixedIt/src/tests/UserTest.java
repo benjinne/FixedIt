@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -42,7 +43,14 @@ public class UserTest {
 
 	@Test
 	public void testDeleteAccount() {
-		fail("Not yet implemented");
+		user.deleteAccount();
+		try {
+			assertEquals(auth.getUser("dwayne@theRockJohnson.com"),null);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Test

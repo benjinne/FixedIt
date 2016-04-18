@@ -9,6 +9,7 @@ import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Authenticator;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
+import fixedIt.modelComponents.User;
 
 public class AuthenticatorTest {
 	private Authenticator a;
@@ -69,24 +70,19 @@ public class AuthenticatorTest {
 	@Test
 	public void testValidatePassword(){
 		String hash1=a.saltHashPassword(validPass);
-		String hash2=a.saltHashPassword(validPass2);
+		
+		User Fake1 = new User ("email@domain.com",hash1,0,0,a);
+		a.addNewUserToDB(Fake1);
+		
+		//System.out.println(a.saltHashPassword(validPass));
+		
+
+		assertTrue(a.credentialsMatch("email@domain.com", "ThisIsAPassword!-._"));
+
+		a.deleteUser(Fake1);
+		
+	}
 	
-		assertTrue(a.credentialsMatch(validPass, hash1));
-		assertTrue(a.credentialsMatch(validPass2, hash2));
-	}
-	@Test
-	public void testQueryController(){
-		String search1="ANT201.106";
-		String search2="PE102.50";
-		String search3="PE125.802";
-		
-		
-		assertTrue(q.getQuery().equals(search1));
-		assertTrue(q.getQuery().equals(search3));
-		assertFalse(q.getQuery().equals(search2));
-		
-		
-	}
 
 	
 }
