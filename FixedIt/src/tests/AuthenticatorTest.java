@@ -7,8 +7,6 @@ import org.junit.Test;
 
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Authenticator;
-import fixedIt.modelComponents.Course;
-import fixedIt.modelComponents.Query;
 
 public class AuthenticatorTest {
 	private Authenticator a;

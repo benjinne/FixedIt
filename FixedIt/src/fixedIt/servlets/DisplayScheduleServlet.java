@@ -1,7 +1,6 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 import fixedIt.controllers.DisplayScheduleController;
@@ -270,8 +268,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 								for(int d=0; d<numCells; d++){
 									newCell.appendText("<br>");
 								}
-							} else{
-								
 							}
 							currRow.appendChild(newCell);
 						}
