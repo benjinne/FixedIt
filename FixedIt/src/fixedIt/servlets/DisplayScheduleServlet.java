@@ -1,6 +1,7 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 import fixedIt.controllers.DisplayScheduleController;
@@ -181,13 +183,13 @@ public class DisplayScheduleServlet extends HttpServlet {
 		Table scheduleTable=new Table();
 		scheduleTable.setCSSClass("scheduleTable");
 		Tr dayRow=new Tr();
-		Th time=new Th(); time.appendText("Time");
 		Th mon=new Th(); mon.appendText("Monday");
 		Th tue=new Th(); tue.appendText("Tuesday");
 		Th wed=new Th(); wed.appendText("Wednesday");
 		Th th=new Th(); th.appendText("Thursday");
-		Th fri=new Th(); th.appendText("Friday");
-		dayRow.appendChild(time, mon, tue, wed, th, fri);		
+		Th fri=new Th(); fri.appendText("Friday");
+		dayRow.appendChild(mon, tue, wed, th, fri);
+		scheduleTable.appendChild(dayRow);
 		TreeMap<Integer, String> colors=mapCoursesToColors(s);
 		
 		String[] days={"m", "t", "w", "r", "f"};
@@ -218,12 +220,10 @@ public class DisplayScheduleServlet extends HttpServlet {
 					timeMin="30";
 				}
 				Tr currRow=new Tr();
-				Td currCell=new Td();
-				currCell.appendText(timeHr + ":" + timeMin + amPm);
-				currRow.appendChild(currCell);
 				
 				for(int i=0; i<days.length; i++){
 					Td newCell=new Td();
+					newCell.setRowspan("1");
 					for(Course c : s.getCourses()){
 						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
@@ -266,10 +266,17 @@ public class DisplayScheduleServlet extends HttpServlet {
 								newCell.appendChild(new Br());
 								newCell.appendChild(submit);
 								newCell.appendChild(moreInfo);
+								newCell.setStyle("display:inline-block; width:100%;");
+								for(int d=0; d<numCells; d++){
+									newCell.appendText("<br>");
+								}
+							} else{
+								
 							}
+							currRow.appendChild(newCell);
 						}
 					}
-					currRow.appendChild(newCell);
+					
 				}
 				scheduleTable.appendChild(currRow);
 			}
