@@ -194,6 +194,9 @@ public class DisplayScheduleServlet extends HttpServlet {
 				timeInt=12;
 			}
 			String timeHr="" + timeInt;
+			
+			//System.out.println(timeHr);
+			
 			String amPm;
 			if(j>11){
 				amPm="PM";
@@ -212,24 +215,24 @@ public class DisplayScheduleServlet extends HttpServlet {
 				}
 				html=html + "<tr>" +
 						"<td>" + timeHr + ":" + timeMin + amPm + "</td>";
-				
 				for(int i=0; i<days.length; i++){
+					html=html  +"<td ";
 					for(Course c : s.getCourses()){
-						String currentColor=colors.get(c.getCRN());
 						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
+								String currentColor=colors.get(c.getCRN());
 								String timeLastHalf=c.getTime().substring(c.getTime().indexOf('-')+1);
 								int startHr=Integer.parseInt(timeHr);
 								int endHr=Integer.parseInt(timeLastHalf.substring(0, timeLastHalf.indexOf(':')));
 								int numCells=endHr-startHr;
 								numCells=numCells*2;
-								if(c.getTime().substring(0, c.getTime().indexOf('-')).contains("30")){
-									if(!timeLastHalf.contains("30")){
+								if(!c.getTime().substring(0, c.getTime().indexOf('-')).contains("00")){
+									if(timeLastHalf.contains("00")){
 										numCells=numCells-1;
 									}
 								}
 								else{
-									if(timeLastHalf.contains("30")){
+									if(!timeLastHalf.contains("00")){
 										numCells=numCells+1;
 									}
 								}
@@ -237,21 +240,20 @@ public class DisplayScheduleServlet extends HttpServlet {
 									numCells=2;
 								}
 								
-								html=html + "<td style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
+								html=html + " style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
 										"<input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "View\" value=\"More Info\"/> <input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
-								html=html + "</td>";
-							}
-							else{
-								html=html+"<td></td>";
+								System.out.println(true + " for "  + c.getCRN() + " on " + days[i]);
 							}
 						}
 					}
-					
+					html=html + "</td>";
 				}
 				html=html + "</tr>";
 			}
 		}
 		html=html + "</table>";
+		
+		System.out.println(html);
 		
 		return html;
 	}

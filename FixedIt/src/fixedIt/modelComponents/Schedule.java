@@ -122,6 +122,34 @@ public class Schedule {
 		return false;
 	}
 	
+	public static boolean timeConflict(Course c, Course c2){
+		String t=c2.getTime().substring(0, c2.getTime().indexOf(':')+3);
+		LocalTime courseStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+		t=c2.getTime().substring(c2.getTime().indexOf('-')+1);
+		t=t.substring(0, t.indexOf(':')+3);
+		LocalTime courseEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+		
+			t=c.getTime().substring(0, c.getTime().indexOf(':')+3);
+			LocalTime cStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+			t=c.getTime().substring(c.getTime().indexOf('-')+1);
+			t=t.substring(0, t.indexOf(':')+3);
+			LocalTime cEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
+			
+			if(courseStart.equals(cStart) || courseEnd.equals(cEnd)){
+				return true;
+			}else if(courseStart.isBefore(cStart)){
+				if(courseEnd.isAfter(cStart)){
+					return true;
+				}
+			}
+			else if(cStart.isBefore(courseStart)){
+				if(cEnd.isAfter(courseStart)){
+					return true;
+				}
+			}
+		return false;
+	}
+	
 	public String getTerm(){
 		return term;
 	}

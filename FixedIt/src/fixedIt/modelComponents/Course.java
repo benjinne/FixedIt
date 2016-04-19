@@ -19,7 +19,7 @@ public class Course {
 		this.courseAndSection=courseAndSection;
 		this.title=title;
 		this.type=type;
-		this.days=days;
+		this.days=days.replaceAll(" ", "");
 		this.time=time;
 		instructors=new ArrayList<String>();
 		instructors.add(instructor);
@@ -155,7 +155,7 @@ public class Course {
 		return days;
 	}
 	public void setDays(String days) {
-		this.days = days;
+		this.days = days.replaceAll(" ", "");
 	}
 	public String getTime() {
 		return time;
