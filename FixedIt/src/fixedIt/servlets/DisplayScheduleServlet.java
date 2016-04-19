@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hp.gagawa.java.elements.*;
+
 import fixedIt.controllers.DisplayScheduleController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Schedule;
@@ -176,16 +178,18 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}*/
 	
 	public String generateHTMLScheduleTable(Schedule s){
+		Table scheduleTable=new Table();
+		scheduleTable.setCSSClass("scheduleTable");
+		Tr dayRow=new Tr();
+		Th time=new Th(); time.appendText("Time");
+		Th mon=new Th(); mon.appendText("Monday");
+		Th tue=new Th(); tue.appendText("Tuesday");
+		Th wed=new Th(); wed.appendText("Wednesday");
+		Th th=new Th(); th.appendText("Thursday");
+		Th fri=new Th(); th.appendText("Friday");
+		dayRow.appendChild(time, mon, tue, wed, th, fri);		
 		TreeMap<Integer, String> colors=mapCoursesToColors(s);
-		String html="<table class=\"scheduleTable\">" + 
-				"<tr>" + 
-				"	<th>Time</th>" + 
-				"	<th>Monday</th>" + 
-				"	<th>Tuesday</th>" + 
-				"	<th>Wednesday</th>" + 
-				"	<th>Thursday</th>" + 
-				"	<th>Friday</th>" + 
-				"</tr>";
+		
 		String[] days={"m", "t", "w", "r", "f"};
 		
 		for(int j=8; j<=22; j++){
@@ -213,10 +217,13 @@ public class DisplayScheduleServlet extends HttpServlet {
 				else{
 					timeMin="30";
 				}
-				html=html + "<tr>" +
-						"<td>" + timeHr + ":" + timeMin + amPm + "</td>";
+				Tr currRow=new Tr();
+				Td currCell=new Td();
+				currCell.appendText(timeHr + ":" + timeMin + amPm);
+				currRow.appendChild(currCell);
+				
 				for(int i=0; i<days.length; i++){
-					html=html  +"<td ";
+					Td newCell=new Td();
 					for(Course c : s.getCourses()){
 						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
 							if(c.getDays().toLowerCase().contains(days[i])){
@@ -239,20 +246,35 @@ public class DisplayScheduleServlet extends HttpServlet {
 								if(numCells<2){
 									numCells=2;
 								}
-								
-								html=html + " style=\"background:" + currentColor + ";\" rowspan=\"" + numCells + "\">" + c.getTitle() + "<br>" +  c.getCourseAndSection() + "<br>" + c.getTime() + "<br>" + 
-										"<input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "View\" value=\"More Info\"/> <input class=\"btn\" type=\"submit\" name=\"" + c.getCRN() + "\" value=\"Remove\"/>";
-								System.out.println(true + " for "  + c.getCRN() + " on " + days[i]);
+								newCell.setBgcolor(currentColor);
+								newCell.setRowspan("" + numCells);
+								newCell.appendText(c.getTitle());
+								newCell.appendChild(new Br());
+								newCell.appendText(c.getCourseAndSection());
+								newCell.appendChild(new Br());
+								newCell.appendText(c.getTime());
+								Input submit=new Input();
+								submit.setType("submit");
+								submit.setCSSClass("btn");
+								submit.setName("" + c.getCRN());
+								submit.setValue("Remove");
+								Input moreInfo=new Input();
+								moreInfo.setType("submit");
+								moreInfo.setCSSClass("btn");
+								moreInfo.setName(c.getCRN() + "View");
+								moreInfo.setValue("More Info");
+								newCell.appendChild(new Br());
+								newCell.appendChild(submit);
+								newCell.appendChild(moreInfo);
 							}
 						}
 					}
-					html=html + "</td>";
+					currRow.appendChild(newCell);
 				}
-				html=html + "</tr>";
+				scheduleTable.appendChild(currRow);
 			}
 		}
-		html=html + "</table>";
-		
+		String html=scheduleTable.write();
 		System.out.println(html);
 		
 		return html;
