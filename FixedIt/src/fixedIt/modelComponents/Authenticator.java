@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -262,8 +263,9 @@ public class Authenticator implements EmailSender {
 	 */
 	public boolean setPasswordForUser(String emailAddress, String password) throws SQLException{
 		Connection conn=getConnection();
-		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress.toLowerCase() + "' ";
 		if(isValidPassword(password)){
+			String passwordHash=saltHashPassword(password);
+			String sql="update users set passwordhash='" + passwordHash + "' where emailaddress='" + emailAddress.toLowerCase() + "' ";
 			SQLWriter.executeDBCommand(conn, sql);
 			conn.commit();
 			conn.close();
@@ -337,11 +339,12 @@ public class Authenticator implements EmailSender {
 	 * email address.
 	 * @param email address for which to lookup user
 	 */
-	public void requestPasswordReset(String email){
+	public void requestPasswordReset(String email, String webContext, UUID uuid){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.DATE, 7);
-		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal);
+		cal.add(Calendar.DATE, 1);
+		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, webContext, uuid);
+		resetPage.generateAndSetURL();
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
 		sendMail(email, message);
 	}

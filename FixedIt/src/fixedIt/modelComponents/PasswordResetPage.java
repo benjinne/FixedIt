@@ -2,22 +2,26 @@ package fixedIt.modelComponents;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class PasswordResetPage implements EmailSender {
 	private String emailAddress;
 	private Calendar expirationDate;
 	private Authenticator auth;
 	private String url;
+	private UUID uuid;
+	private String webContext;
 	
-	public PasswordResetPage(Authenticator auth, String emailAddress, Calendar expirationDate){
+	public PasswordResetPage(Authenticator auth, String emailAddress, Calendar expirationDate, String webContext, UUID uuid){
 		this.emailAddress=emailAddress;
 		this.expirationDate=expirationDate;
 		this.auth=auth;
-		generateAndSetURL();
+		this.webContext=webContext;
+		this.uuid=uuid;
 	}
 	
 	public boolean resetPassword(String password) throws SQLException{
-		if(expirationDate.after(Calendar.getInstance())){
+		if(!isExpired()){
 			auth.setPasswordForUser(emailAddress, password);
 			return true;
 		}
@@ -27,8 +31,16 @@ public class PasswordResetPage implements EmailSender {
 		}
 	}
 	
+	public boolean isExpired(){
+		if(expirationDate.after(Calendar.getInstance())){
+			return false;
+		} else{
+			return true;
+		}
+	}
+	
 	public void renew(){
-		auth.requestPasswordReset(emailAddress);
+		auth.requestPasswordReset(emailAddress, webContext, uuid);
 	}
 	
 	public String buildEmail(String firstHalf, String secondHalf){
@@ -36,7 +48,13 @@ public class PasswordResetPage implements EmailSender {
 				+ secondHalf;
 	}
 	
-	private void generateAndSetURL(){
-		//not implemented yet
+	public void generateAndSetURL(){
+		this.url=webContext;
+		if(!url.endsWith("/")){
+			url=url + "?uuid=" + uuid;
+		} else{
+			url=url.substring(0, url.length()-2) + "?uuid=" +  uuid;
+		}
+		System.out.println(url);
 	}
 }

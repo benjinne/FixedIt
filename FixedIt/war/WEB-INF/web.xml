@@ -28,6 +28,11 @@
     <servlet-name>NewUserServlet</servlet-name>
     <servlet-class>fixedIt.servlets.NewUserServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>PasswordResetServlet</servlet-name>
+    <servlet-class>fixedIt.servlets.PasswordResetServlet</servlet-class>
+  </servlet>
 
   <servlet>
     <servlet-name>UserInfoServlet</servlet-name>
@@ -64,6 +69,11 @@
   <servlet-mapping>
     <servlet-name>NewUserServlet</servlet-name>
     <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>PasswordResetServlet</servlet-name>
+    <url-pattern>/passwordReset</url-pattern>
   </servlet-mapping>
   
   <servlet-mapping>

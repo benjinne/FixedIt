@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ public class PasswordResetPageTest {
 		auth=new Authenticator();
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, -4);
-		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);
+		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal, "localhost:8081/FixedIt/passwordReset/", UUID.randomUUID());
 	}
 
 	@Test
@@ -33,7 +34,7 @@ public class PasswordResetPageTest {
 		}
 		Calendar cal=Calendar.getInstance();
 		cal.add(Calendar.DATE, 4);
-		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal);
+		pwReset=new PasswordResetPage(auth, "cs320fixedit@mailinator.com", cal, "localhost:8081/FixedIt/passwordReset/", UUID.randomUUID());
 		try {
 			assertTrue(pwReset.resetPassword("password"));
 		} catch (SQLException e) {
