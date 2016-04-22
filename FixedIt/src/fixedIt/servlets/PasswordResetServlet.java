@@ -21,7 +21,7 @@ public class PasswordResetServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println(req.getQueryString());
 		if(req.getQueryString()!=null){
-			req.setAttribute("sessionId", req.getQueryString().substring(req.getQueryString().indexOf('=')));
+			req.getSession().setAttribute("sessionId", req.getQueryString().substring(req.getQueryString().indexOf('=')+1));
 		}
 		req.getRequestDispatcher("/_view/PasswordReset.jsp").forward(req, resp);
 	}
@@ -42,11 +42,13 @@ public class PasswordResetServlet extends HttpServlet {
 			resetId=(UUID)req.getSession().getAttribute("uuid");
 		}
 		UUID sessionId=null;
-		if(req.getQueryString()!=null){
-			sessionId=UUID.fromString(req.getQueryString().substring(req.getQueryString().indexOf('=')));
+		System.out.println("QueryString: " + req.getQueryString());
+		System.out.println("req.getSession().getAttribute(\"sessionId\": " + req.getSession().getAttribute("sessionId"));
+		if(req.getQueryString()!=null && req.getQueryString()!="null"){
+			sessionId=UUID.fromString(req.getQueryString().substring(req.getQueryString().indexOf('=')+1));
 			req.getSession().setAttribute("sessionId", sessionId);
 		} else if(req.getSession().getAttribute("sessionId")!=null && req.getSession().getAttribute("sessionId")!="null"){
-			sessionId=UUID.fromString(req.getParameter("sessionId"));
+			sessionId=UUID.fromString((String)req.getSession().getAttribute("sessionId"));
 		}
 		
 		System.out.println(sessionId);

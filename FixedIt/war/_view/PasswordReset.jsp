@@ -51,6 +51,10 @@
 				<c:if test="${! empty sessionId}">
 				<table>
 					<tr>
+						<td class="label" autofocus>Email Address: </td>
+						<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
+					</tr>
+					<tr>
 						<td class="label" autofocus>New Password: </td>
 						<td><input class="textInput" type="password" name="password" size="12" /></td>
 					</tr>
@@ -59,13 +63,14 @@
 						<td><input class="textInput" type="password" name="passwordConfirm" size="12" /></td>
 					</tr>
 					<tr>
+						<td></td>
 						<td><input class="btn" type="submit" name="passwordReset" value="Reset Password"></td>
 					</tr>
 				</table>
 				</c:if>
 				<c:if test="${! empty success}">
 					<br>
-					<input class="btn" type="button" onclick="window.location='login'" />
+					<input class="btn" type="button" value="Login" onclick="window.location='login'" />
 				</c:if>
 						
 			</center>
