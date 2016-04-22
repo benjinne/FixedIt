@@ -31,4 +31,8 @@ public class PasswordResetController {
 			return false;
 		}
 	}
+	
+	public boolean userExists(){
+		return auth.userExists(emailAddress);
+	}
 }

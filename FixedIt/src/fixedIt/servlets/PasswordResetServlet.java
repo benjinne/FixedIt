@@ -44,32 +44,44 @@ public class PasswordResetServlet extends HttpServlet {
 		UUID sessionId=null;
 		if(req.getQueryString()!=null){
 			sessionId=UUID.fromString(req.getQueryString().substring(req.getQueryString().indexOf('=')));
-		} else if(req.getParameter("sessionId")!=null && req.getParameter("sessionId")!="null"){
+			req.getSession().setAttribute("sessionId", sessionId);
+		} else if(req.getSession().getAttribute("sessionId")!=null && req.getSession().getAttribute("sessionId")!="null"){
 			sessionId=UUID.fromString(req.getParameter("sessionId"));
 		}
+		
+		System.out.println(sessionId);
+		
 		String password=req.getParameter("password");
 		String passwordConfirm=req.getParameter("passwordConfirm");
 		String success="";
 		
 		if(sessionId!=null){
-			if(password!=null && passwordConfirm!=null){
-				if(password.equals(passwordConfirm)){
-					boolean isValidPass=controller.resetPassword("" + resetId, "" + sessionId, password);
-					if(!isValidPass){
-						errorMessage="Password does not conform to password rules: password must be at least 8 characters and may use the following characters: \n" +
-								"0-9a-zA-Z ! . - _";
+			if(controller.userExists()){
+				if(password!=null && passwordConfirm!=null){
+					if(password.equals(passwordConfirm)){
+						boolean isValidPass=controller.resetPassword("" + resetId, "" + sessionId, password);
+						if(!isValidPass){
+							errorMessage="Password does not conform to password rules: password must be at least 8 characters and may use the following characters: \n" +
+									"0-9a-zA-Z ! . - _";
+						} else{
+							errorMessage="Password reset successfully.";
+							success="true";
+						}
 					} else{
-						errorMessage="Password reset successfully.";
-						success="true";
+						errorMessage="Passwords do not match.";
 					}
 				} else{
-					errorMessage="Passwords do not match.";
+					errorMessage="Please type and confirm a password.";
 				}
 			} else{
-				errorMessage="Please type and confirm a password.";
+				errorMessage="Email address does not match any accounts on record.";
 			}
 		} else{
-			errorMessage="Please check your email for instructions to reset your password.";
+			if(emailAddress!=null){
+				errorMessage="Please check your email for instructions to reset your password.";
+			} else{
+				errorMessage="Please enter an email address.";
+			}
 		}
 		
 		req.setAttribute("errorMessage", errorMessage);
