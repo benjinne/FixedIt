@@ -512,6 +512,27 @@ public class Authenticator implements EmailSender {
 		return new Session(user, this);
 	}
 	
+	public void sendConfirmEmail(String email, String webContext, UUID uuid){
+		String confirmEmail="<h2>Dear FixedIt User,</h2>" +
+							"<h2>&nbsp; &nbsp; &nbsp; You have created an account " + 
+							"on the FixedIt Scheduler web application. If you believe " +
+							"this message is an error, you can ignore it.</h2><br>" +
+							"<h2>&nbsp; &nbsp; &nbsp; To confirm your account, click the " + 
+							"link below.</h2><br><br>";
+		String link=webContext;
+		if(link.endsWith("/")){
+			link=link.substring(0, link.length()-2) + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}else{
+			link=link + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}
+		
+		String href="<h2><font color=\"blue\"><u><a href=\"" + link + "\">Confirm Account</a></u></font></h2>";
+		
+		confirmEmail=confirmEmail + href;
+		
+		sendMail(email, confirmEmail);
+	}
+	
 	
 	public static final String MESSAGE_FIRST_HALF=
 			"<h2>Dear FixedIt User,</h2>" +

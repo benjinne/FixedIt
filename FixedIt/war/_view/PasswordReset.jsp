@@ -36,10 +36,6 @@
 				<c:if test="${empty sessionId}">
 					<table>
 						<tr>
-							<td class="label" autofocus>Email Address: &nbsp;&nbsp;</td>
-							<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
-						</tr>
-						<tr>
 							<td></td>
 							<td>
 								<input class="btn" type="submit" name="passwordReset" value="Request Password Reset">
