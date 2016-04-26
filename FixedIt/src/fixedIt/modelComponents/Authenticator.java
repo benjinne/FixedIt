@@ -346,7 +346,7 @@ public class Authenticator implements EmailSender {
 		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, webContext, uuid);
 		resetPage.generateAndSetURL();
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
-		sendMail(email, message);
+		sendMail(email, message, "Password Reset Request");
 	}
 	
 	/**
@@ -528,9 +528,10 @@ public class Authenticator implements EmailSender {
 		
 		String href="<h2><font color=\"blue\"><u><a href=\"" + link + "\">Confirm Account</a></u></font></h2>";
 		
-		confirmEmail=confirmEmail + href;
+		confirmEmail=confirmEmail + href + "<br>" +
+				"<center><img src=\"http://s11.postimg.org/97dahnc2r/fixedit_logo.jpg\"/></center>";
 		
-		sendMail(email, confirmEmail);
+		sendMail(email, confirmEmail, "Confirm Your Account");
 	}
 	
 	

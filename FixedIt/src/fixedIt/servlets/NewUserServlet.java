@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Authenticator;
-import fixedIt.modelComponents.User;
 
 
 public class NewUserServlet extends HttpServlet {
@@ -48,7 +47,6 @@ public class NewUserServlet extends HttpServlet {
 			errorMessage="Email address is not recognized as email address format: address@example.com";
 		}
 		else {
-			User user=new User(emailAddress, controller.getAuth().saltHashPassword(password), 0, 0, controller.getAuth());
 			boolean userExists=controller.getAuth().userExists(emailAddress);
 			if(userExists){
 				errorMessage="An account already exists associated with this email address.";
@@ -57,7 +55,8 @@ public class NewUserServlet extends HttpServlet {
 				UUID uuid=UUID.randomUUID();
 				req.getSession().setAttribute("uuid", uuid);
 				req.getSession().setAttribute("passHash", controller.getAuth().saltHashPassword(password));
-				controller.getAuth().sendConfirmEmail(emailAddress, req.getRequestURL().toString(), uuid);
+				String webContext=req.getRequestURL().toString().replace("register", "confirm");
+				controller.getAuth().sendConfirmEmail(emailAddress, webContext, uuid);
 				waitingForConfirm="true";
 			}
 		}
@@ -69,6 +68,7 @@ public class NewUserServlet extends HttpServlet {
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
+		req.setAttribute("waitingForConfirm", waitingForConfirm);
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/newUser.jsp").forward(req, resp);

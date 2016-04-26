@@ -23,7 +23,7 @@ public interface EmailSender {
 	 * @param text the text/HTML to set as the body of the message
 	 * @return true if message is sent successfully, false if message fails to send
 	 */
-	public default boolean sendMail(String email, String text) {
+	public default boolean sendMail(String email, String text, String subject) {
 		Properties properties = new Properties();
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.port", "587");
@@ -69,7 +69,7 @@ public interface EmailSender {
 			InternetAddress address=new InternetAddress(email);
 			InternetAddress[] toAddresses = { address };
 			msg.setRecipients(Message.RecipientType.TO, toAddresses);
-			msg.setSubject("Password Reset Request");
+			msg.setSubject(subject);
 			msg.setSentDate(new Date());
 			msg.setFrom(new InternetAddress("do-not-reply@FixedItScheduler.com", "FixedIt WebMaster"));
 			msg.setReplyTo(new Address[]{new InternetAddress("do-not-reply@FixedItScheduler.com")});
