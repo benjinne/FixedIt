@@ -31,7 +31,7 @@ public class AccountConfirmationServlet extends HttpServlet{
 		if(req.getQueryString()!=null){
 			emailAddress=req.getQueryString().substring(req.getQueryString().indexOf('=')+1, req.getQueryString().indexOf('&'));
 			String tmpId=req.getQueryString().substring(req.getQueryString().indexOf('&'));
-			tmpId=tmpId.substring(tmpId.indexOf('='));
+			tmpId=tmpId.substring(tmpId.indexOf('=')+1);
 			sessionId=UUID.fromString(tmpId);
 		}
 		if(uuid.equals(sessionId)){
