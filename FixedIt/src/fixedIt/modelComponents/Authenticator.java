@@ -346,7 +346,7 @@ public class Authenticator implements EmailSender {
 		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, webContext, uuid);
 		resetPage.generateAndSetURL();
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
-		sendMail(email, message);
+		sendMail(email, message, "Password Reset Request");
 	}
 	
 	/**
@@ -510,6 +510,28 @@ public class Authenticator implements EmailSender {
 	 */
 	private Session createSession(User user){
 		return new Session(user, this);
+	}
+	
+	public void sendConfirmEmail(String email, String webContext, UUID uuid){
+		String confirmEmail="<h2>Dear FixedIt User,</h2>" +
+							"<h2>&nbsp; &nbsp; &nbsp; You have created an account " + 
+							"on the FixedIt Scheduler web application. If you believe " +
+							"this message is an error, you can ignore it.</h2><br>" +
+							"<h2>&nbsp; &nbsp; &nbsp; To confirm your account, click the " + 
+							"link below.</h2><br><br>";
+		String link=webContext;
+		if(link.endsWith("/")){
+			link=link.substring(0, link.length()-2) + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}else{
+			link=link + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}
+		
+		String href="<h2><font color=\"blue\"><u><a href=\"" + link + "\">Confirm Account</a></u></font></h2>";
+		
+		confirmEmail=confirmEmail + href + "<br>" +
+				"<center><img src=\"http://s11.postimg.org/97dahnc2r/fixedit_logo.jpg\"/></center>";
+		
+		sendMail(email, confirmEmail, "Confirm Your Account");
 	}
 	
 	

@@ -51,9 +51,9 @@ public class PasswordResetPage implements EmailSender {
 	public void generateAndSetURL(){
 		this.url=webContext;
 		if(!url.endsWith("/")){
-			url=url + "?uuid=" + uuid;
+			url=url + "?uuid=" + uuid + "&emailAddress=" + emailAddress;
 		} else{
-			url=url.substring(0, url.length()-2) + "?uuid=" +  uuid;
+			url=url.substring(0, url.length()-2) + "?uuid=" +  uuid + "&emailAddress=" + emailAddress;
 		}
 		System.out.println(url);
 	}

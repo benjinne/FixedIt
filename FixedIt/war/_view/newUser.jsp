@@ -5,7 +5,7 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler Login</title>
+		<title>FixedIt Scheduler - Register</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -33,6 +33,7 @@
 		<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
+		<c:if test="${empty waitingForConfirm}">
 			<table>
 				<tr>
 					<td class="label">Email Address: </td>
@@ -49,10 +50,10 @@
 			</table>
 			<input class="btn" type="Submit" name="submit" value="Create Account">
 			<br>
-			<c:set var="accountCreated" value="${accountCreated}"/>
-			<c:if test="${accountCreated}">
-				<a class="btn" href="login">Login to your new account!</a>
-			</c:if>
+		</c:if>
+		<c:if test="${! empty waitingForConfirm}">
+			<h2>Please check your email to confirm your account.</h2>
+		</c:if>
 		</form>
 		</center>
     </section>
