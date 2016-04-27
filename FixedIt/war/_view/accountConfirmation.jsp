@@ -33,9 +33,6 @@
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
-			</c:if>
 			<c:if test="${! empty confirmed}">
 				<input class="btn" type="button" value="Login" onclick="window.location='login';" />
 			</c:if>

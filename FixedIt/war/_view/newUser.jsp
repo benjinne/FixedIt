@@ -5,7 +5,7 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler Login</title>
+		<title>FixedIt Scheduler - Register</title>
 		<style type="text/css">
 		.error {
 			color: red;

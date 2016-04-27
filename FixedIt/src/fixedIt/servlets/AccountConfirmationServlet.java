@@ -27,13 +27,15 @@ public class AccountConfirmationServlet extends HttpServlet{
 		LoginController controller=new LoginController();
 		
 		String confirmed="";
+		emailAddress=req.getParameter("emailAddress");
+		sessionId=UUID.fromString(req.getParameter("sessionId"));
 		
-		if(req.getQueryString()!=null){
-			emailAddress=req.getQueryString().substring(req.getQueryString().indexOf('=')+1, req.getQueryString().indexOf('&'));
-			String tmpId=req.getQueryString().substring(req.getQueryString().indexOf('&'));
-			tmpId=tmpId.substring(tmpId.indexOf('=')+1);
-			sessionId=UUID.fromString(tmpId);
-		}
+//		if(req.getQueryString()!=null){
+//			emailAddress=req.getQueryString().substring(req.getQueryString().indexOf('=')+1, req.getQueryString().indexOf('&'));
+//			String tmpId=req.getQueryString().substring(req.getQueryString().indexOf('&'));
+//			tmpId=tmpId.substring(tmpId.indexOf('=')+1);
+//			sessionId=UUID.fromString(tmpId);
+//		}
 		if(uuid.equals(sessionId)){
 			User user=new User(emailAddress, (String) req.getSession().getAttribute("passHash"), 0, 0, controller.getAuth());
 			boolean success=controller.getAuth().addNewUserToDB(user);
