@@ -51,12 +51,27 @@ public class LoginServlet extends HttpServlet {
 		
 		LoginController controller=new LoginController();
 		Session userSession=null;
+		//debug mode allows us to enter the schedular with a fake account at the click of a button
+		//no need to enter a user name and password each time 
+		//thus allowing us to test new features that we have implemented
+		
 		if(req.getParameter("debug")!= null){
+			req.setAttribute("debug", null);
 			userSession= controller.DebugMode();
 			req.getSession().setAttribute("userSession", userSession);
 			resp.sendRedirect("userInfo");
 			return;
 		}
+		else if(req.getParameter("debug")==null){
+			try {
+				userSession=controller.getAuth().authorizeUser(emailAddress, password);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
@@ -146,6 +161,7 @@ public class LoginServlet extends HttpServlet {
 		req.setAttribute("password", req.getParameter("password"));
 		
 		// Add result objects as request attributes
+		req.setAttribute("debug", null);
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("credentialsMatch", credentialsMatch);
 		req.getSession().setAttribute("loginAttempts", loginAttempts);

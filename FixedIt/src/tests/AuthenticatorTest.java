@@ -16,6 +16,7 @@ public class AuthenticatorTest {
 	private String validPass;
 	private String validPass2;
 	private String invalidPass;
+	private String invalidPass2;
 	private QueryController q;
 	//private String search1;
 	//private String search2;
@@ -27,12 +28,14 @@ public class AuthenticatorTest {
 		validPass="ThisIsAPassword!-._";
 		invalidPass="ThisIsAnInvalidPass/?@#";
 		validPass2="ThisIsAlsoAPassword!!!---...___";
+		invalidPass2="ThisIsAnInvalidPass/? @#";
 		a=new Authenticator();
 	}
 	
 	@Test
 	public void testRequestPasswordReset(){
 		a.requestPasswordReset("cs320fixedit@mailinator.com");
+		a.requestPasswordReset("myfake@gmail.com");
 	}
 
 	@Test
@@ -70,16 +73,31 @@ public class AuthenticatorTest {
 	@Test
 	public void testValidatePassword(){
 		String hash1=a.saltHashPassword(validPass);
+		String hash2=a.saltHashPassword(validPass2);
+		String hash3=a.saltHashPassword(invalidPass);
+		String hash4=a.saltHashPassword(invalidPass2);
 		
 		User Fake1 = new User ("email@domain.com",hash1,0,0,a);
+		User Fake2 = new User ("johnny.appleseed@dadjokes.net",hash2,0,0,a);
+		User Fake3 = new User ("myfake@gmail.com", hash3,0,0,a);
+		User Fake4 = new User ("letshavefun@yahoo.com",hash4,0,0,a);
+		
+		
 		a.addNewUserToDB(Fake1);
+		a.addNewUserToDB(Fake2);
+		a.addNewUserToDB(Fake3);
+		a.addNewUserToDB(Fake4);
 		
-		//System.out.println(a.saltHashPassword(validPass));
-		
-
 		assertTrue(a.credentialsMatch("email@domain.com", "ThisIsAPassword!-._"));
-
+		assertTrue(a.credentialsMatch("johnny.appleseed@dadjokes.net", "ThisIsAlsoAPassword!!!---...___"));
+		assertFalse(a.credentialsMatch("myfake@gmail.com", "ThisIsAPassword!-._"));
+		assertFalse(a.credentialsMatch("letshavefun@yahoo.com","ThisIsAnInvalidPass/?@#"));
+		
+		
 		a.deleteUser(Fake1);
+		a.deleteUser(Fake2);
+		a.deleteUser(Fake3);
+		a.deleteUser(Fake4);
 		
 	}
 	
