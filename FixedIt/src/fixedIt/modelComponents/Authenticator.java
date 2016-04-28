@@ -225,6 +225,7 @@ public class Authenticator implements EmailSender {
 	
 	/**
 	 * Erases all user data and writes new/current user data to database.
+	 * Assumes the user's email address is unchanged.
 	 * @param usr the user for which to write the data
 	 * @throws SQLException
 	 */
@@ -232,7 +233,7 @@ public class Authenticator implements EmailSender {
 		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + usr.getEmailAddress().toLowerCase() + "'";
 		SQLWriter.executeDBCommand(conn, sql);
-		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', " +
+		sql="insert into users values ( '" +usr.getEmailAddress().toLowerCase() + "', '" + usr.getPasswordHash() + "', " +
 				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
 		SQLWriter.executeDBCommand(conn, sql);
 		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
@@ -254,6 +255,40 @@ public class Authenticator implements EmailSender {
 		conn.close();
 		conn=null;
 	}
+	
+	/**
+	 * Erases all user data and writes new/current user data to database.
+	 * @param usr the user for which to write the data
+	 * @throws SQLException
+	 */
+	public void saveExistingUserUpdateEmailAddressToDB(String oldEmailAddress, User usr) throws SQLException{
+		Connection conn=getConnection();
+		String sql="delete from users where emailaddress='" + oldEmailAddress.toLowerCase() + "'";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="insert into users values ( '" +usr.getEmailAddress().toLowerCase() + "', '" + usr.getPasswordHash() + "', " +
+				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
+		Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs=stmnt1.executeQuery(sql);
+		while(rs.next()){
+			sql="drop table " + rs.getString("tablename").toUpperCase();
+			SQLWriter.executeDBCommand(conn, sql);
+		}
+		for(Schedule s : usr.getSchedules().values()){
+			sql="create table schedule" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toLowerCase() + s.getName() + "( crn varchar(20) )";
+			SQLWriter.executeDBCommand(conn, sql);
+			for(Course c : s.getCourses()){
+				sql="insert into SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + s.getName() + " VALUES ( '" + c.getCRN() + "' ) ";
+				SQLWriter.executeDBCommand(conn, sql);
+			}
+		}
+		conn.commit();
+		conn.close();
+		conn=null;
+	}
+	
+	
 	/**
 	 * updates the user's password, if the password is valid
 	 * @param emailAddress the email address of the user for which to update the password
