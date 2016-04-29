@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
 	<head>
 	<meta charset="UTF-8">
-		<title>FixedIt Scheduler Login</title>
+		<title>FixedIt Scheduler Password Reset</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -25,37 +25,51 @@
 	</head>
 	<body>
 	<section class="page-header">
-      <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
-      <div style="margin-left:0px; text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div>
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      
+      <form id="form" action="${pageContext.servletContext.contextPath}/passwordReset" method="post">
 			<center>
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>
-			<c:if test="${! empty recaptchaHTML}">
-				<h1>Please confirm you are a human to continue. We hate robots.</h1>
-				<c:out value="${recaptchaHTML}" escapeXml="false"></c:out>
-			</c:if>
+				
+				<c:if test="${empty sessionId}">
 					<table>
 						<tr>
-							<td class="label" autofocus>Email Address: &nbsp;&nbsp;</td>
-							<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
-						</tr>
-						<tr>
-							<td class="label">Password:&nbsp;&nbsp;</td>
-							<td><input class="textInput" type="password" name="password" size="12" value="${password}" /></td>
-						</tr>
-						<tr>
 							<td></td>
-							<td><input class="btn" type="Submit" name="submit" value="Login"></td>
+							<td>
+								<input class="btn" type="submit" name="passwordReset" value="Request Password Reset">
+							</td>
 						</tr>
-						<tr>
-							<td></td>
-							<td><input class="btn" type="Submit" name="passwordReset" value="Forgot Password?"></td>
-						</tr>
-					</table></center>
+					</table>
+				</c:if>
+				
+				<c:if test="${! empty sessionId}">
+				<table>
+					<tr>
+						<td class="label" autofocus>Email Address: </td>
+						<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
+					</tr>
+					<tr>
+						<td class="label" autofocus>New Password: </td>
+						<td><input class="textInput" type="password" name="password" size="12" /></td>
+					</tr>
+					<tr>
+						<td class="label" autofocus>Confirm Password: </td>
+						<td><input class="textInput" type="password" name="passwordConfirm" size="12" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input class="btn" type="submit" name="passwordReset" value="Reset Password"></td>
+					</tr>
+				</table>
+				</c:if>
+				<c:if test="${! empty success}">
+					<br>
+					<input class="btn" type="button" value="Login" onclick="window.location='login'" />
+				</c:if>
+						
+			</center>
 					<br>
 				</form>
     </section>
@@ -73,11 +87,6 @@
 <p>Garrett Ghafir - <a href="https://github.com/gghafir" class="user-mention">@gghafir</a></p>
 
 <p>Mike Skurla - <a href="https://github.com/mskur1" class="user-mention">@mskur1</a></p>
-	<br>
-	
-	
-		<input class="btn" type="Submit" name="debug" value="DebugMode">
-    
     </section>
 	</body>
 </html>

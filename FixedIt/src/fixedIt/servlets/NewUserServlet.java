@@ -1,5 +1,6 @@
 package fixedIt.servlets;
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,12 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Authenticator;
-import fixedIt.modelComponents.User;
 
 
 public class NewUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	boolean accountCreated=false;
 	Authenticator auth;
 
 	@Override
@@ -32,6 +31,8 @@ public class NewUserServlet extends HttpServlet {
 		String password = getStringFromParameter(req.getParameter("password"));
 		String passwordConfirm=getStringFromParameter(req.getParameter("passwordConfirm"));
 		LoginController controller=new LoginController();
+		String waitingForConfirm="";
+		
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} 
@@ -46,14 +47,17 @@ public class NewUserServlet extends HttpServlet {
 			errorMessage="Email address is not recognized as email address format: address@example.com";
 		}
 		else {
-			User user=new User(emailAddress, controller.getAuth().saltHashPassword(password), 0, 0, controller.getAuth());
-			boolean userExists=controller.getAuth().addNewUserToDB(user);
+			boolean userExists=controller.getAuth().userExists(emailAddress);
 			if(userExists){
 				errorMessage="An account already exists associated with this email address.";
-				accountCreated=false;
 			}
 			else{
-				accountCreated=true;
+				UUID uuid=UUID.randomUUID();
+				req.getSession().setAttribute("uuid", uuid);
+				req.getSession().setAttribute("passHash", controller.getAuth().saltHashPassword(password));
+				String webContext=req.getRequestURL().toString().replace("register", "confirm");
+				controller.getAuth().sendConfirmEmail(emailAddress, webContext, uuid);
+				waitingForConfirm="true";
 			}
 		}
 		
@@ -64,7 +68,7 @@ public class NewUserServlet extends HttpServlet {
 		
 		// Add result objects as request attributes
 		req.setAttribute("errorMessage", errorMessage);
-		req.setAttribute("accountCreated", accountCreated);
+		req.setAttribute("waitingForConfirm", waitingForConfirm);
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/newUser.jsp").forward(req, resp);

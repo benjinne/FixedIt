@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -224,6 +225,7 @@ public class Authenticator implements EmailSender {
 	
 	/**
 	 * Erases all user data and writes new/current user data to database.
+	 * Assumes the user's email address is unchanged.
 	 * @param usr the user for which to write the data
 	 * @throws SQLException
 	 */
@@ -231,7 +233,7 @@ public class Authenticator implements EmailSender {
 		Connection conn=getConnection();
 		String sql="delete from users where emailaddress='" + usr.getEmailAddress().toLowerCase() + "'";
 		SQLWriter.executeDBCommand(conn, sql);
-		sql="insert into users values ( '" +usr.getEmailAddress() + "', '" + usr.getPasswordHash() + "', " +
+		sql="insert into users values ( '" +usr.getEmailAddress().toLowerCase() + "', '" + usr.getPasswordHash() + "', " +
 				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
 		SQLWriter.executeDBCommand(conn, sql);
 		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
@@ -253,6 +255,40 @@ public class Authenticator implements EmailSender {
 		conn.close();
 		conn=null;
 	}
+	
+	/**
+	 * Erases all user data and writes new/current user data to database.
+	 * @param usr the user for which to write the data
+	 * @throws SQLException
+	 */
+	public void saveExistingUserUpdateEmailAddressToDB(String oldEmailAddress, User usr) throws SQLException{
+		Connection conn=getConnection();
+		String sql="delete from users where emailaddress='" + oldEmailAddress.toLowerCase() + "'";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="insert into users values ( '" +usr.getEmailAddress().toLowerCase() + "', '" + usr.getPasswordHash() + "', " +
+				usr.getStudentStatus() + ", " + usr.getNumSchedules() + " ) ";
+		SQLWriter.executeDBCommand(conn, sql);
+		sql="select * from sys.systables where tablename like '%SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + "%' ";
+		Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs=stmnt1.executeQuery(sql);
+		while(rs.next()){
+			sql="drop table " + rs.getString("tablename").toUpperCase();
+			SQLWriter.executeDBCommand(conn, sql);
+		}
+		for(Schedule s : usr.getSchedules().values()){
+			sql="create table schedule" + usr.getEmailAddress().substring(0, usr.getEmailAddress().indexOf("@")).toLowerCase() + s.getName() + "( crn varchar(20) )";
+			SQLWriter.executeDBCommand(conn, sql);
+			for(Course c : s.getCourses()){
+				sql="insert into SCHEDULE" + usr.getEmailAddress().toUpperCase().substring(0, usr.getEmailAddress().indexOf("@")) + s.getName() + " VALUES ( '" + c.getCRN() + "' ) ";
+				SQLWriter.executeDBCommand(conn, sql);
+			}
+		}
+		conn.commit();
+		conn.close();
+		conn=null;
+	}
+	
+	
 	/**
 	 * updates the user's password, if the password is valid
 	 * @param emailAddress the email address of the user for which to update the password
@@ -262,8 +298,9 @@ public class Authenticator implements EmailSender {
 	 */
 	public boolean setPasswordForUser(String emailAddress, String password) throws SQLException{
 		Connection conn=getConnection();
-		String sql="update users set passwordhash='" + password + "' where emailaddress='" + emailAddress.toLowerCase() + "' ";
 		if(isValidPassword(password)){
+			String passwordHash=saltHashPassword(password);
+			String sql="update users set passwordhash='" + passwordHash + "' where emailaddress='" + emailAddress.toLowerCase() + "' ";
 			SQLWriter.executeDBCommand(conn, sql);
 			conn.commit();
 			conn.close();
@@ -337,13 +374,14 @@ public class Authenticator implements EmailSender {
 	 * email address.
 	 * @param email address for which to lookup user
 	 */
-	public void requestPasswordReset(String email){
+	public void requestPasswordReset(String email, String webContext, UUID uuid){
 		Calendar cal=Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.DATE, 7);
-		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal);
+		cal.add(Calendar.DATE, 1);
+		PasswordResetPage resetPage=new PasswordResetPage(this, email, cal, webContext, uuid);
+		resetPage.generateAndSetURL();
 		String message=resetPage.buildEmail(MESSAGE_FIRST_HALF, MESSAGE_SECOND_HALF);
-		sendMail(email, message);
+		sendMail(email, message, "Password Reset Request");
 	}
 	
 	/**
@@ -507,6 +545,28 @@ public class Authenticator implements EmailSender {
 	 */
 	private Session createSession(User user){
 		return new Session(user, this);
+	}
+	
+	public void sendConfirmEmail(String email, String webContext, UUID uuid){
+		String confirmEmail="<h2>Dear FixedIt User,</h2>" +
+							"<h2>&nbsp; &nbsp; &nbsp; You have created an account " + 
+							"on the FixedIt Scheduler web application. If you believe " +
+							"this message is an error, you can ignore it.</h2><br>" +
+							"<h2>&nbsp; &nbsp; &nbsp; To confirm your account, click the " + 
+							"link below.</h2><br><br>";
+		String link=webContext;
+		if(link.endsWith("/")){
+			link=link.substring(0, link.length()-2) + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}else{
+			link=link + "?sessionId=" + uuid + "&emailAddress=" + email;
+		}
+		
+		String href="<h2><font color=\"blue\"><u><a href=\"" + link + "\">Confirm Account</a></u></font></h2>";
+		
+		confirmEmail=confirmEmail + href + "<br>" +
+				"<center><img src=\"http://s11.postimg.org/97dahnc2r/fixedit_logo.jpg\"/></center>";
+		
+		sendMail(email, confirmEmail, "Confirm Your Account");
 	}
 	
 	
