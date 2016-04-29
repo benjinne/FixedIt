@@ -68,16 +68,35 @@ public class AuthenticatorTest {
 	@Test
 	public void testValidatePassword(){
 		String hash1=a.saltHashPassword(validPass);
+		String hash2= a.saltHashPassword(validPass2);
+		String hash3= a.saltHashPassword(invalidPass);
+		String hash4 = a.saltHashPassword(validPass2);
 		
 		User Fake1 = new User ("email@domain.com",hash1,0,0,a);
+		User Fake2 = new User ("johnny.appleseed@dadjokes.net",hash2,0,0,a);
+		User Fake3 = new User ("Fakeout@gmail.com", hash3,0,0,a);
+		User Fake4 = new User ("Fakeout2@gmail.com", hash4, 0, 0,a);
+		
+		
 		a.addNewUserToDB(Fake1);
+		a.addNewUserToDB(Fake2);
+		a.addNewUserToDB(Fake3);
+		a.addNewUserToDB(Fake4);
 		
 		//System.out.println(a.saltHashPassword(validPass));
 		
 
 		assertTrue(a.credentialsMatch("email@domain.com", "ThisIsAPassword!-._"));
+		assertTrue(a.credentialsMatch("johnny.appleseed@dadjokes.net", "ThisIsAlsoAPassword!!!---...___"));
+		assertFalse(a.credentialsMatch("Fakeout@gmail.com", "ThisIsAlsoAPassword!!!---...___"));
+		assertFalse(a.credentialsMatch("Fakeout2@gmail.com", "ThisIsAPassword!-._"));
+		
+		
 
 		a.deleteUser(Fake1);
+		a.deleteUser(Fake2);
+		a.deleteUser(Fake3);
+		a.deleteUser(Fake4);
 		
 	}
 	
