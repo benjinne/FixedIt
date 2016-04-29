@@ -37,6 +37,11 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		if(req.getParameter("passwordReset")!=null){
+			resp.sendRedirect("passwordReset");
+			return;
+		}
+		
 		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
 		String recaptchaHTML=null;

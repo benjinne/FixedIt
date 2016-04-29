@@ -4,8 +4,8 @@
 
 <html>
 	<head>
-	<meta charset="UTF-8">
-		<title>FixedIt Scheduler - Schedule</title>
+		<meta charset="UTF-8">
+		<title>FixedIt Scheduler - Account Confirmation</title>
 		<style type="text/css">
 		.error {
 			color: red;
@@ -13,7 +13,7 @@
 		
 		td.label {
 			text-align: left;
-		}
+		}		
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
@@ -26,40 +26,16 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</head>
 	
-	<div class="styled-body">
+	<section class="styled-body">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/schedule" method="post">
+      <form action="${pageContext.servletContext.contextPath}/confirm" method="post">
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
-		<input class="btn" type="submit" name="dlAsCSV" value="Download Schedule as CSV" />
-		<input class="btn" type="submit" name="dlAsHtml" value="Dowload Schedule as HTML View" />	
-		<br><br>
-		<c:if test="${! empty scheduleHTML}">
-			<div class="course-table" id="courses">
-				<c:out value="${scheduleHTML}" escapeXml="false"/>
-			</div>
-		</c:if>
-		</form>
-		<div class="sideBar">
-			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
-			<div id="menu" class="collapse">
-			<table class="sideBarTable">
-				<tr>
-					<td><input class="sideBarBtn" type="button" value="Search Courses" onclick="window.location='search';" /></td>
-				</tr>
-				<tr>
-					<td><input class="sideBarBtn" type="button" value="View Current Schedule" onclick="window.location='schedule';"  /></td>
-				</tr>
-				<tr>
-					<td><input class="sideBarBtn" type="button" value="My Account" onclick="window.location='userInfo';" /></td>
-				</tr>
-				<tr>
-					<td><input class="sideBarBtn" type="button" value="Logout" onclick="window.location='login';" /></td>
-				</tr>
-			</table>
-			</div>
-		</div>
-    </div>
+			<c:if test="${! empty confirmed}">
+				<input class="btn" type="button" value="Login" onclick="window.location='login';" />
+			</c:if>
+		</form>	
+    </section>
 </html>
