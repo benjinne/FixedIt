@@ -56,6 +56,10 @@ public class LoginServlet extends HttpServlet {
 		
 		LoginController controller=new LoginController();
 		Session userSession=null;
+		
+		
+	
+		
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
 		} else {
@@ -68,9 +72,10 @@ public class LoginServlet extends HttpServlet {
 					}
 					else{
 						try {
+							if(emailAddress != null && password != null && req.getParameter("debug")== null ){
 							userSession=controller.getAuth().authorizeUser(emailAddress, password);
 							req.getSession().setAttribute("userSession", userSession);
-							if(userSession!=null){
+								if(userSession!=null){
 								resp.sendRedirect("userInfo");
 								return;
 							}
@@ -78,10 +83,12 @@ public class LoginServlet extends HttpServlet {
 								errorMessage="Failed to populate User object!";
 								loginAttempts++;
 							}
+							}
 						} catch (SQLException  e) {
 							loginAttempts++;
 							e.printStackTrace();
 						}
+					
 					}
 				}
 				else{
@@ -138,13 +145,44 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 		}
+		//debug mode allows us to enter the schedular with a fake account at the click of a button
+		//no need to enter a user name and password each time 
+		//thus allowing us to test new features that we have implemented
+			if(req.getParameter("debug")!= null&&emailAddress !=null && password!=null){
+				emailAddress =null;
+				password=null;
+				req.setAttribute("debug", null);
+			
+			userSession= controller.DebugMode();
+			req.getSession().setAttribute("userSession", userSession);
+			resp.sendRedirect("userInfo");
+			return;
+			}
+			else if(req.getParameter("debug")!=null){
+				req.setAttribute("debug", null);
+				
+				userSession= controller.DebugMode();
+				req.getSession().setAttribute("userSession", userSession);
+				resp.sendRedirect("userInfo");
+				return;
+			}
 		
+		else if(req.getParameter("debug")==null){
+			try {
+				userSession=controller.getAuth().authorizeUser(emailAddress, password);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		
 		// Add parameters as request attributes
 		req.setAttribute("emailAddress", req.getParameter("emailAddress"));
 		req.setAttribute("password", req.getParameter("password"));
 		
 		// Add result objects as request attributes
+		req.setAttribute("debug", null);
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("credentialsMatch", credentialsMatch);
 		req.getSession().setAttribute("loginAttempts", loginAttempts);
