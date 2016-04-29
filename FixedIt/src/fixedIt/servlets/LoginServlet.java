@@ -67,9 +67,10 @@ public class LoginServlet extends HttpServlet {
 					}
 					else{
 						try {
+							if(emailAddress != null && password != null && req.getParameter("debug")== null ){
 							userSession=controller.getAuth().authorizeUser(emailAddress, password);
 							req.getSession().setAttribute("userSession", userSession);
-							if(userSession!=null){
+								if(userSession!=null){
 								resp.sendRedirect("userInfo");
 								return;
 							}
@@ -77,10 +78,12 @@ public class LoginServlet extends HttpServlet {
 								errorMessage="Failed to populate User object!";
 								loginAttempts++;
 							}
+							}
 						} catch (SQLException  e) {
 							loginAttempts++;
 							e.printStackTrace();
 						}
+					
 					}
 				}
 				else{
@@ -140,13 +143,25 @@ public class LoginServlet extends HttpServlet {
 		//debug mode allows us to enter the schedular with a fake account at the click of a button
 		//no need to enter a user name and password each time 
 		//thus allowing us to test new features that we have implemented
-			if(req.getParameter("debug")!= null){
-			req.setAttribute("debug", null);
+			if(req.getParameter("debug")!= null&&emailAddress !=null && password!=null){
+				emailAddress =null;
+				password=null;
+				req.setAttribute("debug", null);
+			
 			userSession= controller.DebugMode();
 			req.getSession().setAttribute("userSession", userSession);
 			resp.sendRedirect("userInfo");
 			return;
-		}
+			}
+			else if(req.getParameter("debug")!=null){
+				req.setAttribute("debug", null);
+				
+				userSession= controller.DebugMode();
+				req.getSession().setAttribute("userSession", userSession);
+				resp.sendRedirect("userInfo");
+				return;
+			}
+		
 		else if(req.getParameter("debug")==null){
 			try {
 				userSession=controller.getAuth().authorizeUser(emailAddress, password);
