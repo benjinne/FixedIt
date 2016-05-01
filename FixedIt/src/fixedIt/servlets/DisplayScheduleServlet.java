@@ -189,9 +189,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 		System.out.println(s.getCourses().get(1).toCSVLine());
 		System.out.println(s.getCourses().get(2).toCSVLine());
 		
-		int overflow_T=1, overflow_W=1, overflow_R=1, overflow_F=1;
+		int overflow_M=1, overflow_T=1, overflow_W=1, overflow_R=1, overflow_F=1;
 		
-		int numRows=0;;
 		Table scheduleTable=new Table();
 		scheduleTable.setCSSClass("scheduleTable");
 		Tr dayRow=new Tr();
@@ -203,7 +202,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 		Th fri=new Th(); fri.appendText("Friday");
 		dayRow.appendChild(time, mon, tue, wed, th, fri);
 		scheduleTable.appendChild(dayRow);
-		numRows++;
 		TreeMap<Integer, String> colors=mapCoursesToColors(s);
 		
 		String[] days={"m", "t", "w", "r", "f"};
@@ -284,6 +282,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 									newCell.appendText("<br>");
 								}
 								switch(i){
+								case 0:
+									overflow_M+=numCells;
 								case 1:
 									overflow_T+=numCells;
 								case 2:
@@ -305,24 +305,25 @@ public class DisplayScheduleServlet extends HttpServlet {
 								switch(i){
 								case 0:
 									//System.out.println(numRows + " : " + overflow_T);
-									if(numRows>overflow_T){
+									if(overflow_M>overflow_T){
 										currRow.appendChild(newCell);
+										overflow_M+=1;
 									}
 								case 1:
 									//System.out.println(numRows + " : " + overflow_W);
-									if(numRows>overflow_W){
+									if(overflow_T>overflow_W){
 										currRow.appendChild(newCell);
 										overflow_T+=1;
 									}
 								case 2:
 									//System.out.println(numRows + " : " + overflow_R);
-									if(numRows>overflow_R){
+									if(overflow_W>overflow_R){
 										currRow.appendChild(newCell);
 										overflow_W+=1;
 									}
 								case 3:
 									//System.out.println(numRows + " : " + overflow_F);
-									if(numRows>overflow_F){
+									if(overflow_R>overflow_F){
 										currRow.appendChild(newCell);
 										overflow_R+=1;
 									}
@@ -332,7 +333,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 					}
 				}
 				scheduleTable.appendChild(currRow);
-				numRows++;
 			}
 		}
 		String html=scheduleTable.write();
