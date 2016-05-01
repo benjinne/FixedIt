@@ -1,6 +1,7 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -15,6 +16,7 @@ import com.hp.gagawa.java.elements.*;
 import fixedIt.controllers.DisplayScheduleController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Schedule;
+import fixedIt.modelComponents.SortCoursesComparator;
 
 
 public class DisplayScheduleServlet extends HttpServlet {			
@@ -178,16 +180,30 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}*/
 	
 	public String generateHTMLScheduleTable(Schedule s){
+		System.out.println(s.getCourses().get(0).toCSVLine());
+		System.out.println(s.getCourses().get(1).toCSVLine());
+		System.out.println(s.getCourses().get(2).toCSVLine());
+		Collections.sort(s.getCourses(), new SortCoursesComparator());
+		System.out.println();
+		System.out.println(s.getCourses().get(0).toCSVLine());
+		System.out.println(s.getCourses().get(1).toCSVLine());
+		System.out.println(s.getCourses().get(2).toCSVLine());
+		
+		int overflow_T=1, overflow_W=1, overflow_R=1, overflow_F=1;
+		
+		int numRows=0;;
 		Table scheduleTable=new Table();
 		scheduleTable.setCSSClass("scheduleTable");
 		Tr dayRow=new Tr();
+		Th time=new Th(); time.appendText("Time");
 		Th mon=new Th(); mon.appendText("Monday");
 		Th tue=new Th(); tue.appendText("Tuesday");
 		Th wed=new Th(); wed.appendText("Wednesday");
 		Th th=new Th(); th.appendText("Thursday");
 		Th fri=new Th(); fri.appendText("Friday");
-		dayRow.appendChild(mon, tue, wed, th, fri);
+		dayRow.appendChild(time, mon, tue, wed, th, fri);
 		scheduleTable.appendChild(dayRow);
+		numRows++;
 		TreeMap<Integer, String> colors=mapCoursesToColors(s);
 		
 		String[] days={"m", "t", "w", "r", "f"};
@@ -198,9 +214,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 				timeInt=12;
 			}
 			String timeHr="" + timeInt;
-			
-			//System.out.println(timeHr);
-			
 			String amPm;
 			if(j>11){
 				amPm="PM";
@@ -218,7 +231,8 @@ public class DisplayScheduleServlet extends HttpServlet {
 					timeMin="30";
 				}
 				Tr currRow=new Tr();
-				
+				Td timeCell=new Td(); timeCell.appendText(timeHr + ":" + timeMin + amPm);
+				currRow.appendChild(timeCell);
 				for(int i=0; i<days.length; i++){
 					Td newCell=new Td();
 					newCell.setRowspan("1");
@@ -244,6 +258,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 								if(numCells<2){
 									numCells=2;
 								}
+								newCell.setId("" + c.getCRN());
 								newCell.setBgcolor(currentColor);
 								newCell.setRowspan("" + numCells);
 								newCell.appendText(c.getTitle());
@@ -264,21 +279,64 @@ public class DisplayScheduleServlet extends HttpServlet {
 								newCell.appendChild(new Br());
 								newCell.appendChild(submit);
 								newCell.appendChild(moreInfo);
-								newCell.setStyle("display:inline-block; width:100%;");
+								//newCell.setStyle("display:inline-block; width:100%;");
 								for(int d=0; d<numCells; d++){
 									newCell.appendText("<br>");
 								}
+								switch(i){
+								case 1:
+									overflow_T+=numCells;
+								case 2:
+									overflow_W+=numCells;
+								case 3:
+									overflow_R+=numCells;
+								case 4:
+									overflow_F+=numCells;
+								}
+							} else{
+								newCell.setId(null);
+								Div div=new Div();
+								div.setStyle("min-height:30px;");
+								newCell.appendChild(div);
 							}
-							currRow.appendChild(newCell);
+							if(newCell.getId()!=null){
+								currRow.appendChild(newCell);
+							} else{
+								switch(i){
+								case 0:
+									//System.out.println(numRows + " : " + overflow_T);
+									if(numRows>overflow_T){
+										currRow.appendChild(newCell);
+									}
+								case 1:
+									//System.out.println(numRows + " : " + overflow_W);
+									if(numRows>overflow_W){
+										currRow.appendChild(newCell);
+										overflow_T+=1;
+									}
+								case 2:
+									//System.out.println(numRows + " : " + overflow_R);
+									if(numRows>overflow_R){
+										currRow.appendChild(newCell);
+										overflow_W+=1;
+									}
+								case 3:
+									//System.out.println(numRows + " : " + overflow_F);
+									if(numRows>overflow_F){
+										currRow.appendChild(newCell);
+										overflow_R+=1;
+									}
+								}
+							}
 						}
 					}
-					
 				}
 				scheduleTable.appendChild(currRow);
+				numRows++;
 			}
 		}
 		String html=scheduleTable.write();
-		System.out.println(html);
+		//System.out.println(html);
 		
 		return html;
 	}

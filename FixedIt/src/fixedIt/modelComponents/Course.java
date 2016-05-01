@@ -79,6 +79,22 @@ public class Course {
 		return new TimeInterval(start, end);
 	}
 	
+	public boolean startsBefore (Course other){
+		if(Integer.parseInt(time.substring(0, time.indexOf(':')))<Integer.parseInt(other.getTime().substring(0, other.getTime().indexOf(':')))){
+			return true;
+		} else{
+			String timeMin=time.substring(time.indexOf(':')+1);
+			timeMin=timeMin.substring(0, 2);
+			String otherMin=other.getTime().substring(other.getTime().indexOf(':')+1);
+			otherMin=otherMin.substring(0, 2);
+			if(Integer.parseInt(timeMin)<Integer.parseInt(otherMin)){
+				return true;
+			} else{
+				return false;
+			}
+		}
+	}
+	
 	public void addInstructor(String instructor){
 		instructors.add(instructor);
 	}

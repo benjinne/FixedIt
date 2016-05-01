@@ -58,13 +58,18 @@
 	border-radius:8px;
     -moz-border-radius:8px;
 }
-
+.scheduleTable td:first-child{
+	display:none;
+}
 .scheduleTable th{
 	text-align: center;
 	line-height:20px;
 	border-style: solid;
 	border-width:1px;
 	border-color:#000000;
+}
+.scheduleTable th:first-child{
+	display:none;
 }
 
 .courseTable {
