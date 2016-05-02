@@ -51,6 +51,10 @@
 					<td><c:out value="${studentStatus}" /></td>
 				</tr>
 				<tr>
+					<td class="label">Select Schedule: </td>
+							<td><c:out value="${scheduleList}" escapeXml="false"></c:out></td>
+				</tr>
+				<tr>
 					<td> <input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';"/> </td>
 					<td> <input class="sideBarBtn" type="button" value="Change Password" onclick="window.location='passwordUpdate';"/> </td>
 				</tr>		
