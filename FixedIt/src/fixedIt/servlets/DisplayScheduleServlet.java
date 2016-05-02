@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.TreeMap;
+import java.lang.Object;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 import fixedIt.controllers.DisplayScheduleController;
@@ -182,8 +184,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 	public String generateHTMLScheduleTable(Schedule s){
 		Collections.sort(s.getCourses(), new SortCoursesComparator());
 		
-		int overflow_M=1, overflow_T=1, overflow_W=1, overflow_R=1, overflow_F=1;
-		
 		Table scheduleTable=new Table();
 		scheduleTable.setCSSClass("scheduleTable");
 		Tr dayRow=new Tr();
@@ -199,140 +199,139 @@ public class DisplayScheduleServlet extends HttpServlet {
 		
 		String[] days={"m", "t", "w", "r", "f"};
 		
-		for(int j=8; j<=22; j++){
-			int timeInt=j%12;
-			if(timeInt==0){
-				timeInt=12;
-			}
-			String timeHr="" + timeInt;
-			String amPm;
-			if(j>11){
-				amPm="PM";
-			}
-			else{
-				amPm="AM";
-			}
-			for(int k=0; k<2; k++){
-				String timeMin="";
-				if(k==0){
-					timeMin="00";
+		Object[][] coordinates=new Object[5][28];
+		
+		for(Course c : s.getCourses()){
+			for(int i=0; i<days.length; i++){
+				if(c.getDays().toLowerCase().contains(days[i])){
+					int startHr=Integer.parseInt(c.getTime().substring(0, c.getTime().indexOf(':')));
+					if(c.getTime().substring(0, c.getTime().indexOf('-')).toLowerCase().contains("pm") && startHr!=12){
+						startHr+=12;
+					}
 					
-				}
-				else{
-					timeMin="30";
-				}
-				Tr currRow=new Tr();
-				Td timeCell=new Td(); timeCell.appendText(timeHr + ":" + timeMin + amPm);
-				currRow.appendChild(timeCell);
-				for(int i=0; i<days.length; i++){
-					Td newCell=new Td();
-					newCell.setRowspan("1");
-					for(Course c : s.getCourses()){
-						if((c.getTime().substring(0, c.getTime().indexOf(':')).equals(timeHr) || c.getTime().substring(0, c.getTime().indexOf(':')).equals("0" + timeHr)) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(timeMin) && c.getTime().substring(0, c.getTime().indexOf('-')).contains(amPm)){
-							if(c.getDays().toLowerCase().contains(days[i])){
-								String currentColor=colors.get(c.getCRN());
-								String timeLastHalf=c.getTime().substring(c.getTime().indexOf('-')+1);
-								int startHr=Integer.parseInt(timeHr);
-								int endHr=Integer.parseInt(timeLastHalf.substring(0, timeLastHalf.indexOf(':')));
-								int numCells=endHr-startHr;
-								numCells=numCells*2;
-								if(!c.getTime().substring(0, c.getTime().indexOf('-')).contains("00")){
-									if(timeLastHalf.contains("00")){
-										numCells=numCells-1;
-									}
-								}
-								else{
-									if(!timeLastHalf.contains("00")){
-										numCells=numCells+1;
-									}
-								}
-								if(numCells<2){
-									numCells=2;
-								}
-								newCell.setId("" + c.getCRN());
-								newCell.setBgcolor(currentColor);
-								newCell.setRowspan("" + numCells);
-								newCell.appendText(c.getTitle());
-								newCell.appendChild(new Br());
-								newCell.appendText(c.getCourseAndSection());
-								newCell.appendChild(new Br());
-								newCell.appendText(c.getTime());
-								Input submit=new Input();
-								submit.setType("submit");
-								submit.setCSSClass("btn");
-								submit.setName("" + c.getCRN());
-								submit.setValue("Remove");
-								Input moreInfo=new Input();
-								moreInfo.setType("submit");
-								moreInfo.setCSSClass("btn");
-								moreInfo.setName(c.getCRN() + "View");
-								moreInfo.setValue("More Info");
-								newCell.appendChild(new Br());
-								newCell.appendChild(submit);
-								newCell.appendChild(moreInfo);
-								//newCell.setStyle("display:inline-block; width:100%;");
-								for(int d=0; d<numCells; d++){
-									newCell.appendText("<br>");
-								}
-								switch(i){
-								case 0:
-									overflow_M+=numCells; break;
-								case 1:
-									overflow_T+=numCells; break;
-								case 2:
-									overflow_W+=numCells; break;
-								case 3:
-									overflow_R+=numCells; break;
-								case 4:
-									overflow_F+=numCells; break;
-								}
-							} else{
-								newCell=new Td();
-								newCell.setId(null);
-							}
-							System.out.println(c.getCourseAndSection() + " : " + newCell.getId());
-							if(newCell.getId()!=null){
-								currRow.appendChild(newCell);
-							} else{
-								switch(i){
-								case 0:
-									if(overflow_M>=overflow_T && !c.getDays().toLowerCase().contains(days[0])){
-										System.out.println("M : emptyCell");
-										currRow.appendChild(newCell);
-										overflow_M+=1;
-									} break;
-								case 1:
-									if(overflow_T>=overflow_W && !c.getDays().toLowerCase().contains(days[1])){
-										System.out.println("T : emptyCell");
-										currRow.appendChild(newCell);
-										overflow_T+=1;
-									} break;
-								case 2:
-									if(overflow_W>=overflow_R && !c.getDays().toLowerCase().contains(days[2])){
-										System.out.println("W : emptyCell");
-										currRow.appendChild(newCell);
-										overflow_W+=1;
-									} break;
-								case 3:
-									if(overflow_R>=overflow_F && !c.getDays().toLowerCase().contains(days[3])){
-										System.out.println("R : emptyCell");
-										currRow.appendChild(newCell);
-										overflow_R+=1;
-									} break;
-								case 4:
-									if(!c.getDays().toLowerCase().contains(days[4])){
-										System.out.println("F : emptyCell");
-										currRow.appendChild(newCell);
-										overflow_F+=1;
-									} break;
-								}
-							}
+					int startMin=Integer.parseInt(c.getTime().substring(c.getTime().indexOf(':')+1, c.getTime().indexOf(':')+3));
+					
+					String timeLastHalf=c.getTime().substring(c.getTime().indexOf('-')+1);
+					int endHr=Integer.parseInt(timeLastHalf.substring(0, timeLastHalf.indexOf(':')));
+					if(timeLastHalf.toLowerCase().contains("pm") && endHr!=12){
+						endHr+=12;
+					}
+					
+					int endMin=Integer.parseInt(timeLastHalf.substring(timeLastHalf.indexOf(':')+1, timeLastHalf.indexOf(':')+3));
+					
+					int xCoord=i;
+					int yCoord=(startHr-8)*2;
+					if(startMin!=0){
+						yCoord+=1;
+					}
+					
+					int rowspan=(startHr-endHr)*2;
+					if(startMin==0){
+						if(endMin!=0){
+							rowspan+=1;
+						}
+					} else{
+						if(endMin==0){
+							rowspan-=1;
 						}
 					}
+					
+					if(rowspan<2){
+						rowspan=2;
+					}
+					
+					Td newCell=new Td();
+					newCell.setId("" + c.getCRN());
+					newCell.setBgcolor(colors.get(c.getCRN()));
+					newCell.setRowspan("" + rowspan);
+					newCell.appendText(c.getTitle());
+					newCell.appendChild(new Br());
+					newCell.appendText(c.getCourseAndSection());
+					newCell.appendChild(new Br());
+					newCell.appendText(c.getTime());
+					Input submit=new Input();
+					submit.setType("submit");
+					submit.setCSSClass("btn");
+					submit.setName("" + c.getCRN());
+					submit.setValue("Remove");
+					Input moreInfo=new Input();
+					moreInfo.setType("submit");
+					moreInfo.setCSSClass("btn");
+					moreInfo.setName(c.getCRN() + "View");
+					moreInfo.setValue("More Info");
+					newCell.appendChild(new Br());
+					newCell.appendChild(submit);
+					newCell.appendChild(moreInfo);
+					
+					coordinates[xCoord][yCoord]=newCell;
+					for(int r=1; r<rowspan; r++){
+						coordinates[xCoord][yCoord+r]="filled";
+					}
 				}
-				scheduleTable.appendChild(currRow);
 			}
 		}
+		
+		Td[] timeCells=new Td[28];
+		
+		int counter=0;
+		for(int i=8; i<22; i++){
+			for(int j=0; j<2; j++){
+				Td timeCell=new Td();
+				String timeText="";
+				String amPm="";
+				if(i>=12){
+					amPm="PM";
+				} else{
+					amPm="AM";
+				}
+				if(i>12){
+					timeText="" + (i-12);
+				} else{
+					timeText="" + i;
+				}
+				if(j==0){
+					timeText=timeText + ":00" + amPm;
+				} else{
+					timeText=timeText + ":30" + amPm;
+				}
+				
+				timeCell.appendText(timeText);
+				timeCells[counter]=timeCell;
+				counter++;
+			}
+		}
+		
+		for(int y=0; y<28; y++){
+			Tr currRow=new Tr();
+			Td timeCell=timeCells[y];
+			if(timeCell!=null){
+				currRow.appendChild(timeCell);
+			}
+			for(int x=0; x<5; x++){
+				if(coordinates[x][y] instanceof Td){
+					Td td=(Td)coordinates[x][y];
+					currRow.appendChild(td);
+				} else if(coordinates[x][y]==null){
+					Td empty=new Td();
+					empty.appendText("&nbsp;");
+					currRow.appendChild(empty);
+				}
+			}
+			scheduleTable.appendChild(currRow);
+		}
+		
+//		for(int y=0; y<28; y++){
+//			for(int x=0; x<5; x++){
+//				if(coordinates[x][y] instanceof Td){
+//					Td td=(Td)coordinates[x][y];
+//					System.out.print(td.getId() + "     ");
+//				} else{
+//					System.out.print(coordinates[x][y] + "     ");
+//				}
+//			}
+//			System.out.println("\n");
+//		}
+		
 		String html=scheduleTable.write();
 		//System.out.println(html);
 		
