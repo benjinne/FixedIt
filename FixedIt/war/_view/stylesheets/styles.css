@@ -50,6 +50,8 @@
 	margin:0 auto;
 }
 .scheduleTable td{
+	border-style:solid;
+	border-width:5px;
 	width:20%;
 	color: #1a1a1a;
 	line-height:20px;
@@ -59,7 +61,7 @@
     -moz-border-radius:8px;
 }
 .scheduleTable td:first-child{
-	display:none;
+	line-height:60px;
 }
 .scheduleTable th{
 	text-align: center;
@@ -69,7 +71,10 @@
 	border-color:#000000;
 }
 .scheduleTable th:first-child{
-	display:none;
+	
+}
+.scheduleTable tr{
+	
 }
 
 .courseTable {

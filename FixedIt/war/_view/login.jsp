@@ -26,7 +26,6 @@
 	<body>
 	<section class="page-header">
       <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
-      <div style="margin-left:0px; text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div>
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       
@@ -56,7 +55,7 @@
 							<td><input class="btn" type="Submit" name="passwordReset" value="Forgot Password?"></td>
 						</tr>
 					</table></center>
-					<br>
+					 <div style="position:absolute;left:0px;top:0px;" text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div>
 				</form>
     </section>
     <section class="main-content">

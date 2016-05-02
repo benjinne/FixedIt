@@ -180,14 +180,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}*/
 	
 	public String generateHTMLScheduleTable(Schedule s){
-		System.out.println(s.getCourses().get(0).toCSVLine());
-		System.out.println(s.getCourses().get(1).toCSVLine());
-		System.out.println(s.getCourses().get(2).toCSVLine());
 		Collections.sort(s.getCourses(), new SortCoursesComparator());
-		System.out.println();
-		System.out.println(s.getCourses().get(0).toCSVLine());
-		System.out.println(s.getCourses().get(1).toCSVLine());
-		System.out.println(s.getCourses().get(2).toCSVLine());
 		
 		int overflow_M=1, overflow_T=1, overflow_W=1, overflow_R=1, overflow_F=1;
 		
@@ -283,50 +276,55 @@ public class DisplayScheduleServlet extends HttpServlet {
 								}
 								switch(i){
 								case 0:
-									overflow_M+=numCells;
+									overflow_M+=numCells; break;
 								case 1:
-									overflow_T+=numCells;
+									overflow_T+=numCells; break;
 								case 2:
-									overflow_W+=numCells;
+									overflow_W+=numCells; break;
 								case 3:
-									overflow_R+=numCells;
+									overflow_R+=numCells; break;
 								case 4:
-									overflow_F+=numCells;
+									overflow_F+=numCells; break;
 								}
 							} else{
+								newCell=new Td();
 								newCell.setId(null);
-								Div div=new Div();
-								div.setStyle("min-height:30px;");
-								newCell.appendChild(div);
 							}
+							System.out.println(c.getCourseAndSection() + " : " + newCell.getId());
 							if(newCell.getId()!=null){
 								currRow.appendChild(newCell);
 							} else{
 								switch(i){
 								case 0:
-									//System.out.println(numRows + " : " + overflow_T);
-									if(overflow_M>overflow_T){
+									if(overflow_M>=overflow_T && !c.getDays().toLowerCase().contains(days[0])){
+										System.out.println("M : emptyCell");
 										currRow.appendChild(newCell);
 										overflow_M+=1;
-									}
+									} break;
 								case 1:
-									//System.out.println(numRows + " : " + overflow_W);
-									if(overflow_T>overflow_W){
+									if(overflow_T>=overflow_W && !c.getDays().toLowerCase().contains(days[1])){
+										System.out.println("T : emptyCell");
 										currRow.appendChild(newCell);
 										overflow_T+=1;
-									}
+									} break;
 								case 2:
-									//System.out.println(numRows + " : " + overflow_R);
-									if(overflow_W>overflow_R){
+									if(overflow_W>=overflow_R && !c.getDays().toLowerCase().contains(days[2])){
+										System.out.println("W : emptyCell");
 										currRow.appendChild(newCell);
 										overflow_W+=1;
-									}
+									} break;
 								case 3:
-									//System.out.println(numRows + " : " + overflow_F);
-									if(overflow_R>overflow_F){
+									if(overflow_R>=overflow_F && !c.getDays().toLowerCase().contains(days[3])){
+										System.out.println("R : emptyCell");
 										currRow.appendChild(newCell);
 										overflow_R+=1;
-									}
+									} break;
+								case 4:
+									if(!c.getDays().toLowerCase().contains(days[4])){
+										System.out.println("F : emptyCell");
+										currRow.appendChild(newCell);
+										overflow_F+=1;
+									} break;
 								}
 							}
 						}
