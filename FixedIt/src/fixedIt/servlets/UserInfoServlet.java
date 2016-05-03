@@ -1,6 +1,7 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.util.Map.Entry;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fixedIt.controllers.UserInfoController;
 import fixedIt.modelComponents.Schedule;
+import fixedIt.modelComponents.Session;
 
 
 public class UserInfoServlet extends HttpServlet {			
@@ -18,6 +20,14 @@ public class UserInfoServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")!=null){
+			try {
+				((Session) req.getSession().getAttribute("userSession")).getAuth().saveExistingUserNewDataToDB(((Session) req.getSession().getAttribute("userSession")).getCurrentUser());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		resp.setHeader("Cache-Control","no-cache");
 		resp.setHeader("Cache-Control","no-store");
 		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){

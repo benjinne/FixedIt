@@ -66,7 +66,6 @@ public class QueryController {
 			session.getAuth().saveExistingUserNewDataToDB(user);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
 		return success;
 	}

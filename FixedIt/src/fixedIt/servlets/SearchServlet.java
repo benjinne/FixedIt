@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
+import fixedIt.modelComponents.Session;
 
 public class SearchServlet extends HttpServlet {			
 	
@@ -20,6 +21,14 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")!=null){
+			try {
+				((Session) req.getSession().getAttribute("userSession")).getAuth().saveExistingUserNewDataToDB(((Session) req.getSession().getAttribute("userSession")).getCurrentUser());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		resp.setHeader("Cache-Control","no-cache");
 		resp.setHeader("Cache-Control","no-store");
 		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
@@ -111,9 +120,15 @@ public class SearchServlet extends HttpServlet {
 				if(success){
 					System.out.println("Course added successfully.");
 					errorMessage="Course added successfully";
+					try {
+						session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+					} catch (SQLException e) {
+						errorMessage="An error occured when saving data. Please try again.";
+						e.printStackTrace();
+					}
 				}
 				else{
-					errorMessage="Course conflicts with one on schedule, or something went wrong.";
+					errorMessage="Course conflicts with one on schedule.";
 				}
 			}
 			req.setAttribute("" + c.getCRN(), null);
