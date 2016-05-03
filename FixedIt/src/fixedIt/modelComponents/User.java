@@ -13,7 +13,7 @@ public class User{
 	private Query currentQuery;
 	private Authenticator auth;
 	private Schedule activeSchedule;
-	
+
 	public User(){
 		emailAddress=null;
 		passwordHash=null;
@@ -126,6 +126,9 @@ public class User{
 	}
 	public void setPasswordHash(String newHash){
 		passwordHash=newHash;
+	}
+	public Schedule getActiveSchedule() {
+		return activeSchedule;
 	}
 	public void setActiveSchedule(Schedule activeSchedule) {
 		this.activeSchedule = activeSchedule;
