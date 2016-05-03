@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.QueryController;
 import fixedIt.modelComponents.Course;
 import fixedIt.modelComponents.Query;
+import fixedIt.modelComponents.Session;
 
 public class SearchServlet extends HttpServlet {			
 	
@@ -20,6 +21,14 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")!=null){
+			try {
+				((Session) req.getSession().getAttribute("userSession")).getAuth().saveExistingUserNewDataToDB(((Session) req.getSession().getAttribute("userSession")).getCurrentUser());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		resp.setHeader("Cache-Control","no-cache");
 		resp.setHeader("Cache-Control","no-store");
 		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){

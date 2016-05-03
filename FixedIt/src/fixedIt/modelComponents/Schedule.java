@@ -2,7 +2,10 @@ package fixedIt.modelComponents;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 
 public class Schedule {
 	
@@ -71,8 +74,8 @@ public class Schedule {
 	 * @return boolean
 	 */
 	public boolean conflictsWithCourse(Course course){
-		if(timeConflicts(course)){
-			for(Course c : courses){
+		for(Course c : courses){
+			if(timeConflicts(course, c)){
 				char[] cDays=c.getDays().toCharArray();
 				for(int i=0; i<cDays.length; i++){
 					if(Character.isLetter(cDays[i])){
@@ -83,7 +86,6 @@ public class Schedule {
 				}
 			}
 		}
-		
 		return false;
 	}
 	
@@ -92,45 +94,20 @@ public class Schedule {
 	 * @param course the course for which to check for conflicts
 	 * @return boolean
 	 */
-	public boolean timeConflicts(Course course){
-		LocalTime courseStart=LocalTime.parse(course.getTime().substring(0, course.getTime().indexOf('-')));
-		LocalTime courseEnd=LocalTime.parse(course.getTime().substring(course.getTime().indexOf('-')+1));
+	public boolean timeConflicts(Course course, Course c){
+		String pattern="hh:mmaa";
+		DateTime courseStart=DateTime.parse(course.getTime().substring(0, course.getTime().indexOf('-')), DateTimeFormat.forPattern(pattern));
+		DateTime courseEnd=DateTime.parse(course.getTime().substring(course.getTime().indexOf('-')+1), DateTimeFormat.forPattern(pattern));
+		Interval courseInterval=new Interval(courseStart, courseEnd);
 		
-		for(Course c : this.getCourses()){
-			LocalTime cStart=LocalTime.parse(c.getTime().substring(0, c.getTime().indexOf('-')));
-			LocalTime cEnd=LocalTime.parse(c.getTime().substring(c.getTime().indexOf('-')+1));
-			
+		DateTime cStart=DateTime.parse(c.getTime().substring(0, c.getTime().indexOf('-')), DateTimeFormat.forPattern(pattern));
+		DateTime cEnd=DateTime.parse(c.getTime().substring(c.getTime().indexOf('-')+1), DateTimeFormat.forPattern(pattern));		
+		Interval cInterval=new Interval(cStart, cEnd);
+		
+		if(courseInterval.overlaps(cInterval)){
+			return true;
 		}
 		return false;
-		
-		
-//		String t=course.getTime().substring(0, course.getTime().indexOf(':')+3);
-//		LocalTime courseStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
-//		t=course.getTime().substring(course.getTime().indexOf('-')+1);
-//		t=t.substring(0, t.indexOf(':')+3);
-//		LocalTime courseEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
-//		
-//		for(Course c : getCourses()){
-//			t=c.getTime().substring(0, c.getTime().indexOf(':')+3);
-//			LocalTime cStart=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
-//			t=c.getTime().substring(c.getTime().indexOf('-')+1);
-//			t=t.substring(0, t.indexOf(':')+3);
-//			LocalTime cEnd=new LocalTime(Integer.parseInt(t.substring(0, t.indexOf(':'))), Integer.parseInt(t.substring(t.indexOf(':')+1)));
-//			
-//			if(courseStart.equals(cStart) || courseEnd.equals(cEnd)){
-//				return true;
-//			}else if(courseStart.isBefore(cStart)){
-//				if(courseEnd.isAfter(cStart)){
-//					return true;
-//				}
-//			}
-//			else if(cStart.isBefore(courseStart)){
-//				if(cEnd.isAfter(courseStart)){
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
 	}
 	
 	public static boolean timeConflict(Course c, Course c2){
