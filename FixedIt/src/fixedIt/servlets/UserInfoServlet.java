@@ -30,8 +30,7 @@ public class UserInfoServlet extends HttpServlet {
 		String numSchedules="";
 		String studentStatus="";
 		String activeSchedule=req.getParameter("scheduleList");	
-		
-		//controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+		//String newSchedule = req.getParameter("newSchedule");
 		
 		if(controller.isSessionNull()){
 			errorMessage="Error loading session.";
@@ -79,9 +78,27 @@ public class UserInfoServlet extends HttpServlet {
 		
 		String errorMessage ="Successfully changed active schedule";
 		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
-		String activeSchedule=req.getParameter("scheduleList");		
-		
-		controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+		String activeSchedule=req.getParameter("scheduleList");
+
+		if (req.getParameter("newSchedule")!=null) {
+			if(req.getParameter("scheduleName")!=null){
+			controller.getUser().createSchedule(req.getParameter("scheduleName"));	
+			}
+			else{
+				errorMessage="Please Name This Schedule";
+			}
+			
+		}
+
+		if (req.getParameter("activeSchedule")!=null && controller.getUser().getNumSchedules()<5) {
+			if (controller.getUser().getSchedule(activeSchedule)!=null)
+				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+		}
+		else
+		{
+			errorMessage= "You created the max number of schedules";
+			
+		}
 	
 		req.setAttribute("errorMessage", errorMessage);	
 		req.setAttribute("activeSchedule", activeSchedule);

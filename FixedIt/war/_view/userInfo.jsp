@@ -29,7 +29,7 @@
 	<section class="styled-body">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
-      <form action="${pageContext.servletContext.contextPath}/login" method="post">
+      <form action="${pageContext.servletContext.contextPath}/userInfo" method="post">
       	<c:if test="${! empty errorMessage}">
 			<div class="error">${errorMessage}</div>
 		</c:if>
@@ -58,6 +58,11 @@
 					<td> <input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';"/> </td>
 					<td> <input class="sideBarBtn" type="button" value="Change Password" onclick="window.location='passwordUpdate';"/> </td>
 				</tr>		
+				<td> <input class="btn" type="Submit" name="newSchedule" >
+				</tr>
+				<td><input class="textInput" type="text" name="scheduleName" >
+				</tr>
+				
 			</table>
 			</center>
 		</form>

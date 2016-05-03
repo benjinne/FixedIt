@@ -21,6 +21,7 @@ public class User{
 		numSchedules=0;
 		auth=null;
 		schedules=new TreeMap<String, Schedule>();
+		activeSchedule= new Schedule("");
 	}
 	
 	public User(String emailAddress, String passwordHash, int studentStatus, int numSchedules, Authenticator auth){
@@ -30,6 +31,7 @@ public class User{
 		this.numSchedules=numSchedules;
 		this.auth=auth;
 		schedules=new TreeMap<String, Schedule>();
+		activeSchedule=new Schedule("");
 	}
 	
 	public void reInitializeUser() throws SQLException{
