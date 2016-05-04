@@ -67,71 +67,69 @@ public class SearchServlet extends HttpServlet {
 			return;
 		}
 		
-		String returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
-				"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
-				"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
-				"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
+		String returnedCourses=null;
 		ArrayList<Course> courses=null;
 		try{
 			System.out.println("Search started...");
 			courses=controller.getCourses();
 			System.out.println("Search done.");
-		}catch(IOException e){
-			errorMessage="Failed to read courses from database properly.";
-		}
-		try {
 			System.out.println("Writing to DB...");
 			session.getAuth().addCoursesToDB(courses);
 			System.out.println("Done.");
-		} catch (SQLException e) {
-			errorMessage="Something went wrong with the search. Please try again.";
-			e.printStackTrace();
-		}
-		for(Course c : courses){
-			returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
-			if(c.getLocation().size()>1){
-				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
-			}
-			else{
-				returnedCourses=returnedCourses+("<td> </td>");
-			}
-			returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
-			if(c.getInstructors().size()>1){
-				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
-			}
-			else{
-				returnedCourses=returnedCourses+("<td> </td>");
-			}
-			returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
-			returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
-			returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
-					+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
-			if(req.getParameter("" + c.getCRN())!=null){
-				boolean success=controller.addToSchedule(c.getCRN());
-				if(success){
-					System.out.println("Course added successfully.");
-					errorMessage="Course added successfully";
-					try {
-						session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
-					} catch (SQLException e) {
-						errorMessage="An error occured when saving data. Please try again.";
-						e.printStackTrace();
-					}
+			
+			returnedCourses="<tr><td>CRN</td><td>Course</td><td>Title</td>" +
+					"<td>Credits</td><td>Type</td><td>Days</td><td>Time</td><td>Location 1</td>" +
+					"<td>Location 2</td><td>Instructor 1</td><td>Instructor 2</td><td>Capacity</td> " +
+					"<td>Seats Open</td><td>Enrolled</td><td>Begin-End</td><td>Add to Schedule</td></tr>";
+			
+			for(Course c : courses){
+				returnedCourses=returnedCourses+("<tr><td>" + c.getCRN() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCourseAndSection() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTitle() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getCredits() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getType() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getDays() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getTime() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getLocation().get(0) + "</td>");
+				if(c.getLocation().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getLocation().get(1) + "</td>");
 				}
 				else{
-					errorMessage="Course conflicts with one on schedule.";
+					returnedCourses=returnedCourses+("<td> </td>");
 				}
+				returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(0) + "</td>");
+				if(c.getInstructors().size()>1){
+					returnedCourses=returnedCourses+("<td>" + c.getInstructors().get(1) + "</td>");
+				}
+				else{
+					returnedCourses=returnedCourses+("<td> </td>");
+				}
+				returnedCourses=returnedCourses+("<td>" + c.getCapacity() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsRemain() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getSeatsFilled() + "</td>");
+				returnedCourses=returnedCourses+("<td>" + c.getBeginEnd() + "</td>");
+				returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
+						+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
+				if(req.getParameter("" + c.getCRN())!=null){
+					boolean success=controller.addToSchedule(c.getCRN());
+					if(success){
+						System.out.println("Course added successfully.");
+						errorMessage="Course added successfully";
+						try {
+							session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+						} catch (SQLException e) {
+							errorMessage="An error occured when saving data. Please try again.";
+							e.printStackTrace();
+						}
+					}
+					else{
+						errorMessage="Course conflicts with one on schedule.";
+					}
+				}
+				req.setAttribute("" + c.getCRN(), null);
 			}
-			req.setAttribute("" + c.getCRN(), null);
+		}catch(StringIndexOutOfBoundsException | IOException | SQLException e){
+			errorMessage="Invalid combination of search parameters.";
 		}
 		
 		// Add parameters as request attributes

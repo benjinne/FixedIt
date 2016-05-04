@@ -8,10 +8,6 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler Password Reset</title>
 		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
 		td.label {
 			text-align: right;
 		}		
@@ -28,7 +24,7 @@
       <form id="form" action="${pageContext.servletContext.contextPath}/passwordReset" method="post">
 			<center>
 			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
+				<script type="text/javascript">alert("${errorMessage}")</script>
 			</c:if>
 				
 				<c:if test="${empty sessionId}">

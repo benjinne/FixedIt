@@ -8,10 +8,9 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler Login</title>
 		<style type="text/css">
-		.error {
-			color: red;
+		.error{
+			color:red;
 		}
-		
 		td.label {
 			text-align: right;
 		}		

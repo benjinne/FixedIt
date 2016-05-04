@@ -6,11 +6,7 @@
 	<head>
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler - My Account</title>
-		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
+		<style type="text/css">		
 		td.label {
 			text-align: left;
 		}		
@@ -32,7 +28,7 @@
 			<div class="error">${errorMessage}</div>
 		</c:if>
 			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
+				<script type="text/javascript">alert("${errorMessage}")</script>
 			</c:if>
 			<center>
 			<table>

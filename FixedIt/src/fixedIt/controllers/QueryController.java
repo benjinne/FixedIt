@@ -38,25 +38,18 @@ public class QueryController {
 		return registrar.fetch();
 	}
 	
-	private Course getCourse(int CRN){
+	private Course getCourse(int CRN) throws IOException{
 		Course course=null;
-		try {
-			for(Course c : getCourses()){
-				if(c.getCRN()==CRN){
-					course=c;
-					return course;
-				}
+		for(Course c : getCourses()){
+			if(c.getCRN()==CRN){
+				course=c;
+				return course;
 			}
-			System.out.println("Couse not found...");
-			return course;
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Couse not found...");
-			return course;
 		}
+		return course;
 	}
 	
-	public boolean addToSchedule(int CRN){
+	public boolean addToSchedule(int CRN) throws IOException{
 		if(user.getSchedules().isEmpty()){
 			user.createSchedule("testSchedule");
 		}

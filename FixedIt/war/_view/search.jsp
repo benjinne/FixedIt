@@ -11,10 +11,6 @@
 .selectBox{
 	color:black;
 }
-.error {
-	color: red;
-	font-weight: bold;
-}
 
 td.label {
 	text-align: left;
@@ -40,7 +36,7 @@ td.label {
 		<h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
+				<script type="text/javascript">alert("${errorMessage}")</script>
 			</c:if>
 				<table align="center">
 				<tr>

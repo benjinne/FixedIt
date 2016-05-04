@@ -7,10 +7,6 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler - Change Password</title>
 		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
 		td.label {
 			text-align: left;
 		}		
@@ -29,11 +25,8 @@
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/passwordUpdate" method="post">
       	<c:if test="${! empty errorMessage}">
-			<div class="error">${errorMessage}</div>
+			<script type="text/javascript">alert("${errorMessage}")</script>
 		</c:if>
-			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
-			</c:if>
 				<table align="center">
 					<tr>
 					<tr>
