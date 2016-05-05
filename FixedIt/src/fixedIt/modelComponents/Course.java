@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Course {
 	private int CRN, capacity, seatsRemain, seatsFilled;
-	private double credits;
+	private float credits;
 	private String courseAndSection, title, type, days, time, beginEnd;
 	private ArrayList<String> instructors, locations;
 	
-	public Course(int CRN, String courseAndSection, String title, double credits, String type, String days, 
+	public Course(int CRN, String courseAndSection, String title, float credits, String type, String days, 
 			String time, String location, String instructor, int capacity, int seatsRemain, 
 			int seatsFilled, String beginEnd){
 		this.CRN=CRN;
@@ -119,10 +119,10 @@ public class Course {
 	public void setCRN(int CRN) {
 		this.CRN = CRN;
 	}
-	public double getCredits() {
+	public float getCredits() {
 		return credits;
 	}
-	public void setCredits(double d) {
+	public void setCredits(float d) {
 		this.credits = d;
 	}
 	public int getCapacity() {

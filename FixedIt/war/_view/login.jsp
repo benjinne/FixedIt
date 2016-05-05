@@ -45,7 +45,7 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td><input class="btn" type="Submit" name="submit" value="Login"></td>
+							<td><input class="btn" type="Submit" name="submit" value="Login">&nbsp;&nbsp;<input class="btn" type="button" value="Register" onclick="window.location='register';"></td>
 						</tr>
 						<tr>
 							<td></td>

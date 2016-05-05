@@ -194,7 +194,7 @@ public class Authenticator implements EmailSender {
 						c.setCRN(Integer.parseInt(course.getString("crn")));					//
 						c.setCourseAndSection(course.getString("courseandsection"));			//
 						c.setTitle(course.getString("title"));									//
-						c.setCredits(Double.parseDouble(course.getString("credits")));			//
+						c.setCredits(Float.parseFloat(course.getString("credits")));			//
 						c.setType(course.getString("type"));									//
 						c.setDays(course.getString("days"));									//	add all course info
 						c.setTime(course.getString("time"));									//	to a course object

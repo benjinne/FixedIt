@@ -31,6 +31,7 @@
 		<input class="btn" type="submit" name="dlAsHtml" value="Dowload Schedule as HTML View" />	
 		<br><br>
 		<c:if test="${! empty scheduleHTML}">
+			<!-- <div class="numCreditsContainer"><p>Total Credits: <c:out value="${numCredits}"></c:out>&nbsp;</p></div><br> -->
 			<div id="courses">
 				<c:out value="${scheduleHTML}" escapeXml="false"/>
 			</div>

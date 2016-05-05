@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hp.gagawa.java.Node;
 import com.hp.gagawa.java.elements.*;
 
 import fixedIt.controllers.DisplayScheduleController;
@@ -62,6 +61,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 		}
 		
 		String html=generateHTMLScheduleTable(s);
+		
 		req.setAttribute("scheduleHTML", html);
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
@@ -172,8 +172,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		// Add parameters as request attributes
-		//req.getSession().setAttribute("userSession", session);
 		String html=generateHTMLScheduleTable(s);
 		req.setAttribute("scheduleHTML", html);
 		req.setAttribute("errorMessage", errorMessage);

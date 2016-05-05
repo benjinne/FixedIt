@@ -1,3 +1,7 @@
+html{
+	font-family:Arial!important;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -67,6 +71,13 @@ button:focus {
 	display: table-cell;
 	vertical-align: middle;
 	padding: 10px;
+}
+
+.numCreditsContainer{
+	position:absolute;
+	color:#ffffff;
+	font-weight:bold;
+	right:2.5%;
 }
 
 .scheduleTable {
