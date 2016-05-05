@@ -16,6 +16,10 @@ public class DisplayScheduleController {
 		}
 	}
 	
+	public User getUser(){
+		return user;
+	}
+	
 	public String getScheduleAsCSV(Schedule s){
 		return user.getScheduleAsCSV(s);
 	}

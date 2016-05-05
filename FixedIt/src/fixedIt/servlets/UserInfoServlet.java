@@ -58,18 +58,16 @@ public class UserInfoServlet extends HttpServlet {
 		}
 		
 		String scheduleList="<select class=\"selectBox\" name=\"scheduleList\" size=\"1\">";
-		int index=0;
 		for(Entry<String, Schedule> e : controller.getUser().getSchedules().entrySet()){
 			Schedule s=e.getValue();
 			System.out.println(s.getName());
-			if(index==0){
+			if(controller.getUser().getActiveSchedule().equals(controller.getUser().getSchedule(e.getKey()))){
 				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
 					"\" selected=\"selected\">" + s.getName() + "</option> \n";
 			} else{
 				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
 					"\">" + s.getName() + "</option> \n";
 			}
-			index++;
 		}
 		scheduleList=scheduleList + "</select>";
 		
@@ -85,47 +83,80 @@ public class UserInfoServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		Session session=null;
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
+			resp.sendRedirect("login");
+			return;
+		} else{
+			session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
+		}
 		
-		String errorMessage ="Successfully changed active schedule";
-		UserInfoController controller=new UserInfoController((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession"));
+		String errorMessage ="";
+		UserInfoController controller=new UserInfoController(session);
+		controller.setUser(session.getCurrentUser());
 		String activeSchedule=req.getParameter("scheduleList");
 
 		if (req.getParameter("newSchedule")!=null) {
 			if(controller.getUser().getNumSchedules()<6){
 				if(req.getParameter("scheduleName")!= null){
 					controller.getUser().createSchedule(req.getParameter("scheduleName"));
-					req.setAttribute("newSchedule", null);
+					//req.setAttribute("newSchedule", null);
+					errorMessage="Schedule created successfully.";
+					try {
+						session.getAuth().saveExistingUserNewDataToDB(controller.getUser());
+					} catch (SQLException e1) {
+						errorMessage="Database write error; please try again.";
+						e1.printStackTrace();
+					}
 				}
 				else{
 					errorMessage="Please Name This Schedule";
-					req.setAttribute("newSchedule", null);
+					//req.setAttribute("newSchedule", null);
 				}
 			}
 			else{
 				errorMessage= "Max number of schedules created";
-				req.setAttribute("newSchedule", null);
+				//req.setAttribute("newSchedule", null);
 			}
 		}
 		else if(req.getParameter("selectSchedule")!= null){
-			if (req.getParameter("activeSchedule")!=null) {
-				if(controller.getUser().getSchedule(req.getParameter("activeSchedule"))!= null){
-					controller.getUser().setActiveSchedule(controller.getUser().getSchedule(req.getParameter("activeSchedule")));
-					req.setAttribute("selectSchedule", null);
-				}
-				else{
-					errorMessage ="That schedule does not exist";
-					req.setAttribute("selectSchedule", null);
-				}
+			System.out.println(activeSchedule);
+			System.out.println(controller.getUser().getSchedules().firstEntry().getValue().getName());
+			if(controller.getUser().getSchedule(activeSchedule)!= null){
+				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+				//req.setAttribute("selectSchedule", null);
+				errorMessage="Successfully changed active schedule";
+			}
+			else{
+				errorMessage ="Schedule does not exist.";
 			}
 		}
+		
+		String scheduleList="<select class=\"selectBox\" name=\"scheduleList\" size=\"1\">";
+		for(Entry<String, Schedule> e : controller.getUser().getSchedules().entrySet()){
+			Schedule s=e.getValue();
+			System.out.println(s.getName());
+			if(controller.getUser().getActiveSchedule().equals(controller.getUser().getSchedule(e.getKey()))){
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+					"\" selected=\"selected\">" + s.getName() + "</option> \n";
+			} else{
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+					"\">" + s.getName() + "</option> \n";
+			}
+		}
+		scheduleList=scheduleList + "</select>";
+		
+		req.setAttribute("selectSchedule", null);
+		req.setAttribute("newSchedule", null);
+		
+		req.getSession().setAttribute("userSession", session);
 		req.setAttribute("emailAddress",controller.getUser().getEmailAddress());
 		req.setAttribute("numSchedules", controller.getUser().getNumSchedules());
 		req.setAttribute("studentStatus", controller.getUser().getStudentStatus());
-		req.setAttribute("scheduleList", activeSchedule);
+		req.setAttribute("scheduleList", scheduleList);
 		req.setAttribute("newSchedule", null);
 		req.setAttribute("selectSchedule", null);
 		req.setAttribute("errorMessage", errorMessage);	
-		req.setAttribute("activeSchedule", activeSchedule);
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);

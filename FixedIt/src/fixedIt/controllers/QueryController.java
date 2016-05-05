@@ -49,12 +49,13 @@ public class QueryController {
 		return course;
 	}
 	
+	public User getUser(){
+		return user;
+	}
+	
 	public boolean addToSchedule(int CRN) throws IOException{
-		if(user.getSchedules().isEmpty()){
-			user.createSchedule("testSchedule");
-		}
 		Course c=getCourse(CRN);
-		boolean success=user.getSchedules().firstEntry().getValue().addCourse(c);
+		boolean success=user.getActiveSchedule().addCourse(c);
 		try {
 			session.getAuth().saveExistingUserNewDataToDB(user);
 		} catch (SQLException e) {

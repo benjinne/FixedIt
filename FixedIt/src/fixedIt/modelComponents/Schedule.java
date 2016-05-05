@@ -29,7 +29,7 @@ public class Schedule {
 	}
 	
 	public Schedule(Schedule s){
-		this.name="" + s.getName();
+		this.name="" + s.getName().toLowerCase();
 		this.courses=new ArrayList<Course>();
 		this.courses.addAll(s.getCourses());
 		this.term="" + s.getTerm();

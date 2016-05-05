@@ -20,6 +20,10 @@ public class UserInfoController {
 		return user;
 	}
 	
+	public void setUser(User user){
+		this.user=user;
+	}
+	
 	public void setSession(Session session){
 		this.session = session;
 		this.user=this.session.getCurrentUser();

@@ -111,20 +111,28 @@ public class SearchServlet extends HttpServlet {
 				returnedCourses=returnedCourses+"<td><input type=\"submit\" name=\"" 
 						+ c.getCRN() + "\" value=\"Add to Schedule\"</tr>";
 				if(req.getParameter("" + c.getCRN())!=null){
-					boolean success=controller.addToSchedule(c.getCRN());
-					if(success){
-						System.out.println("Course added successfully.");
-						errorMessage="Course added successfully";
-						try {
-							session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
-						} catch (SQLException e) {
-							errorMessage="An error occured when saving data. Please try again.";
-							e.printStackTrace();
+					if(controller.getUser().getSchedules().size()!=0){
+						if(controller.getUser().getActiveSchedule()!=null){
+							boolean success=controller.addToSchedule(c.getCRN());
+							if(success){
+								System.out.println("Course added successfully.");
+								errorMessage="Course added successfully";
+								try {
+									session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+								} catch (SQLException e) {
+									errorMessage="An error occured when saving data. Please try again.";
+									e.printStackTrace();
+								}
+							}
+							else{
+								errorMessage="Course conflicts with one on schedule.";
+							}
 						}
+					} else{
+						errorMessage="Active schedule not set.";
 					}
-					else{
-						errorMessage="Course conflicts with one on schedule.";
-					}
+				} else{
+					errorMessage="No schedules exits for user; create a new one first.";
 				}
 				req.setAttribute("" + c.getCRN(), null);
 			}

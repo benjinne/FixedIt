@@ -28,6 +28,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String errorMessage="";
 		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")!=null){
 			try {
 				((Session) req.getSession().getAttribute("userSession")).getAuth().saveExistingUserNewDataToDB(((Session) req.getSession().getAttribute("userSession")).getCurrentUser());
@@ -43,25 +44,22 @@ public class DisplayScheduleServlet extends HttpServlet {
 			resp.sendRedirect("login");
 			return;
 		}
-		Schedule s;
+		Schedule s=null;
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
-		try{
-			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
-		}
-		catch(NullPointerException e){
-			controller.initializeSchedule();
-			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
-			//System.out.print(s.getName());
-		}
 		
-		for(Course c : s.getCourses()){
-			if(req.getParameter("" + c.getCRN())!=null){
-				s.deleteCourse(c.getCRN());
+		if(controller.getUser().getSchedules().size()!=0){
+			if(controller.getUser().getActiveSchedule()!=null){
+				s=controller.getUser().getActiveSchedule();
+			} else{
+				errorMessage="Active schedule not set.";
 			}
+		} else{
+			errorMessage="No schedules exits for user; create a new one first.";
 		}
 		
 		String html=generateHTMLScheduleTable(s);
 		
+		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("scheduleHTML", html);
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
@@ -73,10 +71,6 @@ public class DisplayScheduleServlet extends HttpServlet {
 		// Decode form parameters and dispatch to controller
 		String errorMessage = null;
 		fixedIt.modelComponents.Session session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
-		if(session==null){
-			resp.sendRedirect("login");
-			return;
-		}
 		
 		Schedule s;
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
@@ -181,6 +175,9 @@ public class DisplayScheduleServlet extends HttpServlet {
 	}
 	
 	public String generateHTMLScheduleTable(Schedule s){
+		if(s==null){
+			return null;
+		}
 		Collections.sort(s.getCourses(), new SortCoursesComparator());
 		Table scheduleTable=new Table();
 		scheduleTable.setCSSClass("scheduleTable");
