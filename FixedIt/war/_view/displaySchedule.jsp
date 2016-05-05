@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler - Schedule</title>
 		<style type="text/css">
-		.error {
+		.error { 
 			color: red;
 		}
 		
