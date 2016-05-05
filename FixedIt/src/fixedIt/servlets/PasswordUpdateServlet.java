@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import fixedIt.controllers.UserInfoController;
 import fixedIt.controllers.LoginController;
 import fixedIt.modelComponents.Authenticator;
+import fixedIt.modelComponents.Session;
 
 
 public class PasswordUpdateServlet extends HttpServlet {
@@ -20,7 +21,21 @@ public class PasswordUpdateServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.getRequestDispatcher("/_view/passwordUpdate.jsp").forward(req, resp);
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")!=null){
+			try {
+				((Session) req.getSession().getAttribute("userSession")).getAuth().saveExistingUserNewDataToDB(((Session) req.getSession().getAttribute("userSession")).getCurrentUser());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		resp.setHeader("Cache-Control","no-cache");
+		resp.setHeader("Cache-Control","no-store");
+		if((fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession")==null){
+			resp.sendRedirect("login");
+			return;
+		}
+		else req.getRequestDispatcher("/_view/passwordUpdate.jsp").forward(req, resp);
 	}
 	
 	@Override

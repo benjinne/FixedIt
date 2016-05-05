@@ -8,25 +8,21 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler Login</title>
 		<style type="text/css">
-		.error {
-			color: red;
+		.error{
+			color:red;
 		}
-		
 		td.label {
 			text-align: right;
 		}		
 		</style>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
 	</head>
 	<body>
 	<section class="page-header">
       <form id="form" action="${pageContext.servletContext.contextPath}/login" method="post">
-      <div style="margin-left:0px; text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div>
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       
@@ -49,14 +45,14 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td><input class="btn" type="Submit" name="submit" value="Login"></td>
+							<td><input class="btn" type="Submit" name="submit" value="Login">&nbsp;&nbsp;<input class="btn" type="button" value="Register" onclick="window.location='register';"></td>
 						</tr>
 						<tr>
 							<td></td>
 							<td><input class="btn" type="Submit" name="passwordReset" value="Forgot Password?"></td>
 						</tr>
 					</table></center>
-					<br>
+					 <!-- <div style="position:absolute;left:0px;top:0px;" text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div> -->
 				</form>
     </section>
     <section class="main-content">

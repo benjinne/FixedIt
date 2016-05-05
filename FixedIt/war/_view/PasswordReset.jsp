@@ -8,20 +8,14 @@
 	<meta charset="UTF-8">
 		<title>FixedIt Scheduler Password Reset</title>
 		<style type="text/css">
-		.error {
-			color: red;
-		}
-		
 		td.label {
 			text-align: right;
 		}		
 		</style>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="_view/stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="_view/stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="_view/stylesheets/github-light.css" media="screen">
 	</head>
 	<body>
 	<section class="page-header">
@@ -30,39 +24,43 @@
       <form id="form" action="${pageContext.servletContext.contextPath}/passwordReset" method="post">
 			<center>
 			<c:if test="${! empty errorMessage}">
-				<div class="error">${errorMessage}</div>
+				<script type="text/javascript">alert("${errorMessage}")</script>
 			</c:if>
 				
 				<c:if test="${empty sessionId}">
-					<table>
-						<tr>
-							<td></td>
-							<td>
-								<input class="btn" type="submit" name="passwordReset" value="Request Password Reset">
-							</td>
-						</tr>
-					</table>
+					<c:if test="${empty errorMessage}">
+						<table>
+							<tr>
+								<td class="label">Email Address: </td>
+								<td><input class="textInput" type="text" name="emailAddress"></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<input class="btn" type="submit" name="passwordReset" value="Request Password Reset">
+								</td>
+							</tr>
+						</table>
+					</c:if>
 				</c:if>
 				
 				<c:if test="${! empty sessionId}">
-				<table>
-					<tr>
-						<td class="label" autofocus>Email Address: </td>
-						<td><input class="textInput" type="text" name="emailAddress" size="12" value="${emailAddress}" /></td>
-					</tr>
-					<tr>
-						<td class="label" autofocus>New Password: </td>
-						<td><input class="textInput" type="password" name="password" size="12" /></td>
-					</tr>
-					<tr>
-						<td class="label" autofocus>Confirm Password: </td>
-						<td><input class="textInput" type="password" name="passwordConfirm" size="12" /></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input class="btn" type="submit" name="passwordReset" value="Reset Password"></td>
-					</tr>
-				</table>
+					<c:if test="${empty errorMessage}">
+						<table>
+							<tr>
+								<td class="label" autofocus>New Password: </td>
+								<td><input class="textInput" type="password" name="password" size="12" /></td>
+							</tr>
+							<tr>
+								<td class="label" autofocus>Confirm Password: </td>
+								<td><input class="textInput" type="password" name="passwordConfirm" size="12" /></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input class="btn" type="submit" name="passwordReset" value="Reset Password"></td>
+							</tr>
+						</table>
+					</c:if>
 				</c:if>
 				<c:if test="${! empty success}">
 					<br>

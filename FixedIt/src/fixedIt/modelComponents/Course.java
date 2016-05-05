@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Course {
 	private int CRN, capacity, seatsRemain, seatsFilled;
-	private double credits;
+	private float credits;
 	private String courseAndSection, title, type, days, time, beginEnd;
 	private ArrayList<String> instructors, locations;
 	
-	public Course(int CRN, String courseAndSection, String title, double credits, String type, String days, 
+	public Course(int CRN, String courseAndSection, String title, float credits, String type, String days, 
 			String time, String location, String instructor, int capacity, int seatsRemain, 
 			int seatsFilled, String beginEnd){
 		this.CRN=CRN;
@@ -79,6 +79,22 @@ public class Course {
 		return new TimeInterval(start, end);
 	}
 	
+	public boolean startsBefore (Course other){
+		if(Integer.parseInt(time.substring(0, time.indexOf(':')))<Integer.parseInt(other.getTime().substring(0, other.getTime().indexOf(':')))){
+			return true;
+		} else{
+			String timeMin=time.substring(time.indexOf(':')+1);
+			timeMin=timeMin.substring(0, 2);
+			String otherMin=other.getTime().substring(other.getTime().indexOf(':')+1);
+			otherMin=otherMin.substring(0, 2);
+			if(Integer.parseInt(timeMin)<Integer.parseInt(otherMin)){
+				return true;
+			} else{
+				return false;
+			}
+		}
+	}
+	
 	public void addInstructor(String instructor){
 		instructors.add(instructor);
 	}
@@ -103,10 +119,10 @@ public class Course {
 	public void setCRN(int CRN) {
 		this.CRN = CRN;
 	}
-	public double getCredits() {
+	public float getCredits() {
 		return credits;
 	}
-	public void setCredits(double d) {
+	public void setCredits(float d) {
 		this.credits = d;
 	}
 	public int getCapacity() {

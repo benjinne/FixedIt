@@ -145,10 +145,10 @@ public class LoginServlet extends HttpServlet {
 				}
 			}
 		}
-		//debug mode allows us to enter the schedular with a fake account at the click of a button
+		//debug mode allows us to enter the scheduler with a fake account at the click of a button
 		//no need to enter a user name and password each time 
 		//thus allowing us to test new features that we have implemented
-			if(req.getParameter("debug")!= null&&emailAddress !=null && password!=null){
+			if(req.getParameter("debug")!= null && emailAddress !=null && password!=null){
 				emailAddress =null;
 				password=null;
 				req.setAttribute("debug", null);
@@ -166,16 +166,6 @@ public class LoginServlet extends HttpServlet {
 				resp.sendRedirect("userInfo");
 				return;
 			}
-		
-		else if(req.getParameter("debug")==null){
-			try {
-				userSession=controller.getAuth().authorizeUser(emailAddress, password);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
 		
 		// Add parameters as request attributes
 		req.setAttribute("emailAddress", req.getParameter("emailAddress"));

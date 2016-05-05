@@ -23,7 +23,7 @@ public class PasswordResetServlet extends HttpServlet {
 		if(req.getQueryString()!=null){
 			String sessionId=req.getQueryString().substring(req.getQueryString().indexOf('=')+1, req.getQueryString().indexOf('&'));
 			String emailAddress=req.getQueryString().substring(req.getQueryString().indexOf('&'));
-			emailAddress=emailAddress.substring(emailAddress.indexOf('='));
+			emailAddress=emailAddress.substring(emailAddress.indexOf('=')+1);
 			req.getSession().setAttribute("sessionId", sessionId);
 			req.getSession().setAttribute("emailAddress", emailAddress);
 		}
@@ -34,6 +34,9 @@ public class PasswordResetServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String emailAddress=(String) req.getSession().getAttribute("emailAddress");
+		if(emailAddress==null){
+			emailAddress=(String) req.getParameter("emailAddress");
+		}
 		String errorMessage=req.getParameter("errorMessage");
 		PasswordResetController controller=new PasswordResetController(emailAddress);
 		

@@ -36,13 +36,6 @@ public class ScheduleTest {
 	public void testGetCredits() {
 		assertEquals(6, s.getCredits());
 	}
-
-	@Test
-	public void testTimeConflicts() {
-		assertFalse(s.timeConflicts(noconflict2));
-		assertTrue(s.timeConflicts(conflicting1));
-		assertTrue(s.timeConflicts(conflicting2));
-	}
 	
 	@Test
 	public void testConflictsWithCourse() {

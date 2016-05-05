@@ -1,3 +1,8 @@
+/*
+ * Server code is based on code from
+ * 	CS320_Lab03 (http://ycpcs.github.io/cs320-spring2016/labs/CS320_Lab03.zip)
+ */
+
 package fixedIt.main;
 
 import java.util.Scanner;
