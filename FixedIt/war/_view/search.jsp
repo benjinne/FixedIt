@@ -14,6 +14,7 @@
 
 td.label {
 	text-align: left;
+	font-size:10pt;
 }
 .optgroupColor {
 	color: black;
@@ -36,7 +37,16 @@ td.label {
 		<h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<c:if test="${! empty errorMessage}">
-				<script type="text/javascript">alert("${errorMessage}")</script>
+				<c:if test="${errorMessage=='No schedules exists for user; create a new one first.'}">
+					<script type="text/javascript">
+						if(window.confirm('You have not created any schedules; create one now?')){
+							window.location='userInfo';
+						}
+					</script>
+				</c:if>
+				<c:if test="${errorMessage!='No schedules exists for user; create a new one first.'}">
+					<script type="text/javascript">alert("${errorMessage}")</script>
+				</c:if>
 			</c:if>
 				<table align="center">
 				<tr>

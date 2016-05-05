@@ -127,13 +127,13 @@ public class SearchServlet extends HttpServlet {
 							else{
 								errorMessage="Course conflicts with one on schedule.";
 							}
+						} else{
+							errorMessage="Active schedule not set.";
 						}
 					} else{
-						errorMessage="Active schedule not set.";
+						errorMessage="No schedules exists for user; create a new one first.";
 					}
-				} else{
-					errorMessage="No schedules exits for user; create a new one first.";
-				}
+				} 
 				req.setAttribute("" + c.getCRN(), null);
 			}
 		}catch(StringIndexOutOfBoundsException | IOException | SQLException e){

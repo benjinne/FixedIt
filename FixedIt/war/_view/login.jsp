@@ -13,6 +13,7 @@
 		}
 		td.label {
 			text-align: right;
+			font-size:10pt;
 		}		
 		</style>
 	<script src='https://www.google.com/recaptcha/api.js'></script>

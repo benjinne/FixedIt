@@ -39,7 +39,10 @@ public class UserInfoServlet extends HttpServlet {
 		String emailAddress="";
 		String numSchedules="";
 		String studentStatus="";
-		String activeSchedule=req.getParameter("scheduleList");	
+		String activeSchedule="";
+		if(controller.getUser().getActiveSchedule()!=null){
+			activeSchedule=controller.getUser().getActiveSchedule().getName();
+		}
 		//String newSchedule = req.getParameter("newSchedule");
 		
 		if(controller.isSessionNull()){
@@ -60,12 +63,12 @@ public class UserInfoServlet extends HttpServlet {
 		String scheduleList="<select class=\"selectBox\" name=\"scheduleList\" size=\"1\">";
 		for(Entry<String, Schedule> e : controller.getUser().getSchedules().entrySet()){
 			Schedule s=e.getValue();
-			System.out.println(s.getName());
+			//System.out.println(s.getName());
 			if(controller.getUser().getActiveSchedule().equals(controller.getUser().getSchedule(e.getKey()))){
-				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName().toUpperCase() + 
 					"\" selected=\"selected\">" + s.getName() + "</option> \n";
 			} else{
-				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName().toUpperCase() + 
 					"\">" + s.getName() + "</option> \n";
 			}
 		}
@@ -99,24 +102,25 @@ public class UserInfoServlet extends HttpServlet {
 		if (req.getParameter("newSchedule")!=null) {
 			if(controller.getUser().getNumSchedules()<6){
 				if(req.getParameter("scheduleName")!= null){
-					controller.getUser().createSchedule(req.getParameter("scheduleName"));
-					//req.setAttribute("newSchedule", null);
-					errorMessage="Schedule created successfully.";
-					try {
-						session.getAuth().saveExistingUserNewDataToDB(controller.getUser());
-					} catch (SQLException e1) {
-						errorMessage="Database write error; please try again.";
-						e1.printStackTrace();
+					if(containsOnlyLetters(req.getParameter("scheduleName"))){
+						controller.getUser().createSchedule(req.getParameter("scheduleName"));
+						errorMessage="Schedule created successfully.";
+						try {
+							session.getAuth().saveExistingUserNewDataToDB(controller.getUser());
+						} catch (SQLException e1) {
+							errorMessage="Database write error; please try again.";
+							e1.printStackTrace();
+						}
+					} else{
+						errorMessage="Schedule names may contain only letters.";
 					}
 				}
 				else{
 					errorMessage="Please Name This Schedule";
-					//req.setAttribute("newSchedule", null);
 				}
 			}
 			else{
 				errorMessage= "Max number of schedules created";
-				//req.setAttribute("newSchedule", null);
 			}
 		}
 		else if(req.getParameter("selectSchedule")!= null){
@@ -124,7 +128,6 @@ public class UserInfoServlet extends HttpServlet {
 			System.out.println(controller.getUser().getSchedules().firstEntry().getValue().getName());
 			if(controller.getUser().getSchedule(activeSchedule)!= null){
 				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
-				//req.setAttribute("selectSchedule", null);
 				errorMessage="Successfully changed active schedule";
 			}
 			else{
@@ -160,6 +163,10 @@ public class UserInfoServlet extends HttpServlet {
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);
+	}
+	
+	public boolean containsOnlyLetters(String name) {
+	    return name.matches("[a-zA-Z]+");
 	}
 }
 

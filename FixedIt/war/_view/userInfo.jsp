@@ -9,6 +9,7 @@
 		<style type="text/css">		
 		td.label {
 			text-align: left;
+			font-size:10pt;
 		}		
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,24 +44,40 @@
 				<tr> 
 					<td class="label">Student Status: </td>
 					<td><c:out value="${studentStatus}" /></td>
-					<td> <input class="btn" type="Submit" value="Set Active Schedule" name="selectSchedule">
 				</tr>
 				<tr>
-					<td class="label">Select Schedule: </td>
-							<td><c:out value="${scheduleList}" escapeXml="false"></c:out></td>
+					<td class="label">Set Active Schedule: </td>
+					<td><c:out value="${scheduleList}" escapeXml="false"></c:out></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input class="sideBarBtn" type="Submit" value="Submit" name="selectSchedule"><br></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td> <input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';"/> </td>
 					<td> <input class="sideBarBtn" type="button" value="Change Password" onclick="window.location='passwordUpdate';"/> </td>
-				</tr>		
-				<td> <input class="btn" type="Submit" value="Create" name="newSchedule" >
-				</tr>
-				<td><input class="textInput" type="text" name="scheduleName" >
-				</tr>
-				
+				</tr>				
 			</table>
 			</center>
 		</form>
+		<br>
+		<form action="${pageContext.servletContext.contextPath}/userInfo" method="post">
+		<center>
+			<table>
+				<tr>
+					<td class="label">Create new schedule: </td>	
+				</tr>
+				<tr>
+				<td><input class="textInput" type="text" name="scheduleName" ></td>
+				<td>&nbsp;&nbsp;&nbsp;<input class="sideBarBtn" type="Submit" value="Create" name="newSchedule" ></td>
+				</tr>
+			</table>
+		</center>
+		</form>
+		
 		<div class="sideBar">
 			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
 			<div id="menu" class="collapse">

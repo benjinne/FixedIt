@@ -9,6 +9,7 @@
 		<style type="text/css">
 		td.label {
 			text-align: right;
+			font-size:10pt;
 		}		
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
