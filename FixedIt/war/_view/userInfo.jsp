@@ -43,6 +43,7 @@
 				<tr> 
 					<td class="label">Student Status: </td>
 					<td><c:out value="${studentStatus}" /></td>
+					<td> <input class="btn" type="Submit" value="Set Active Schedule" name="selectSchedule">
 				</tr>
 				<tr>
 					<td class="label">Select Schedule: </td>
@@ -52,7 +53,7 @@
 					<td> <input class="sideBarBtn" type="button" value="Edit Account"  onclick="window.location='editUserInfo';"/> </td>
 					<td> <input class="sideBarBtn" type="button" value="Change Password" onclick="window.location='passwordUpdate';"/> </td>
 				</tr>		
-				<td> <input class="btn" type="Submit" name="newSchedule" >
+				<td> <input class="btn" type="Submit" value="Create" name="newSchedule" >
 				</tr>
 				<td><input class="textInput" type="text" name="scheduleName" >
 				</tr>

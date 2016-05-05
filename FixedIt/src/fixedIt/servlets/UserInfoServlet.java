@@ -91,25 +91,39 @@ public class UserInfoServlet extends HttpServlet {
 		String activeSchedule=req.getParameter("scheduleList");
 
 		if (req.getParameter("newSchedule")!=null) {
-			if(req.getParameter("scheduleName")!=null){
-			controller.getUser().createSchedule(req.getParameter("scheduleName"));	
+			if(controller.getUser().getNumSchedules()<6){
+				if(req.getParameter("scheduleName")!= null){
+					controller.getUser().createSchedule(req.getParameter("scheduleName"));
+					req.setAttribute("newSchedule", null);
+				}
+				else{
+					errorMessage="Please Name This Schedule";
+					req.setAttribute("newSchedule", null);
+				}
 			}
 			else{
-				errorMessage="Please Name This Schedule";
+				errorMessage= "Max number of schedules created";
+				req.setAttribute("newSchedule", null);
 			}
-			
 		}
-
-		if (req.getParameter("activeSchedule")!=null && controller.getUser().getNumSchedules()<5) {
-			if (controller.getUser().getSchedule(activeSchedule)!=null)
-				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+		else if(req.getParameter("selectSchedule")!= null){
+			if (req.getParameter("activeSchedule")!=null) {
+				if(controller.getUser().getSchedule(req.getParameter("activeSchedule"))!= null){
+					controller.getUser().setActiveSchedule(controller.getUser().getSchedule(req.getParameter("activeSchedule")));
+					req.setAttribute("selectSchedule", null);
+				}
+				else{
+					errorMessage ="That schedule does not exist";
+					req.setAttribute("selectSchedule", null);
+				}
+			}
 		}
-		else
-		{
-			errorMessage= "You created the max number of schedules";
-			
-		}
-	
+		req.setAttribute("emailAddress",controller.getUser().getEmailAddress());
+		req.setAttribute("numSchedules", controller.getUser().getNumSchedules());
+		req.setAttribute("studentStatus", controller.getUser().getStudentStatus());
+		req.setAttribute("scheduleList", activeSchedule);
+		req.setAttribute("newSchedule", null);
+		req.setAttribute("selectSchedule", null);
 		req.setAttribute("errorMessage", errorMessage);	
 		req.setAttribute("activeSchedule", activeSchedule);
 		
