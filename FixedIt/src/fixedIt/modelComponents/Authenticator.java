@@ -173,14 +173,14 @@ public class Authenticator implements EmailSender {
 			user.setStudentStatus(Integer.parseInt(rs.getString("studentstatus")));
 			int numSchedules=Integer.parseInt(rs.getString("numschedules"));
 			user.setEmailAddress(emailAddress);
-			sql="select * from sys.systables where tablename like '%" + emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@")) + "%' ";
+			sql="select * from sys.systables where tablename like '%" + emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@")).replaceAll("[^A-Za-z0-9]", "_") + "%' ";
 			//System.out.println(sql);
 			Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs=stmnt1.executeQuery(sql);  //gets all of the user's schedules as ResultSet
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
 			if(numSchedules>0){
 				while(rs.next()){	//loop through all schedules
-					String scheduleName=rs.getString("tablename").substring("schedule".length(), rs.getString("tablename").indexOf(emailAddress.toUpperCase().substring(0, emailAddress.indexOf("@"))));
+					String scheduleName=rs.getString("tablename").substring("schedule".length() + emailAddress.substring(0, emailAddress.indexOf('@')).replaceAll("[^A-Za-z0-9]", "_").length());
 					Schedule s=new Schedule(scheduleName);
 					sql="select * from " + rs.getString("tablename");
 					Statement stmnt2=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -236,7 +236,7 @@ public class Authenticator implements EmailSender {
 		sql="insert into users values ( '" +user.getEmailAddress().toLowerCase() + "', '" + user.getPasswordHash() + "', " +
 				user.getStudentStatus() + ", " + user.getNumSchedules() + " ) ";
 		SQLWriter.executeDBCommand(conn, sql);
-		sql="select * from sys.systables where tablename like '%SCHEDULE" + user.getEmailAddress().toUpperCase().substring(0, user.getEmailAddress().indexOf("@")) + "%' ";
+		sql="select * from sys.systables where tablename like '%SCHEDULE" + user.getEmailAddress().toUpperCase().substring(0, user.getEmailAddress().indexOf("@")).replaceAll("[^A-Za-z0-9]", "_") + "%' ";
 		Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs=stmnt1.executeQuery(sql);
 		while(rs.next()){
@@ -244,10 +244,10 @@ public class Authenticator implements EmailSender {
 			SQLWriter.executeDBCommand(conn, sql);
 		}
 		for(Schedule s : user.getSchedules().values()){
-			sql="create table schedule" + user.getEmailAddress().substring(0, user.getEmailAddress().indexOf("@")).toLowerCase() + s.getName() + "( crn varchar(20) )";
+			sql="create table schedule" + user.getEmailAddress().substring(0, user.getEmailAddress().indexOf("@")).toLowerCase().replaceAll("[^A-Za-z0-9]", "_") + s.getName() + "( crn varchar(20) )";
 			SQLWriter.executeDBCommand(conn, sql);
 			for(Course c : s.getCourses()){
-				sql="insert into SCHEDULE" + user.getEmailAddress().toUpperCase().substring(0, user.getEmailAddress().indexOf("@")) + s.getName() + " VALUES ( '" + c.getCRN() + "' ) ";
+				sql="insert into SCHEDULE" + user.getEmailAddress().toUpperCase().substring(0, user.getEmailAddress().indexOf("@")).replaceAll("[^A-Za-z0-9]", "_") + s.getName() + " VALUES ( '" + c.getCRN() + "' ) ";
 				SQLWriter.executeDBCommand(conn, sql);
 			}
 		}
@@ -260,6 +260,7 @@ public class Authenticator implements EmailSender {
 	 * Erases all user data and writes new/current user data to database.
 	 * @param user the user for which to write the data
 	 * @throws SQLException
+	 * BROKEN: needs to be fixed to implement changing of email address for user.
 	 */
 	public void saveExistingUserUpdateEmailAddressToDB(String oldEmailAddress, User user) throws SQLException{
 		Connection conn=getConnection();
