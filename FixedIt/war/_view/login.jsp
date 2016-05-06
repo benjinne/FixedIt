@@ -53,7 +53,7 @@
 							<td><input class="btn" type="Submit" name="passwordReset" value="Forgot Password?"></td>
 						</tr>
 					</table></center>
-					  <div style="position:absolute;left:0px;top:0px;" text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div> 
+					  <!-- <div style="position:absolute;left:0px;top:0px;" text-align: left;"><input class="btn" type="Submit" name="debug" value="DebugMode"></div> --> 
 				</form>
     </section>
     <section class="main-content">
