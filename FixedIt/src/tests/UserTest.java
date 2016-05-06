@@ -20,7 +20,7 @@ public class UserTest {
 	@Before
 	public void setUp() throws Exception {
 		auth=new Authenticator();
-		user=new User("dwayne@theRockJohnson.com", "xpf109", 0, 0,  auth);
+		user=new User("dwayne@theRockJohnson.com", "xpf109", 0,  auth);
 		ArrayList<Course> cs=user.newQuery(Query.SPRING_2016, Query.LEVEL_UNDERGRAD, Query.CS_12).createRegistrar().fetch();
 		user.createSchedule("Dwayne \"The Rock\" Johnson's Schedule");
 		user.getSchedule("Dwayne \"The Rock\" Johnson's Schedule").addCourses(cs.get(0), cs.get(1), cs.get(2), cs.get(4));

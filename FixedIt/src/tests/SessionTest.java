@@ -15,7 +15,7 @@ public class SessionTest {
 	@Before
 	public void setUp() throws Exception {
 		auth=new Authenticator();
-		user=new User("dwayne@theRockJohnson.com", "xpf109", 0, 0,  auth);
+		user=new User("dwayne@theRockJohnson.com", "xpf109", 0,  auth);
 	}
 
 	@Test

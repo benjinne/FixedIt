@@ -68,7 +68,7 @@
 		<center>
 			<table>
 				<tr>
-					<td class="label">Create new schedule: </td>	
+					<td class="label">Create New Schedule: </td>	
 				</tr>
 				<tr>
 				<td><input class="textInput" type="text" name="scheduleName" ></td>

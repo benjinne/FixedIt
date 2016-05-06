@@ -177,41 +177,40 @@ public class Authenticator implements EmailSender {
 			//System.out.println(sql);
 			Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs=stmnt1.executeQuery(sql);  //gets all of the user's schedules as ResultSet
+			System.out.println(sql);
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
-			if(numSchedules>0){
-				while(rs.next()){	//loop through all schedules
-					String scheduleName=rs.getString("tablename").substring("schedule".length() + emailAddress.substring(0, emailAddress.indexOf('@')).replaceAll("[^A-Za-z0-9]", "_").length());
-					Schedule s=new Schedule(scheduleName);
-					sql="select * from " + rs.getString("tablename");
-					Statement stmnt2=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-					ResultSet courses=stmnt2.executeQuery(sql);  //get all courses in current schedule 
-					//System.out.println(courses.isBeforeFirst());
-					while(courses.next()){	//loop through all courses in current schedule 
-						Course c=new Course();
-						sql="select * from courses where crn='" + courses.getString("crn") + "'";
-						ResultSet course=SQLWriter.executeDBCommand(conn, sql);
-						course.absolute(1);
-						c.setCRN(Integer.parseInt(course.getString("crn")));					//
-						c.setCourseAndSection(course.getString("courseandsection"));			//
-						c.setTitle(course.getString("title"));									//
-						c.setCredits(Float.parseFloat(course.getString("credits")));			//
-						c.setType(course.getString("type"));									//
-						c.setDays(course.getString("days"));									//	add all course info
-						c.setTime(course.getString("time"));									//	to a course object
-						c.addLocation(course.getString("location_one"));						//
-						c.addLocation(course.getString("location_two"));						//
-						c.addInstructor(course.getString("instructor_one"));					//
-						c.addInstructor(course.getString("instructor_two"));					//
-						c.setCapacity(Integer.parseInt(course.getString("capacity")));			//
-						c.setSeatsRemain(Integer.parseInt(course.getString("seatsremain")));	//
-						c.setSeatsFilled(Integer.parseInt(course.getString("seatsfilled")));	//
-						c.setBeginEnd(course.getString("beginend"));							//
-						s.addCourse(c);		//add course to a schedule
-					}
-					schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
+			while(rs.next()){	//loop through all schedules
+				String scheduleName=rs.getString("tablename").substring("schedule".length() + emailAddress.substring(0, emailAddress.indexOf('@')).replaceAll("[^A-Za-z0-9]", "_").length());
+				Schedule s=new Schedule(scheduleName);
+				sql="select * from " + rs.getString("tablename");
+				Statement stmnt2=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet courses=stmnt2.executeQuery(sql);  //get all courses in current schedule 
+				System.out.println(sql);
+				while(courses.next()){	//loop through all courses in current schedule 
+					Course c=new Course();
+					sql="select * from courses where crn='" + courses.getString("crn") + "'";
+					ResultSet course=SQLWriter.executeDBCommand(conn, sql);
+					course.absolute(1);
+					c.setCRN(Integer.parseInt(course.getString("crn")));					//
+					c.setCourseAndSection(course.getString("courseandsection"));			//
+					c.setTitle(course.getString("title"));									//
+					c.setCredits(Float.parseFloat(course.getString("credits")));			//
+					c.setType(course.getString("type"));									//
+					c.setDays(course.getString("days"));									//	add all course info
+					c.setTime(course.getString("time"));									//	to a course object
+					c.addLocation(course.getString("location_one"));						//
+					c.addLocation(course.getString("location_two"));						//
+					c.addInstructor(course.getString("instructor_one"));					//
+					c.addInstructor(course.getString("instructor_two"));					//
+					c.setCapacity(Integer.parseInt(course.getString("capacity")));			//
+					c.setSeatsRemain(Integer.parseInt(course.getString("seatsremain")));	//
+					c.setSeatsFilled(Integer.parseInt(course.getString("seatsfilled")));	//
+					c.setBeginEnd(course.getString("beginend"));							//
+					s.addCourse(c);		//add course to a schedule
 				}
-				user.setSchedules(schedules); //add schedules TreeMap
-			}	
+				schedules.put(scheduleName, s);	//add current schedule to schedules TreeMap
+			}
+			user.setSchedules(schedules); //add schedules TreeMap
 			conn.commit();
 			conn.close();
 			conn=null;

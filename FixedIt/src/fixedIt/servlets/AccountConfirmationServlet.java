@@ -37,7 +37,7 @@ public class AccountConfirmationServlet extends HttpServlet{
 //			sessionId=UUID.fromString(tmpId);
 //		}
 		if(uuid.equals(sessionId)){
-			User user=new User(emailAddress, (String) req.getSession().getAttribute("passHash"), 0, 0, controller.getAuth());
+			User user=new User(emailAddress, (String) req.getSession().getAttribute("passHash"), 0, controller.getAuth());
 			boolean success=controller.getAuth().addNewUserToDB(user);
 			if(success){
 				confirmed="true";

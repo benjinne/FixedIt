@@ -9,7 +9,7 @@ public class User{
 	
 	private String emailAddress, passwordHash;
 	private TreeMap<String, Schedule> schedules;
-	private int studentStatus, numSchedules;
+	private int studentStatus;
 	private Query currentQuery;
 	private Authenticator auth;
 	private Schedule activeSchedule;
@@ -18,17 +18,15 @@ public class User{
 		emailAddress=null;
 		passwordHash=null;
 		studentStatus=0;
-		numSchedules=0;
 		auth=null;
 		schedules=new TreeMap<String, Schedule>();
 		activeSchedule= new Schedule("");
 	}
 	
-	public User(String emailAddress, String passwordHash, int studentStatus, int numSchedules, Authenticator auth){
+	public User(String emailAddress, String passwordHash, int studentStatus, Authenticator auth){
 		this.emailAddress=emailAddress;
 		this.passwordHash=passwordHash;
 		this.studentStatus=studentStatus;
-		this.numSchedules=numSchedules;
 		this.auth=auth;
 		schedules=new TreeMap<String, Schedule>();
 		activeSchedule=new Schedule("");
@@ -39,7 +37,6 @@ public class User{
 		emailAddress=tmp.getEmailAddress();
 		schedules=tmp.getSchedules();
 		studentStatus=tmp.getStudentStatus();
-		numSchedules=tmp.getNumSchedules();
 		tmp.dispose();
 	}
 	
@@ -50,9 +47,8 @@ public class User{
 		currentQuery=null;
 	}
 	public void createSchedule(String name){
-		if(numSchedules<5){
+		if(getNumSchedules()<5){
 			schedules.put(name, new Schedule(name));
-			numSchedules++;
 		}
 	}
 	
@@ -97,7 +93,7 @@ public class User{
 		this.auth=auth;
 	}
 	public int getNumSchedules(){
-		return numSchedules;
+		return schedules.size();
 	}
 	public String getEmailAddress() {
 		return emailAddress;

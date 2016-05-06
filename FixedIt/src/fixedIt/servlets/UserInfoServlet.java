@@ -1,6 +1,7 @@
 package fixedIt.servlets;
 import java.io.IOException;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -94,6 +95,7 @@ public class UserInfoServlet extends HttpServlet {
 			session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
 		}
 		
+		String selectedForDelete=req.getParameter("deleteScheduleList");
 		String errorMessage ="";
 		UserInfoController controller=new UserInfoController(session);
 		controller.setUser(session.getCurrentUser());
@@ -101,9 +103,9 @@ public class UserInfoServlet extends HttpServlet {
 
 		if (req.getParameter("newSchedule")!=null) {
 			if(controller.getUser().getNumSchedules()<6){
-				if(req.getParameter("scheduleName")!= null){
-					if(containsOnlyLetters(req.getParameter("scheduleName"))){
-						controller.getUser().createSchedule(req.getParameter("scheduleName"));
+				if(req.getParameter("scheduleName")!= null && !req.getParameter("scheduleName").isEmpty()){
+					if(isAlphaNumeric(req.getParameter("scheduleName"))){
+						controller.getUser().createSchedule(req.getParameter("scheduleName").toUpperCase());
 						errorMessage="Schedule created successfully.";
 						try {
 							session.getAuth().saveExistingUserNewDataToDB(controller.getUser());
@@ -112,7 +114,7 @@ public class UserInfoServlet extends HttpServlet {
 							e1.printStackTrace();
 						}
 					} else{
-						errorMessage="Schedule names may contain only letters.";
+						errorMessage="Schedule names may contain only letters and numbers.";
 					}
 				}
 				else{
@@ -124,14 +126,15 @@ public class UserInfoServlet extends HttpServlet {
 			}
 		}
 		else if(req.getParameter("selectSchedule")!= null){
-			System.out.println(activeSchedule);
-			System.out.println(controller.getUser().getSchedules().firstEntry().getValue().getName());
-			if(controller.getUser().getSchedule(activeSchedule)!= null){
-				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
-				errorMessage="Successfully changed active schedule";
-			}
-			else{
-				errorMessage ="Schedule does not exist.";
+			if(activeSchedule!=null){
+				if(controller.getUser().getSchedule(activeSchedule)!= null){
+					controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+					errorMessage="Successfully changed active schedule";
+				} else{
+					errorMessage ="Schedule does not exist.";
+				}
+			} else{
+				errorMessage="You must create a new schedule first.";
 			}
 		}
 		
@@ -140,19 +143,18 @@ public class UserInfoServlet extends HttpServlet {
 			Schedule s=e.getValue();
 			System.out.println(s.getName());
 			if(controller.getUser().getActiveSchedule().equals(controller.getUser().getSchedule(e.getKey()))){
-				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName().toUpperCase() + 
 					"\" selected=\"selected\">" + s.getName() + "</option> \n";
 			} else{
-				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName() + 
+				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName().toUpperCase() + 
 					"\">" + s.getName() + "</option> \n";
 			}
 		}
 		scheduleList=scheduleList + "</select>";
 		
+		req.getSession().setAttribute("userSession", session);
 		req.setAttribute("selectSchedule", null);
 		req.setAttribute("newSchedule", null);
-		
-		req.getSession().setAttribute("userSession", session);
 		req.setAttribute("emailAddress",controller.getUser().getEmailAddress());
 		req.setAttribute("numSchedules", controller.getUser().getNumSchedules());
 		req.setAttribute("studentStatus", controller.getUser().getStudentStatus());
@@ -165,8 +167,9 @@ public class UserInfoServlet extends HttpServlet {
 		req.getRequestDispatcher("/_view/userInfo.jsp").forward(req, resp);
 	}
 	
-	public boolean containsOnlyLetters(String name) {
-	    return name.matches("[a-zA-Z]+");
+	public boolean isAlphaNumeric(String name) {
+		Pattern p=Pattern.compile("[^a-zA-Z0-9]");
+		return !p.matcher(name).find();
 	}
 }
 

@@ -51,6 +51,7 @@ public class SQLWriter {
 			+ "----------------------------------------------------";
 
 	public static ResultSet executeDBCommand(Connection conn, String sql) throws SQLException{
+		//System.out.println(sql);
 		return executeSQL(conn, sql);
 	}
 	
@@ -76,11 +77,11 @@ public class SQLWriter {
 
 				List<Integer> colWidths = getColumnWidths(colNames, rowList);
 
-				printRow(colNames, colWidths);
-				printSeparator(colWidths);
-				for (List<String> row : rowList) {
-					printRow(row, colWidths);
-				}
+//				printRow(colNames, colWidths);
+//				printSeparator(colWidths);
+//				for (List<String> row : rowList) {
+//					printRow(row, colWidths);
+//				}
 			}
 			//System.out.println("OK (" + rowCount + " rows(s))");
 		} finally{

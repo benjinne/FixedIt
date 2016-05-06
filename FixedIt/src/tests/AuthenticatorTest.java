@@ -72,10 +72,10 @@ public class AuthenticatorTest {
 		String hash3= a.saltHashPassword(invalidPass);
 		String hash4 = a.saltHashPassword(validPass2);
 		
-		User Fake1 = new User ("email@domain.com",hash1,0,0,a);
-		User Fake2 = new User ("johnny.appleseed@dadjokes.net",hash2,0,0,a);
-		User Fake3 = new User ("Fakeout@gmail.com", hash3,0,0,a);
-		User Fake4 = new User ("Fakeout2@gmail.com", hash4, 0, 0,a);
+		User Fake1 = new User ("email@domain.com",hash1,0,a);
+		User Fake2 = new User ("johnny.appleseed@dadjokes.net",hash2,0,a);
+		User Fake3 = new User ("Fakeout@gmail.com", hash3,0,a);
+		User Fake4 = new User ("Fakeout2@gmail.com", hash4,0,a);
 		
 		
 		a.addNewUserToDB(Fake1);
