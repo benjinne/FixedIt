@@ -39,7 +39,7 @@ public class NewUserServlet extends HttpServlet {
 		else if(!password.equals(passwordConfirm)){
 			errorMessage="Passwords do not match.";
 		}
-		else if(!controller.getAuth().isValidPassword(password)){
+		else if(!controller.getAuth().isValidPassword(password) || password.length()<8){
 			errorMessage="Password does not conform to password rules: password must be at least 8 characters and may use the following characters: \n" +
 						"0-9a-zA-Z ! . - _";
 		}

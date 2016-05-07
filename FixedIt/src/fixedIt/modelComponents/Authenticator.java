@@ -177,7 +177,7 @@ public class Authenticator implements EmailSender {
 			//System.out.println(sql);
 			Statement stmnt1=conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs=stmnt1.executeQuery(sql);  //gets all of the user's schedules as ResultSet
-			System.out.println(sql);
+			//System.out.println(sql);
 			TreeMap<String, Schedule> schedules=new TreeMap<String, Schedule>();
 			while(rs.next()){	//loop through all schedules
 				String scheduleName=rs.getString("tablename").substring("schedule".length() + emailAddress.substring(0, emailAddress.indexOf('@')).replaceAll("[^A-Za-z0-9]", "_").length());
