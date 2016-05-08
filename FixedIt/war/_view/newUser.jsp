@@ -10,7 +10,10 @@
 		td.label {
 			text-align: right;
 			font-size:10pt;
-		}		
+		}
+		.error{
+			color:red;
+		}
 		</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="_view/stylesheets/styles.css" media="screen" />
@@ -26,7 +29,7 @@
 		<center>
 		<form action="${pageContext.servletContext.contextPath}/register" method="post">
 		<c:if test="${! empty errorMessage}">
-			<script type="text/javascript">alert("${errorMessage}")</script>
+			<div class="error"><c:out value="${errorMessage}"></c:out></div>
 		</c:if>
 		<c:if test="${empty waitingForConfirm}">
 			<table>

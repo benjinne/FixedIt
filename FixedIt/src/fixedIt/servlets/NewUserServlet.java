@@ -18,6 +18,8 @@ public class NewUserServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		String errorMessage = req.getParameter("errorMessage");
+		req.setAttribute("errorMessage", errorMessage);
 		req.getRequestDispatcher("/_view/newUser.jsp").forward(req, resp);
 	}
 	
@@ -26,7 +28,7 @@ public class NewUserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		// Decode form parameters and dispatch to controller
-		String errorMessage = null;
+		String errorMessage = req.getParameter("errorMessage");
 		String emailAddress = getStringFromParameter(req.getParameter("emailAddress"));
 		String password = getStringFromParameter(req.getParameter("password"));
 		String passwordConfirm=getStringFromParameter(req.getParameter("passwordConfirm"));
@@ -35,16 +37,16 @@ public class NewUserServlet extends HttpServlet {
 		
 		if (emailAddress == null || password == null) {
 			errorMessage = "Please enter an email address and password.";
-		} 
-		else if(!password.equals(passwordConfirm)){
-			errorMessage="Passwords do not match.";
-		}
-		else if(!controller.getAuth().isValidPassword(password) || password.length()<8){
-			errorMessage="Password does not conform to password rules: password must be at least 8 characters and may use the following characters: \n" +
-						"0-9a-zA-Z ! . - _";
 		}
 		else if(!controller.getAuth().isValidEmailAddress(emailAddress)){
 			errorMessage="Email address is not recognized as email address format: address@example.com";
+		}
+		else if(!password.equals(passwordConfirm)){
+			errorMessage="Passwords do not match.";
+		}
+		else if(!controller.getAuth().isValidPassword(password)){
+			errorMessage="Password does not conform to password rules: password must be at least 8 characters and may use the following characters: \n" +
+						"0-9a-zA-Z ! . - _";
 		}
 		else {
 			boolean userExists=controller.getAuth().userExists(emailAddress);
