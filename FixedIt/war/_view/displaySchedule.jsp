@@ -34,7 +34,7 @@
       		</c:if>
       		<c:if test="${errorMessage == 'Active schedule not set.'}">
       			<script type="text/javascript">
-      				alert("No schedules exits for user; create a new one first.");
+      				alert("Active schedule not set.");
       				window.location="userInfo";
       			</script>
       		</c:if>

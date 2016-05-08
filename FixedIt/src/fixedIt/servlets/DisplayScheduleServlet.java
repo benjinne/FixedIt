@@ -75,16 +75,15 @@ public class DisplayScheduleServlet extends HttpServlet {
 		String errorMessage = null;
 		fixedIt.modelComponents.Session session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
 		
-		Schedule s;
+		Schedule s=null;
 		String scheduleName="";
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
 		try{
-			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+			s=session.getCurrentUser().getActiveSchedule();
 			scheduleName=s.getName();
 		}
 		catch(NullPointerException e){
-			controller.initializeSchedule();
-			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+			errorMessage="Active schedule not set.";
 		}
 		
 		if(req.getParameter("dlAsCSV")!=null){
