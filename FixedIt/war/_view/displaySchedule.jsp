@@ -21,7 +21,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</head>
 	
-	<div class="styled-body">
+	<div class="styled-body-long">
       <h1 class="project-name">FixedIt</h1>
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/schedule" method="post">

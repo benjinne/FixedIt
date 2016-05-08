@@ -76,8 +76,13 @@ public class LoginServlet extends HttpServlet {
 							userSession=controller.getAuth().authorizeUser(emailAddress, password);
 							req.getSession().setAttribute("userSession", userSession);
 								if(userSession!=null){
-								resp.sendRedirect("userInfo");
-								return;
+									if(userSession.getCurrentUser().getSchedules().size()!=0){
+										if(userSession.getCurrentUser().getSchedules().firstEntry().getValue()!=null){
+											userSession.getCurrentUser().setActiveSchedule(userSession.getCurrentUser().getSchedules().firstEntry().getValue());
+										}
+									}
+									resp.sendRedirect("userInfo");
+									return;
 							}
 							else{
 								errorMessage="Failed to populate User object!";

@@ -154,6 +154,15 @@ button:focus {
   background-image: linear-gradient(120deg, #155799, #159957);
 }
 
+.styled-body-long{
+	  margin:0px;
+  height: 300vh;
+  color: #fff;
+  text-align: center;
+  background-color: #159957;
+  background-image: linear-gradient(120deg, #155799, #159957);
+}
+
 .courseTable {
 	font-family: arial;
 	margin:0px;

@@ -44,8 +44,14 @@ public class UserInfoServlet extends HttpServlet {
 		if(controller.getUser().getActiveSchedule()!=null){
 			activeSchedule=controller.getUser().getActiveSchedule().getName();
 		} else{
-			controller.getUser().setActiveSchedule(controller.getUser().getSchedules().firstEntry().getValue());
+			if(controller.getUser().getSchedules().size()!=0){
+				activeSchedule=controller.getUser().getSchedules().firstKey();
+				controller.getUser().setActiveSchedule(controller.getUser().getSchedule(activeSchedule));
+			}
 		}
+		System.out.println("First Schedule: " + controller.getUser().getSchedules().firstEntry().getValue().getName());
+		System.out.println("Active Schedule Set: " + controller.getUser().getActiveSchedule().getName());
+		
 		//String newSchedule = req.getParameter("newSchedule");
 		
 		if(controller.isSessionNull()){
