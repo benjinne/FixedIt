@@ -107,14 +107,13 @@ public class UserInfoServlet extends HttpServlet {
 			session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
 		}
 		
-		String selectedForDelete=req.getParameter("deleteScheduleList");
 		String errorMessage ="";
 		UserInfoController controller=new UserInfoController(session);
 		controller.setUser(session.getCurrentUser());
 		String activeSchedule=req.getParameter("scheduleList");
 
 		if (req.getParameter("newSchedule")!=null) {
-			if(controller.getUser().getNumSchedules()<6){
+			if(controller.getUser().getNumSchedules()<5){
 				if(req.getParameter("scheduleName")!= null && !req.getParameter("scheduleName").isEmpty()){
 					if(isAlphaNumeric(req.getParameter("scheduleName"))){
 						controller.getUser().createSchedule(req.getParameter("scheduleName").toUpperCase());
@@ -134,7 +133,7 @@ public class UserInfoServlet extends HttpServlet {
 				}
 			}
 			else{
-				errorMessage= "Max number of schedules created";
+				errorMessage= "Max number of schedules has been reached.";
 			}
 		}
 		else if(req.getParameter("selectSchedule")!= null){
