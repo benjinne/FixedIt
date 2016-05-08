@@ -42,7 +42,13 @@ public class UserInfoServlet extends HttpServlet {
 		String studentStatus="";
 		String activeSchedule="";
 		if(controller.getUser().getActiveSchedule()!=null){
-			activeSchedule=controller.getUser().getActiveSchedule().getName();
+			if(controller.getUser().getSchedule(controller.getUser().getActiveSchedule().getName())!=null){
+				activeSchedule=controller.getUser().getActiveSchedule().getName();
+			} else{
+				if(controller.getUser().getSchedules().size()!=0){
+					controller.getUser().setActiveSchedule(controller.getUser().getSchedules().firstEntry().getValue());
+				}
+			}
 		} else{
 			if(controller.getUser().getSchedules().size()!=0){
 				activeSchedule=controller.getUser().getSchedules().firstKey();
@@ -147,7 +153,7 @@ public class UserInfoServlet extends HttpServlet {
 		String scheduleList="<select class=\"selectBox\" name=\"scheduleList\" size=\"1\">";
 		for(Entry<String, Schedule> e : controller.getUser().getSchedules().entrySet()){
 			Schedule s=e.getValue();
-			System.out.println(s.getName());
+			//System.out.println(s.getName());
 			if(controller.getUser().getActiveSchedule().equals(controller.getUser().getSchedule(e.getKey()))){
 				scheduleList=scheduleList + "<option class=\"option\"  VALUE=\"" + s.getName().toUpperCase() + 
 					"\" selected=\"selected\">" + s.getName() + "</option> \n";

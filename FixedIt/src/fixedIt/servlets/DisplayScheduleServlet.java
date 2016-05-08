@@ -45,11 +45,13 @@ public class DisplayScheduleServlet extends HttpServlet {
 			return;
 		}
 		Schedule s=null;
+		String scheduleName="";
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
 		
 		if(controller.getUser().getSchedules().size()!=0){
 			if(controller.getUser().getActiveSchedule()!=null){
 				s=controller.getUser().getActiveSchedule();
+				scheduleName=s.getName();
 			} else{
 				errorMessage="Active schedule not set.";
 			}
@@ -61,6 +63,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 		
 		req.setAttribute("errorMessage", errorMessage);
 		req.setAttribute("scheduleHTML", html);
+		req.setAttribute("scheduleName", scheduleName);
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);
 	}
 	
@@ -73,9 +76,11 @@ public class DisplayScheduleServlet extends HttpServlet {
 		fixedIt.modelComponents.Session session=(fixedIt.modelComponents.Session) req.getSession().getAttribute("userSession");
 		
 		Schedule s;
+		String scheduleName="";
 		DisplayScheduleController controller=new DisplayScheduleController(session.getCurrentUser());
 		try{
 			s=session.getCurrentUser().getSchedules().firstEntry().getValue();
+			scheduleName=s.getName();
 		}
 		catch(NullPointerException e){
 			controller.initializeSchedule();
@@ -159,6 +164,20 @@ public class DisplayScheduleServlet extends HttpServlet {
 			}
 		}
 		
+		if(req.getParameter("delete")!=null){
+			controller.getUser().getSchedules().remove(scheduleName);
+			controller.getUser().setActiveSchedule(null);
+			try {
+				session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
+				resp.sendRedirect("userInfo");
+				return;
+			} catch (SQLException e) {
+				errorMessage="Error saving user data. Please try again.";
+				e.printStackTrace();
+			}
+			
+		}
+		
 		try {
 			session.getAuth().saveExistingUserNewDataToDB(session.getCurrentUser());
 		} catch (SQLException e) {
@@ -169,6 +188,7 @@ public class DisplayScheduleServlet extends HttpServlet {
 		String html=generateHTMLScheduleTable(s);
 		req.setAttribute("scheduleHTML", html);
 		req.setAttribute("errorMessage", errorMessage);
+		req.setAttribute("scheduleName", scheduleName);
 		
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/displaySchedule.jsp").forward(req, resp);

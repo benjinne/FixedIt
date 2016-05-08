@@ -26,18 +26,40 @@
       <h2 class="project-tagline">CS320 Software Engineering Project: York College Scheduling App</h2>
       <form action="${pageContext.servletContext.contextPath}/schedule" method="post">
       	<c:if test="${! empty errorMessage}">
+      		<c:if test="${errorMessage == 'No schedules exits for user; create a new one first.'}">
+      			<script type="text/javascript">
+      				alert("No schedules exits for user; create a new one first.");
+      				window.location="userInfo";
+      			</script>
+      		</c:if>
+      		<c:if test="${errorMessage == 'Active schedule not set.'}">
+      			<script type="text/javascript">
+      				alert("No schedules exits for user; create a new one first.");
+      				window.location="userInfo";
+      			</script>
+      		</c:if>
 			<script type="text/javascript">alert("${errorMessage}")</script>
 		</c:if>
 		<input class="btn" type="submit" name="dlAsCSV" value="Download Schedule as CSV" />
 		<input class="btn" type="submit" name="dlAsHtml" value="Dowload Schedule as HTML View" />	
 		<br><br>
 		<c:if test="${! empty scheduleHTML}">
-			<!-- <div class="numCreditsContainer"><p>Total Credits: <c:out value="${numCredits}"></c:out>&nbsp;</p></div><br> -->
+			<div class="scheduleNameContainer"><p>Schedule: <c:out value="${scheduleName}"></c:out>&nbsp;</p></div><br>
 			<div id="courses">
 				<c:out value="${scheduleHTML}" escapeXml="false"/>
 			</div>
 		</c:if>
 		</form>
+		
+		<form action="${pageContext.servletContext.contextPath}/schedule" method="post">
+			<div style="position:absolute;left:0px;top:0px;"><input class="btn" type=submit name="delete" value="Delete This Schedule" onclick='return deleteConfirm("${scheduleName}");'></div>
+			<script type="text/javascript">
+				function deleteConfirm(scheduleName){
+					return confirm("Are you sure you want to delete the schedule " + scheduleName + "?");
+				}
+			</script>
+		</form>
+		
 		<div class="sideBar">
 			<button class="sideBarBtn" data-toggle="collapse" data-target="#menu">Navigation</button>
 			<div id="menu" class="collapse">

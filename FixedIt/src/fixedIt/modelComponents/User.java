@@ -48,7 +48,12 @@ public class User{
 	}
 	public void createSchedule(String name){
 		if(getNumSchedules()<5){
-			schedules.put(name, new Schedule(name));			
+			if(getNumSchedules()==0){
+				schedules.put(name, new Schedule(name));
+				this.activeSchedule=schedules.firstEntry().getValue();
+			} else{
+				schedules.put(name, new Schedule(name));
+			}
 		}
 	}
 	
