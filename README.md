@@ -19,7 +19,7 @@ ___
 ![alt text](https://github.com/mrjones2014/FixedIt/blob/master/FixedIt%20Screenshots/new-account-page.png)
 ___
 ![alt text](https://github.com/mrjones2014/FixedIt/blob/master/FixedIt%20Screenshots/login-page.png)
-<br>
+___
 ![alt text](https://github.com/mrjones2014/FixedIt/blob/master/FixedIt%20Screenshots/user-info-page.png)
 ___
 ![alt text](https://github.com/mrjones2014/FixedIt/blob/master/FixedIt%20Screenshots/user-info-navigation-drawer.png)
